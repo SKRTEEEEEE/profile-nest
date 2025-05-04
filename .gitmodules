@@ -1,0 +1,3 @@
+[submodule "src/domain"]
+	path = src/domain
+	url = https://github.com/SKRTEEEEEE/profile-domain.git

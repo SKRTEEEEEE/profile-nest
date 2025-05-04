@@ -1,12 +1,16 @@
-// @ts-check
-import eslint from '@eslint/js';
-import eslintPluginPrettierRecommended from 'eslint-plugin-prettier/recommended';
-import globals from 'globals';
-import tseslint from 'typescript-eslint';
+// eslint.config.js
+const tseslint = require('typescript-eslint');
+const eslint = require('@eslint/js');
+const eslintPluginPrettierRecommended = require('eslint-plugin-prettier/recommended');
+const globals = require('globals');
 
-export default tseslint.config(
+module.exports = tseslint.config(
   {
-    ignores: ['eslint.config.mjs'],
+    ignores: [
+      'dist/**',
+      'node_modules/**',
+      'eslint.config.js',
+    ],
   },
   eslint.configs.recommended,
   ...tseslint.configs.recommendedTypeChecked,
@@ -17,10 +21,10 @@ export default tseslint.config(
         ...globals.node,
         ...globals.jest,
       },
-      sourceType: 'commonjs',
+      sourceType: 'module', // usa 'commonjs' si tu NestJS usa require()
       parserOptions: {
-        projectService: true,
-        tsconfigRootDir: import.meta.dirname,
+        project: true,
+        tsconfigRootDir: __dirname, // para Windows, usa __dirname
       },
     },
   },
@@ -28,7 +32,11 @@ export default tseslint.config(
     rules: {
       '@typescript-eslint/no-explicit-any': 'off',
       '@typescript-eslint/no-floating-promises': 'warn',
-      '@typescript-eslint/no-unsafe-argument': 'warn'
+      '@typescript-eslint/no-unsafe-argument': 'warn',
+      '@typescript-eslint/explicit-function-return-type': ['warn', {
+        allowExpressions: true,
+        allowTypedFunctionExpressions: true,
+      }],
     },
   },
 );
