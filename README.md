@@ -10,6 +10,8 @@
 
 ## Información
 Backend con Clean Arquitectura para mi pagina de perfil. Realizado con NestJS como framework.
+### Tecnologías utilizadas
+- [Mongoose](https://mongoosejs.com/docs/guide.html) 
 
 ## [Recursos](https://github.com/SKRTEEEEEE/markdowns)
 
