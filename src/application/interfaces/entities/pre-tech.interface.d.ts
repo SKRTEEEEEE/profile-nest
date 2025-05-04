@@ -5,7 +5,6 @@ import { PopulateRepository } from "src/domain/interfaces/populate";
 import { ReadRepository } from "src/domain/interfaces/read";
 
 export type PreTechRepository<TBase,TDBBase, Meta extends ReadMeta<TBase>> = ReadRepository<TBase, Meta> & PopulateRepository<TBase, TDBBase> & {
-    readByName(name: string): Promise<TBase & TDBBase>;
     updatePreTech(): Promise<void>;
-    readByQuery(query: string): Promise<TBase & TDBBase[]>;
+    readByQuery(query: string): Promise<(TBase & TDBBase)[]>;
 }

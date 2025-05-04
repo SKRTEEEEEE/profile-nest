@@ -9,13 +9,9 @@ export class PreTechService<TDBBase, TReadMeta extends ReadMeta<PreTechBase>> {
       private readonly preTechRepository: PreTechRepository<PreTechBase, TDBBase, TReadMeta>
     ) {}
   
-    // Aquí debo usar los DTOs -> con tipos genéricos complejos (es el caso) ES MEJOR UTILIZAR LOS DTOs EN la capa de PRESENTACIÓN (controllers)
+    // Aquí puedo usar los DTOs -> con tipos genéricos complejos (es el caso) ES MEJOR UTILIZAR LOS DTOs EN la capa de PRESENTACIÓN (controllers)
     async read(props: ReadProps<PreTechBase, TReadMeta>) {
       return await this.preTechRepository.read(props)
-    }
-  
-    async readByName(name: string) {
-      return await this.preTechRepository.readByName(name)
     }
   
     async updatePreTech() {
