@@ -1,4 +1,3 @@
-import { Injectable } from '@nestjs/common';
 import { Model } from 'mongoose';
 import { MongooseBaseImpl } from './base';
 import { MongooseBase, MongooseDocument } from '../types';
@@ -8,7 +7,6 @@ import { DatabaseOperationError, InputParseError } from 'src/domain/errors/main'
 export type MongoosePopulateProps<TBase> = Array<TBase>;
 export type MongoosePopulateResponse<TBase> = Promise<(TBase & MongooseBase)[]>;
 
-@Injectable()
 export class MongoosePopulateImpl<
   TBase,
   TOptions extends Partial<Record<keyof TBase & MongooseBase, (value: any) => any>> = {}

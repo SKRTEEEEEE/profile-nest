@@ -1,8 +1,9 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
+import { Document } from "mongoose";
 import { PreTechBase } from "src/domain/entities/pre-tech";
 
 @Schema({ timestamps: true, collection: 'ptechs' }) // 👈 aquí forzas el nombre
-export class PreTechSchema implements PreTechBase {
+export class PreTechSchemaDocument extends Document implements PreTechBase {
   @Prop({ required: true, unique: true })
   nameId: string;
 
@@ -16,4 +17,4 @@ export class PreTechSchema implements PreTechBase {
   web: string;
 }
 
-export const preTechSchemaFactory = SchemaFactory.createForClass(PreTechSchema);
+export const PreTechSchemaFactory = SchemaFactory.createForClass(PreTechSchemaDocument);

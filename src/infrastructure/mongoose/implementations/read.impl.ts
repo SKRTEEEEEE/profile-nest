@@ -1,10 +1,9 @@
-import { Injectable } from '@nestjs/common';
+
 import { MongooseBaseImpl } from './base';
 import { MongooseBase } from '../types';
 import { Model } from 'mongoose';
 import { MongooseReadI, MongooseReadProps, MongooseReadResponse } from '../types/implementations';
 
-@Injectable()
 export class MongooseReadImpl <
 TBase,
 TOptions extends Partial<Record<keyof TBase & MongooseBase, (value: any) => any>> = {}

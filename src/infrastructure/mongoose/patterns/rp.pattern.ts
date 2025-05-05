@@ -19,13 +19,17 @@ export abstract class MongooseRpPattern<
 > extends MongooseBaseImpl<TBase, TOptions> 
 implements MongooseRp<TBase>
     {
-    private readRepo: MongooseReadImpl<TBase, TOptions>;
-    private populateRepo: MongoosePopulateImpl<TBase, TOptions>;
+    // private readRepo: MongooseReadImpl<TBase, TOptions>;
+    // private populateRepo: MongoosePopulateImpl<TBase, TOptions>;
    
-    constructor(Model: Model<any, {}, {}, {}, any, any>, parseOpt?: TOptions) {
+    constructor(
+        Model: Model<any, {}, {}, {}, any, any>,
+        private readonly readRepo: MongooseReadImpl<TBase, TOptions>,
+        private readonly populateRepo: MongoosePopulateImpl<TBase, TOptions>, 
+        parseOpt?: TOptions) {
         super(Model, parseOpt);
-        this.readRepo = new MongooseReadImpl(this.Model, parseOpt);
-        this.populateRepo = new MongoosePopulateImpl(this.Model, parseOpt);
+        // this.readRepo = new MongooseReadImpl(this.Model, parseOpt);
+        // this.populateRepo = new MongoosePopulateImpl(this.Model, parseOpt);
     }
     async read(
         props: MongooseReadProps<TBase>

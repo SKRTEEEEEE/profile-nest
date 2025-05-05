@@ -6,6 +6,8 @@ import { PreTechBase } from 'src/domain/entities/pre-tech';
 import { FilterQuery, Model, ProjectionType, QueryOptions } from 'mongoose';
 import { ReadMeta } from 'src/domain/interfaces/read';
 import { InjectModel } from '@nestjs/mongoose';
+import { MongooseReadImpl } from '../implementations/read.impl';
+import { MongoosePopulateImpl } from '../implementations/populate.impl';
 
 type PreTechMeta = ReadMeta<
           PreTechBase, 
@@ -20,8 +22,8 @@ export class MongoosePreTechRepo extends MongooseRpPattern<PreTechBase> implemen
   private mdUrl = 'https://raw.githubusercontent.com/simple-icons/simple-icons/master/slugs.md';
   private jsonUrl = 'https://raw.githubusercontent.com/simple-icons/simple-icons/master/_data/simple-icons.json';
 
-  constructor(@InjectModel('PreTech') private readonly preTechModel: Model<PreTechBase & MongooseBase>,) {
-    super(preTechModel);
+  constructor(@InjectModel('PreTech') private readonly preTechModel: Model<PreTechBase & Document>,) {
+    super(preTechModel, new MongooseReadImpl(preTechModel), new MongoosePopulateImpl(preTechModel));
   }
 
   async readByQuery(query: string): Promise<(PreTechBase & MongooseBase)[]> {
