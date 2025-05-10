@@ -3,6 +3,8 @@ import { PreTechModule } from './pre-tech.module';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigModule } from '@nestjs/config';
 import { AuthUserModule } from './auth-user.module';
+import { APP_GUARD } from '@nestjs/core';
+import { JwtAuthUserGuard } from '../guards/jwt-auth-user.guard';
 
 
 @Module({
@@ -13,6 +15,12 @@ import { AuthUserModule } from './auth-user.module';
     AuthUserModule,
   ],
   controllers: [],
-  providers: [],
+  providers: [
+     // Aplicar el JwtAuthGuard globalmente (todas las rutas requieren autenticación por defecto)
+     {
+      provide: APP_GUARD,
+      useClass: JwtAuthUserGuard,
+    },
+  ],
 })
 export class AppModule {}

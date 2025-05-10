@@ -1,14 +1,12 @@
 import { Model } from "mongoose";
-import { MongoDbConnection } from "src/infrastructure/connectors/mongoose.conn";
 import { MongooseBase, MongooseDocument } from "../types";
 
 export abstract class MongooseBaseImpl<
   TBase,
   TOptions extends Partial<Record<keyof TBase & MongooseBase, (value: any) => any>> = {}
-> extends MongoDbConnection {
+>  {
   protected parseOpt?: TOptions;
   constructor(protected Model: Model<any, {}, {}, {}, any, any>, parseOpt?: TOptions) {
-    super();
     this.parseOpt = parseOpt;
   }
   private flattenMap(value: any): any {

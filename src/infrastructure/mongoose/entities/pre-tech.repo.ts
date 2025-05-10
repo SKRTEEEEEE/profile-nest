@@ -25,7 +25,6 @@ export class MongoosePreTechRepo extends MongooseRpPattern<PreTechBase> implemen
   }
 
   async readByQuery(query: string): Promise<(PreTechBase & MongooseBase)[]> {
-    await this.connect();
     const opt = {
       filter: {
         $or: [
@@ -40,7 +39,6 @@ export class MongoosePreTechRepo extends MongooseRpPattern<PreTechBase> implemen
   }
 
   async updatePreTech(): Promise<void> {
-    await this.connect();
     try {
       const mdResponse = await fetch(this.mdUrl);
       const mdContent = await mdResponse.text();

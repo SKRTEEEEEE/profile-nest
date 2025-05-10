@@ -16,7 +16,7 @@ TOptions extends Partial<Record<keyof TBase & MongooseBase, (value: any) => any>
       {filter, projection, options}: MongooseReadProps<TBase> 
     ): MongooseReadResponse<TBase> {
       try {
-        await this.connect();
+        
         const docs = await this.Model.find(filter || {}, projection, options) // Usa un objeto vacío si filter es undefined
         return docs.map(user=>this.documentToPrimary(user))
       } catch (error) {

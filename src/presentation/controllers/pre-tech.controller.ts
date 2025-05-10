@@ -1,24 +1,21 @@
-import { Controller, Get, Post, Query, UseGuards } from "@nestjs/common";
+import { Controller, Get, Post, Query } from "@nestjs/common";
 import { PreTechService } from "src/application/usecases/entities/pre-tech.service";
-import { JwtAuthUserGuard } from "src/presentation/guards/jwt-auth-user.guard";
 import { MongoosePreTechReadMeta } from "src/infrastructure/mongoose/entities/pre-tech.repo";
 import { MongooseBase } from "src/infrastructure/mongoose/types";
-
-// He de cambiar a un enfoque donde todas las rutas utilizan JwtAuthUserGuard y solo las que ten con el decorador publicRoute tengan acceso
+import { PublicRoute } from "../decorators/public-route.decorator";
 
 @Controller("/pre-tech")
 export class PreTechController {
     constructor(private readonly PreTechService: PreTechService<MongooseBase, MongoosePreTechReadMeta>){}
 
     @Post()
-    @UseGuards(JwtAuthUserGuard)
     async updatePreTech(): Promise<void> {
         return await this.PreTechService.updatePreTech();
     }
 
-    // Esta ruta sera pública
+    
     @Get()
-    @UseGuards(JwtAuthUserGuard)
+    @PublicRoute() // Esto es un decorador, en este caso el de ruta publica -> public-route.decorator.ts
     async readPreTechByQuery(
         @Query("q") query: string,
     ): Promise<PreTech<MongooseBase>[]> {

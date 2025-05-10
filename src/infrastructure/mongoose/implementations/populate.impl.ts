@@ -16,7 +16,7 @@ export class MongoosePopulateImpl<
 
   async populate(docs: MongoosePopulateProps<TBase>): MongoosePopulateResponse<TBase> {
     if (docs.length === 0) throw new InputParseError('No documents to populate');
-    await this.connect();
+    
     try {
       const res = await this.model.insertMany(docs);
       return res.map((doc) => this.documentToPrimary(doc as TBase & MongooseDocument));
