@@ -1,16 +1,19 @@
 import { Injectable } from '@nestjs/common';
 import { PreTechRepository } from 'src/application/interfaces/entities/pre-tech.interface';
-import { PreTechBase } from 'src/domain/entities/pre-tech';
-import { ReadMeta, ReadProps } from 'src/domain/interfaces/read';
 
 @Injectable()
-export class PreTechService<TDBBase, TReadMeta extends ReadMeta<PreTechBase>> {
+export class PreTechService<
+TDBBase, 
+// TReadMeta extends ReadMeta<PreTechBase, TDBBase, any, any, any>> 
+TReadMeta extends ReadMeta<PreTechBase, TDBBase>> 
+{
     constructor(
-      private readonly preTechRepository: PreTechRepository<PreTechBase, TDBBase, TReadMeta>
+      private readonly preTechRepository: PreTechRepository<TDBBase, TReadMeta>
     ) {}
   
     // Aquí puedo usar los DTOs -> con tipos genéricos complejos (es el caso) ES MEJOR UTILIZAR LOS DTOs EN la capa de PRESENTACIÓN (controllers)
     async read(props: ReadProps<PreTechBase, TReadMeta>) {
+      
       return await this.preTechRepository.read(props)
     }
   

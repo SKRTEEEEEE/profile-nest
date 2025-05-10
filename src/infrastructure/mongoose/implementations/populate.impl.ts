@@ -1,11 +1,10 @@
 import { Model } from 'mongoose';
 import { MongooseBaseImpl } from './base';
 import { MongooseBase, MongooseDocument } from '../types';
-import { MongoosePopulateI } from '../types/implementations';
+import { MongoosePopulateI, MongoosePopulateProps, MongoosePopulateResponse } from '../types/implementations';
 import { DatabaseOperationError, InputParseError } from 'src/domain/errors/main';
 
-export type MongoosePopulateProps<TBase> = Array<TBase>;
-export type MongoosePopulateResponse<TBase> = Promise<(TBase & MongooseBase)[]>;
+
 
 export class MongoosePopulateImpl<
   TBase,

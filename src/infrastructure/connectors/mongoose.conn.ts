@@ -1,5 +1,7 @@
 import mongoose, { Connection } from 'mongoose';
 
+//‼️⚠️ He de analizar si este enfoque esta correcto, o si de esto se 'ocupa' el enfoque de nestjs
+
 type DBConnection = {
     isConnected: boolean;
   }

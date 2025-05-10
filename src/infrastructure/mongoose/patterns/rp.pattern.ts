@@ -4,8 +4,8 @@ import { MongooseBase } from "../types";
 import { MongooseRp } from "../types/patterns";
 import { MongooseBaseImpl } from "../implementations/base";
 import { MongooseReadImpl } from "../implementations/read.impl";
-import { MongoosePopulateImpl, MongoosePopulateProps, MongoosePopulateResponse } from "../implementations/populate.impl";
-import { MongooseReadProps, MongooseReadResponse } from "../types/implementations";
+import { MongoosePopulateImpl } from "../implementations/populate.impl";
+import { MongoosePopulateProps, MongoosePopulateResponse, MongooseReadProps, MongooseReadResponse } from "../types/implementations";
 
 /* 
 - Rp -> Read, Populate
