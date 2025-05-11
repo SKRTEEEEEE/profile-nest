@@ -1,17 +1,14 @@
 export abstract class UserRepository<
-    TDBBase extends TDBBaseMockup, 
-    TUpdateByIdMeta extends UpdateByIdMeta<UserBase>, 
-    TUpdateMeta extends UpdateMeta<UserBase>, 
-    TReadMeta extends ReadMeta<UserBase>
+    TDBBase 
     > 
-    implements CRURepository<UserBase,TDBBase, TUpdateByIdMeta>, 
-    DeleteByIdRepository<UserBase, TDBBase>, UpdateRepository<UserBase, TUpdateMeta>, ReadRepository<UserBase, TReadMeta> 
+    implements CRURepository<UserBase,TDBBase>, 
+    DeleteByIdRepository<UserBase, TDBBase>, UpdateRepository<UserBase, TDBBase>, ReadRepository<UserBase, TDBBase> 
     {
     abstract create(data: Omit<UserBase, 'id'>): Promise<UserBase & TDBBase>;
-    abstract read(props: ReadProps<UserBase, TReadMeta>): Promise<UserBase[]>;
-    abstract readById(id: TDBBase["id"]): Promise<UserBase & TDBBase>;
-    abstract update(props: UpdateProps<UserBase, TUpdateMeta>): Promise<UserBase>;
-    abstract updateById(props: UpdateByIdProps<UserBase, TUpdateByIdMeta>): Promise<UserBase & TDBBase>;
+    abstract read(filter: ReadProps<UserBase, TDBBase>): Promise<(UserBase & TDBBase)[]>;
+    abstract readById(id: ReadByIdProps<TDBBase>): Promise<UserBase & TDBBase>;
+    abstract update(props: UpdateProps<UserBase, TDBBase>): Promise<UserBase & TDBBase>;
+    abstract updateById(props: UpdateByIdProps<UserBase, TDBBase>): Promise<UserBase & TDBBase>;
     abstract deleteById(props: DeleteByIdProps< TDBBase>): Promise<UserBase & TDBBase>;
     // Esta función se añade sin utilizar las 'implementaciones' (mongoose), pero en el repositorio de mongoose se utilizará el método .findOne() -> Comprobar la flexibilidad de la arch 
     abstract readByAddress(address: string): Promise<UserBase & TDBBase>;

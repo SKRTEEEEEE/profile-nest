@@ -14,6 +14,8 @@
 //     id: TDBBase["id"]; 
 //     img: string | undefined;
 
+import { RoleType } from "src/domain/entities/role.type";
+
 //   }
 
 // export type AuthUserJWTPayload<TDBBase extends TDBBaseMockup> = JWTPayload<JWTContext<TDBBase>>
@@ -40,9 +42,9 @@ type JWTPayload<Tctx = unknown> = {
 }
 export type JWTContext = {
   role: RoleType | null;
-  nick: string | undefined;
+  nick?: string | undefined;
   id: string; 
-  img: string | undefined;
+  img?: string | undefined;
 
 }
 

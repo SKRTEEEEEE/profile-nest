@@ -30,7 +30,7 @@ import { JwtAuthUserStrategy } from "src/infrastructure/adapters/jwt-auth-user.s
         JwtAuthUserStrategy,
         // {
         //     provide: AuthUserRepository,
-        //     useClass: NestAuthUserRepo,
+        //     useClass: AuthUserRepo,
             
         // }
     
@@ -40,4 +40,4 @@ import { JwtAuthUserStrategy } from "src/infrastructure/adapters/jwt-auth-user.s
         JwtAuthUserStrategy, 
         PassportModule]
 })
-export class AuthUserModule {}
+export class JwtAuthUserModule {}

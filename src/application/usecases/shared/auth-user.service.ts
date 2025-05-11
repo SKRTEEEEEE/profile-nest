@@ -2,7 +2,7 @@ import { Injectable } from "@nestjs/common";
 import { AuthUserRepository } from "src/application/interfaces/shared/auth-user.interface";
 
 
-
+// ⚠️ SIN USO ACTUALMENTE
 //No utilizar si no necesitamos -> Verificar tokens fuera de contexto HTTP - o - Abstracción para infraestructura de auth(websockets, workers, subscribers--mqtt)
 @Injectable()
 export class AuthUserService

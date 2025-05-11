@@ -2,21 +2,17 @@ import { Injectable } from '@nestjs/common';
 import { MongooseBase } from '../types';
 import { MongooseRpPattern } from '../patterns/rp.pattern';
 import { PreTechRepository } from 'src/application/interfaces/entities/pre-tech.interface';
-import { FilterQuery, Model, ProjectionType, QueryOptions } from 'mongoose';
+import { Document, Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 import { MongooseReadImpl } from '../implementations/read.impl';
 import { MongoosePopulateImpl } from '../implementations/populate.impl';
+import { MongooseRp } from '../types/patterns';
 
-export type MongoosePreTechReadMeta = ReadMeta<
-          PreTechBase, 
-          MongooseBase, 
-          FilterQuery<PreTechBase & MongooseBase> | undefined,
-          ProjectionType<PreTechBase> | null | undefined,
-          QueryOptions<PreTechBase> | null | undefined
-          >
 
 @Injectable()
-export class MongoosePreTechRepo extends MongooseRpPattern<PreTechBase> implements PreTechRepository<MongooseBase, MongoosePreTechReadMeta> {
+export class MongoosePreTechRepo 
+extends MongooseRpPattern<PreTechBase> 
+implements PreTechRepository<MongooseBase>, MongooseRp<PreTechBase> {
   private mdUrl = 'https://raw.githubusercontent.com/simple-icons/simple-icons/master/slugs.md';
   private jsonUrl = 'https://raw.githubusercontent.com/simple-icons/simple-icons/master/_data/simple-icons.json';
 

@@ -1,26 +1,21 @@
-import { Model, Query } from "mongoose";
+import { Model } from "mongoose";
 import { MongooseBaseImpl } from "../implementations/base";
-import { MongooseCRUImpl } from "../implementations/cru.impl";
-import { MongooseDeleteByIdImpl, MongooseDeleteImpl } from "../implementations/delete.impl";
-import { MongooseReadImpl } from "../implementations/read.impl";
+import { MongooseCRUImpl, MongooseUpdateByIdProps } from "../implementations/cru.impl";
+import { MongooseDeleteByIdImpl, MongooseDeleteByIdRes, MongooseDeleteImpl, MongooseDeleteProps, MongooseDeleteRes } from "../implementations/delete.impl";
+import { MongooseReadImpl, MongooseReadProps, MongooseReadResponse } from "../implementations/read.impl";
 import { MongooseBase } from "../types";
-import { MongooseDeleteProps, MongooseReadProps, MongooseReadResponse, MongooseUpdateByIdProps } from "../types/implementations";
 import { MongooseCRRUDD } from "../types/patterns";
 
 export abstract class MongooseCRRUDDPattern<
 TBase> extends MongooseBaseImpl<TBase> implements MongooseCRRUDD<TBase>{
-  private cruRepo: MongooseCRUImpl<TBase>
-  private readRepo: MongooseReadImpl<TBase>;
-  private deleteByIdRepo: MongooseDeleteByIdImpl<TBase>;
+  constructor(
+    Model: Model<any, {}, {}, {}, any, any>,
+    private cruRepo: MongooseCRUImpl<TBase>,
+  private readRepo: MongooseReadImpl<TBase>,
+  private deleteByIdRepo: MongooseDeleteByIdImpl<TBase>,
   private deleteRepo: MongooseDeleteImpl<TBase>
-
-  constructor(Model: Model<any, {}, {}, {}, any, any>) {
+  ) {
     super(Model);
-
-    this.readRepo = new MongooseReadImpl(this.Model);
-    this.deleteByIdRepo = new MongooseDeleteByIdImpl(this.Model);
-    this.deleteRepo = new MongooseDeleteImpl(this.Model)
-    this.cruRepo = new MongooseCRUImpl(this.Model)
   }
   async create(
     data: Omit<TBase, 'id'>
@@ -40,7 +35,7 @@ TBase> extends MongooseBaseImpl<TBase> implements MongooseCRRUDD<TBase>{
       return await this.cruRepo.updateById(props)
     }
   // Implementar el método delete
-  async deleteById(id: string): Promise<boolean> {
+  async deleteById(id: string): MongooseDeleteByIdRes<TBase> {
     return this.deleteByIdRepo.deleteById(id);
     
   }
@@ -49,7 +44,7 @@ TBase> extends MongooseBaseImpl<TBase> implements MongooseCRRUDD<TBase>{
   ): MongooseReadResponse<TBase> {
     return await this.readRepo.read(props);
   }
-  async delete(props: MongooseDeleteProps<TBase>): Promise<Query<any, any, {}, any, "findOneAndDelete", {}>>{
+  async delete(props: MongooseDeleteProps<TBase>): MongooseDeleteRes<TBase>{
     return this.deleteRepo.delete(props)
   }
 }

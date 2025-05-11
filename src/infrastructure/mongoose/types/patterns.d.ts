@@ -1,5 +1,9 @@
 import { MongooseBase } from ".";
-import { MongooseCRUI, MongooseDeleteByIdI,  MongooseDeleteI,  MongooseReadI, MongooseUpdateI } from "./implementations";
+import { MongooseCRUI } from "../implementations/cru.impl";
+import { MongooseDeleteByIdI, MongooseDeleteI } from "../implementations/delete.impl";
+import { MongoosePopulateI } from "../implementations/populate.impl";
+import { MongooseReadI } from "../implementations/read.impl";
+import { MongooseUpdateI } from "../implementations/update.impl";
 
 type MongooseCRRUUD1<TBase> = 
 MongooseCRUI<TBase> & 
@@ -17,10 +21,9 @@ type MongooseRp<TBase> =
 MongooseReadI<TBase> & 
 MongoosePopulateI<TBase>
 
-// interface MongooseCRRUDD<TBase> extends MongooseCRUI<TBase> , MongooseReadI<TBase>, MongooseDeleteI<TBase> ,MongooseDeleteByIdI<TBase> {}
 
 type MongooseCRRUDD<TBase> = 
 MongooseCRUI<TBase> &
 MongooseReadI<TBase> &
 MongooseDeleteI<TBase> & 
-MongooseDeleteByIdI
+MongooseDeleteByIdI<TBase>

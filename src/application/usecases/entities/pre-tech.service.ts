@@ -5,14 +5,14 @@ import { PreTechRepository } from 'src/application/interfaces/entities/pre-tech.
 export class PreTechService<
 TDBBase, 
 // TReadMeta extends ReadMeta<PreTechBase, TDBBase, any, any, any>> 
-TReadMeta extends ReadMeta<PreTechBase, TDBBase>> 
-{
+// TReadMeta extends ReadMeta<PreTechBase, TDBBase>> 
+>{
     constructor(
-      private readonly preTechRepository: PreTechRepository<TDBBase, TReadMeta>
+      private readonly preTechRepository: PreTechRepository<TDBBase>
     ) {}
   
     // Aquí puedo usar los DTOs -> con tipos genéricos complejos (es el caso) ES MEJOR UTILIZAR LOS DTOs EN la capa de PRESENTACIÓN (controllers)
-    async read(props: ReadProps<PreTechBase, TReadMeta>) {
+    async read(props: ReadProps<PreTechBase, TDBBase>) {
       
       return await this.preTechRepository.read(props)
     }

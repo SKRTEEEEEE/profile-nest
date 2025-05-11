@@ -1,12 +1,11 @@
 import { Model } from "mongoose";
 import { MongooseBase } from "../types";
 import { MongooseCRRUUD1 } from "../types/patterns";
-import { MongooseReadProps, MongooseReadResponse, MongooseUpdateByIdProps, MongooseUpdateProps } from "../types/implementations";
 import { MongooseBaseImpl } from "../implementations/base";
-import { MongooseCRUImpl } from "../implementations/cru.impl";
-import { MongooseReadImpl } from "../implementations/read.impl";
-import { MongooseUpdateImpl } from "../implementations/update.impl";
-import { MongooseDeleteByIdImpl } from "../implementations/delete.impl";
+import { MongooseCRUImpl, MongooseUpdateByIdProps } from "../implementations/cru.impl";
+import { MongooseReadImpl, MongooseReadProps, MongooseReadResponse } from "../implementations/read.impl";
+import { MongooseUpdateImpl, MongooseUpdateProps } from "../implementations/update.impl";
+import { MongooseDeleteByIdImpl, MongooseDeleteByIdRes } from "../implementations/delete.impl";
 
 /* 
   - crruud v1
@@ -58,7 +57,7 @@ export abstract class MongooseCRRUUD1Pattern<
     return await this.updateRepo.update(props)
   }
   // Implementar el método delete
-  async deleteById(id: string): Promise<boolean> {
+  async deleteById(id: string): MongooseDeleteByIdRes<TBase> {
     return await this.deleteRepo.deleteById(id);
   }
 

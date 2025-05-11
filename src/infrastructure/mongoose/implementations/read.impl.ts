@@ -1,8 +1,21 @@
 
 import { MongooseBaseImpl } from './base';
 import { MongooseBase } from '../types';
-import { Model } from 'mongoose';
-import { MongooseReadI, MongooseReadProps, MongooseReadResponse } from '../types/implementations';
+import { FilterQuery, Model, ProjectionType, QueryOptions, UpdateQuery } from 'mongoose';
+ 
+export type MongooseReadProps<TBase> = {
+  filter?: FilterQuery<TBase & MongooseBase> | undefined,
+  projection?: ProjectionType<TBase> | null | undefined,
+  options?: QueryOptions<TBase> | null | undefined
+}
+export type MongooseReadResponse<TBase> = Promise<(TBase & MongooseBase)[]>
+export type MongooseReadI<TBase> = {
+  read(
+    {filter, projection, options}:MongooseReadProps<TBase>
+  )
+    : MongooseReadResponse<TBase>
+}
+
 
 export class MongooseReadImpl <
 TBase,

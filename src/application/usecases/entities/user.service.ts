@@ -15,34 +15,31 @@ import { UserRepository } from "src/application/interfaces/entities/user.interfa
 
 @Injectable()
 export class UserService<
-  TDBBase extends TDBBaseMockup,
-  TReadMeta extends ReadMeta<UserBase, TDBBase, any, any, any>,
-  TUpdateMeta extends UpdateMeta<UserBase, TDBBase, any, any, any>,
-  TUpdateByIdMeta extends UpdateByIdMeta<UserBase, TDBBase, any, any>
+  TDBBase 
 > {
-  private readonly userRepository: UserRepository<TDBBase, TUpdateByIdMeta, TUpdateMeta, TReadMeta>;
+  private readonly userRepository: UserRepository<TDBBase>;
 
   constructor(
-    userRepository: UserRepository<TDBBase, TUpdateByIdMeta, TUpdateMeta, TReadMeta>
+    userRepository: UserRepository<TDBBase>
   ) {
     this.userRepository = userRepository;
   }
   async create(data: Omit<UserBase, "id">): Promise<UserBase & TDBBase> {
     return await this.userRepository.create(data);
   }
-    async read(props: ReadProps<UserBase, TReadMeta>): Promise<UserBase[]> {
+    async read(props: ReadProps<UserBase, TDBBase>): Promise<UserBase[]> {
         return await this.userRepository.read(props);
     }
-    async readById(id: TDBBase["id"]): Promise<UserBase & TDBBase> {
+    async readById(id: ReadByIdProps<TDBBase>): Promise<UserBase & TDBBase> {
         return await this.userRepository.readById(id);
     }
     async readByAddress(address: string): Promise<UserBase & TDBBase> {
         return await this.userRepository.readByAddress(address);
     }
-    async update(props: UpdateProps<UserBase, TUpdateMeta>): Promise<UserBase> {
+    async update(props: UpdateProps<UserBase, TDBBase>): Promise<UserBase> {
         return await this.userRepository.update(props);
     }
-    async updateById(props: UpdateByIdProps<UserBase, TUpdateByIdMeta>): Promise<UserBase & TDBBase> {
+    async updateById(props: UpdateByIdProps<UserBase, TDBBase>): Promise<UserBase & TDBBase> {
         return await this.userRepository.updateById(props);
     }
     async deleteById(props: DeleteByIdProps<TDBBase>): Promise<UserBase & TDBBase> {

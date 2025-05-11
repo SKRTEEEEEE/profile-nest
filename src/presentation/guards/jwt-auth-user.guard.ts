@@ -13,7 +13,7 @@ export class JwtAuthUserGuard extends AuthGuard('jwt') {
   canActivate(
     context: ExecutionContext,
   ): boolean | Promise<boolean> | Observable<boolean> {
-    // Comprueba si la ruta está marcada como pública usando el decorador @Public()
+    // Comprueba si la ruta está marcada como pública usando el decorador @PublicRoute()
     const isPublic = this.reflector.getAllAndOverride<boolean>(PUBLIC_ROUTE_KEY, [
       context.getHandler(),
       context.getClass(),

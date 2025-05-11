@@ -24,10 +24,6 @@ export abstract class MongooseBaseImpl<
     return value;
   }
 
-  
-  
-  
-
 // Uso en documentToPrimary
  protected documentToPrimary(document: TBase & MongooseDocument): TBase & MongooseBase {
     const { _id, createdAt, updatedAt, ...rest } = document.toObject();

@@ -1,7 +1,27 @@
+import { QueryOptions, UpdateQuery } from "mongoose";
 import { MongooseBase, MongooseDocument } from "../types";
-import { MongooseCRUI, MongooseUpdateByIdProps } from "../types/implementations";
 import { MongooseBaseImpl } from "./base";
-
+export type MongooseUpdateByIdProps<TBase> = {
+  id: string,
+  updateData: UpdateQuery<TBase> | undefined,
+  options?: QueryOptions<TBase> | null | undefined 
+}
+export type MongooseCRUI<
+  TBase,
+> = {
+  create(
+    data: Omit<TBase, 'id'>
+  )
+    : Promise<TBase & MongooseBase>
+  readById(
+    id: string
+  )
+    : Promise<TBase & MongooseBase | null>
+  updateById(
+    props: MongooseUpdateByIdProps<TBase>
+  )
+    : Promise<TBase & MongooseBase | null>
+}
 export class MongooseCRUImpl<
 TBase,
 > extends MongooseBaseImpl<TBase> implements MongooseCRUI<TBase>{
