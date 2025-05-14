@@ -26,12 +26,12 @@ TBase> extends MongooseBaseImpl<TBase> implements MongooseCRRUDD<TBase>{
   async readById(
     id: string
   )
-    : Promise<TBase & MongooseBase | null> {
+    : Promise<TBase & MongooseBase> {
       return await this.cruRepo.readById(id)
     }
   async updateById(props: MongooseUpdateByIdProps<TBase>
   )
-    : Promise<TBase & MongooseBase | null> {
+    : Promise<TBase & MongooseBase> {
       return await this.cruRepo.updateById(props)
     }
   // Implementar el método delete

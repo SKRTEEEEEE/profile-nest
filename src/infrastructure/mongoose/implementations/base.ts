@@ -1,5 +1,6 @@
 import { Model } from "mongoose";
 import { MongooseBase, MongooseDocument } from "../types";
+import { DatabaseFindError } from "src/domain/errors/domain.error";
 
 export abstract class MongooseBaseImpl<
   TBase,
@@ -53,5 +54,10 @@ export abstract class MongooseBaseImpl<
     }
 
     return result as TBase & MongooseBase;
+  }
+
+  protected resArrCheck(docs: TBase & MongooseBase[] | any[] | undefined | null): void {
+    if(!docs) throw new DatabaseFindError({optionalMessage:"Failed to find the documents"});
+    if(docs.length === 0) throw new DatabaseFindError({optionalMessage:"No documents found"});
   }
 }

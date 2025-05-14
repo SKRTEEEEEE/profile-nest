@@ -1,7 +1,7 @@
 import { QueryOptions, RootFilterQuery } from "mongoose";
 import { MongooseBase } from "../types";
 import { MongooseBaseImpl } from "./base";
-import { DatabaseFindError } from "src/domain/errors/domain.error";
+import { DatabaseActionError, DatabaseFindError } from "src/domain/errors/domain.error";
 export type MongooseDeleteByIdRes<TB> =Promise<TB & MongooseBase>
 export type MongooseDeleteByIdI<TBase> = {
   deleteById(
@@ -13,9 +13,14 @@ export class MongooseDeleteByIdImpl<
 TBase,
 > extends MongooseBaseImpl<TBase> implements MongooseDeleteByIdI<TBase>{
   async deleteById(id: MongooseBase["id"]): MongooseDeleteByIdRes<TBase> {
-    const result: TBase & MongooseBase | null = await this.Model.findByIdAndDelete(id);
-    if(!result)throw new DatabaseFindError('user',"User id not found")
-    return result;
+    try {
+      const result: TBase & MongooseBase | null = await this.Model.findByIdAndDelete(id);
+      if(!result)throw new DatabaseFindError({entitie: 'user',optionalMessage:"User id not found"})
+      return result;
+    } catch (error) {
+      console.error("Error al eliminar el documento:", error);
+      throw new DatabaseActionError("deleteById",{optionalMessage:"Failed to delete the document"});
+    }
   }
 }
 export type MongooseDeleteRes<TB> = Promise<(TB & MongooseBase)[]>
@@ -35,6 +40,11 @@ export class MongooseDeleteImpl<
 TBase,
 > extends MongooseBaseImpl<TBase> implements MongooseDeleteI<TBase>{
   async delete({filter, options}: MongooseDeleteProps<TBase>) {
-    return await this.Model.findOneAndDelete(filter, options)
+    try {
+      return await this.Model.findOneAndDelete(filter, options)
+    } catch (error) {
+      console.error("Error al eliminar el documento:", error);
+      throw new DatabaseActionError("delete",{optionalMessage:"Failed to delete the document"});
+    }
   }
 }

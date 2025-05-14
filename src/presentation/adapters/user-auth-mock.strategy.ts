@@ -4,12 +4,12 @@ import { Injectable, UnauthorizedException } from "@nestjs/common";
 import { PassportStrategy } from "@nestjs/passport";
 import { Request } from "express";
 import { Strategy } from "passport-custom";
-import { AuthUserJWTPayload } from "src/application/interfaces/shared/auth-user.interface";
+import { UserAuthJWTPayload } from "src/application/interfaces/shared/user-auth.interface";
 import { RoleType } from "src/domain/entities/role.type";
 
 @Injectable()
-export class MockAuthUserStrategy extends PassportStrategy(Strategy, 'mock') {
-  async validate(req: Request): Promise<AuthUserJWTPayload["ctx"]> {
+export class UserAuthMockStrategy extends PassportStrategy(Strategy, 'mock') {
+  async validate(req: Request): Promise<UserAuthJWTPayload["ctx"]> {
     const authHeader = req.headers['authorization'];
     const token = authHeader?.split(' ')[1];
 

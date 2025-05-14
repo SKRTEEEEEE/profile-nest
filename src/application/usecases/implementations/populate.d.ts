@@ -1,10 +1,10 @@
 
 
 
-type PopulateProps<TBase> = Array<TBase>
+type PopulateProps<TB> = Array<TB>
 
-type PopulateRepository<TBase, TDBBase> = {
+type PopulateRepository<TB, TDB> = {
     populate(
-      docs: PopulateProps<TBase>,
-    ): Promise<(TBase & TDBBase)[]>
+      docs: PopulateProps<TB>,
+    ): EntitieArrayRes<TB, TDB>;
   }

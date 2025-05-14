@@ -1,12 +1,16 @@
 import { Injectable, UnauthorizedException } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
+// import { ConfigService } from "@nestjs/config";
 import { PassportStrategy } from "@nestjs/passport";
-import { ExtractJwt, Strategy } from "passport-jwt";
-import { AuthUserJWTPayload } from "src/application/interfaces/shared/auth-user.interface";
+import { Request } from "express";
+import { ExtractJwt, Strategy, StrategyOptionsWithRequest } from "passport-jwt";
+import { UserAuthJWTPayload } from "src/application/interfaces/shared/user-auth.interface";
 // import { AuthUserService } from "src/application/usecases/shared/auth-user.service";
 
+// --> NOT USED - para usar se ha de crear el guard correspondiente
+
 @Injectable()
-export class JwtAuthUserStrategy extends PassportStrategy(Strategy) {
+export class UserAuthJWTStrategy extends PassportStrategy(Strategy) {
     constructor(
         private configService: ConfigService,
         // private authUserService: AuthUserService // -> creo que no hace falta ya que se hace por inyeccion ❓
@@ -18,13 +22,24 @@ export class JwtAuthUserStrategy extends PassportStrategy(Strategy) {
             // secretOrKey: configService.get<string>('JWT_SECRET_KEY'),
             // Si Thirdweb usa RS256, usarías esto en lugar de secretOrKey:
             secretOrKeyProvider: (request, rawJwtToken, done) => {
-                const publicKey = this.configService.get<string>('JWT_PUBLIC_KEY');
+                const publicKey = this.configService.get<string>("JWT_PUBLIC_KEY");
+                console.log("pubKey: ",publicKey)
                 done(null, publicKey);
             },
-        })
+            verifyOptions: {
+                algorithms: ["ES256"]
+            },
+            // secretOrKey: configService.get<string>("JWT_PUBLIC_KEY"),
+            passReqToCallback: true,
+        }as StrategyOptionsWithRequest)
     }
-    async validate(payload: AuthUserJWTPayload){
-        if(!payload || !payload.sub)throw new UnauthorizedException("Token JWT inválido")
+    async validate(req:Request, payload: UserAuthJWTPayload){
+        console.log("validating..")
+        // Acceder al token JWT crudo
+        const rawJwt = req.headers.authorization?.replace('Bearer ', '');
+        console.log('Token JWT crudo:', rawJwt);
+        console.log('Payload decodificado:', payload);
+            if(!payload || !payload.sub)throw new UnauthorizedException("Token JWT inválido")
 
         // Aquí puedes buscar el usuario en tu base de datos usando la dirección
     // y añadir lógica adicional según tus requisitos

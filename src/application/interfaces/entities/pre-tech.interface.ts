@@ -1,11 +1,11 @@
 
 
 export abstract class PreTechRepository<
-TDBBase> implements 
-ReadRepository<PreTechBase, TDBBase>, 
-PopulateRepository<PreTechBase, TDBBase>  {
+TDB> implements 
+ReadRepository<PreTechBase, TDB>, 
+PopulateRepository<PreTechBase, TDB>  {
     abstract updatePreTech(): Promise<void>;
-    abstract readByQuery(query: string): Promise<(PreTechBase & TDBBase)[]>;
-    abstract read(filter: ReadProps<PreTechBase, TDBBase>): Promise<(PreTechBase & TDBBase)[]>;
-    abstract populate(docs: PopulateProps<PreTechBase>): Promise<(PreTechBase & TDBBase)[]>;
+    abstract readByQuery(query: string): Promise<(PreTechBase & TDB)[]>;
+    abstract read(filter: ReadProps<PreTechBase, TDB>): Promise<(PreTechBase & TDB)[]>;
+    abstract populate(docs: PopulateProps<PreTechBase>): Promise<(PreTechBase & TDB)[]>;
 }

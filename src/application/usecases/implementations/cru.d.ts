@@ -1,32 +1,32 @@
 // type UpdateByIdMeta<
-// TBase, 
-// TDBBase = TDBBaseMockup, 
-// TUpdateQuery = Partial<TBase & TDBBase>, 
+// TB, 
+// TDB = TDBMockup, 
+// TUpdateQuery = Partial<TB & TDB>, 
 // TOptions = any
 // > = {
-//     id: TDBBase["id"],
+//     id: TDB["id"],
 //     updateData: TUpdateQuery,
 //     options: TOptions 
 // }
 
-// type UpdateByIdProps<TBase, TUpdateByIdMeta extends UpdateByIdMeta<TBase>
+// type UpdateByIdProps<TB, TUpdateByIdMeta extends UpdateByIdMeta<TB>
 // > = TUpdateByIdMeta
 
 // type CRURepository
-// <TBase, TDBBase = TDBBaseMockup, TUpdateByIdMeta extends UpdateByIdMeta<TBase>>
+// <TB, TDB = TDBMockup, TUpdateByIdMeta extends UpdateByIdMeta<TB>>
 // = {
-//     create: (data: Omit<TBase, 'id'>) => Promise <TBase & TDBBase>,
-//     readById: (id: TDBBase["id"]) => Promise<TBase & TDBBase>,
-//     updateById: (props: UpdateByIdProps<TBase, TReadMeta>) => Promise<TBase & TDBBase>
+//     create: (data: Omit<TB, 'id'>) => Promise <TB & TDB>,
+//     readById: (id: TDB["id"]) => Promise<TB & TDB>,
+//     updateById: (props: UpdateByIdProps<TB, TReadMeta>) => Promise<TB & TDB>
 // }
 type CreateProps<T> = Omit<T, 'id'>
 type ReadByIdProps<T> = T["id"]
-type UpdateByIdProps<TBase, TDBBase> = {id: TDBBase["id"], updateData: Partial<TBase>}
+type UpdateByIdProps<TB, TDB> = {id: TDB["id"], updateData: Partial<TB>}
 
 type CRURepository
-<TBase, TDBBase>
+<TB, TDB>
 = {
-    create: (data: Omit<TBase, 'id'>) => Promise <TBase & TDBBase>,
-    readById: (id: ReadByIdProps<TDBBase>) => Promise<TBase & TDBBase | null>,
-    updateById: (props: UpdateByIdProps<TBase, TDBBase>) => Promise<TBase & TDBBase | null>
+    create: (data: Omit<TB, 'id'>) => EntitieRes<TB, TDB>,
+    readById: (id: ReadByIdProps<TDB>) => EntitieRes<TB, TDB>,
+    updateById: (props: UpdateByIdProps<TB, TDB>) => EntitieRes<TB, TDB>
 }

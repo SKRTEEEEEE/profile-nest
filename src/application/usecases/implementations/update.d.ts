@@ -1,30 +1,30 @@
 // type UpdateMeta<
-//     TBase,
-//     TDBBase = TDBBaseMockup,
-//     TFilter = Partial<TBase & TDBBase>,
-//     TUpdate = Partial<TBase & TDBBase>,
+//     TB,
+//     TDB = TDBMockup,
+//     TFilter = Partial<TB & TDB>,
+//     TUpdate = Partial<TB & TDB>,
 //     TOptions = TOptionsMockup> = {
 //     filter?: TFilter, 
 //     updateData?: TUpdate, 
 //     options?: TOptions 
 // }
-// type UpdateProps<TBase, TUpdateMeta extends UpdateMeta<TBase>> = TUpdateMeta
+// type UpdateProps<TB, TUpdateMeta extends UpdateMeta<TB>> = TUpdateMeta
 
 // type UpdateRepository<
-// TBase,
-// TUpdateMeta extends UpdateMeta<TBase>
+// TB,
+// TUpdateMeta extends UpdateMeta<TB>
 // >
 // = {
-//     update: (props: UpdateProps<TBase, TUpdateMeta>) => Promise<(TBase & TDBBase)| null>;
+//     update: (props: UpdateProps<TB, TUpdateMeta>) => Promise<(TB & TDB)| null>;
 // }
 
 type UpdateProps <
-TBase, TDBBase
-> = {filter: Partial<TBase & TDBBase>, updateData: Partial<TBase & TDBBase>}
+TB, TDB
+> = {filter: Partial<TB & TDB>, updateData: Partial<TB & TDB>}
 
 type UpdateRepository<
-TBase, TDBBase
+TB, TDB
 >
 = {
-    update: (props: UpdateProps<TBase,TDBBase>) => Promise<(TBase & TDBBase) | null>;
+    update: (props: UpdateProps<TB,TDB>) => EntitieArrayRes<TB, TDB>;
 }

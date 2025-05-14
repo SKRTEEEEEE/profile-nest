@@ -1,7 +1,7 @@
 // type ReadMeta<
-//   TBase,
-//   TDBBase = TDBBaseMockup,
-//   TFilter = Partial<TBase & TDBBase>,
+//   TB,
+//   TDB = TDBMockup,
+//   TFilter = Partial<TB & TDB>,
 //   TProjection = any,
 //   TOptions = TOptionsMockup,
 // > = {
@@ -10,12 +10,12 @@
 //   options?: TOptions;
 // };
 
-// type ReadProps<TBase, TReadMeta extends ReadMeta<TBase>> = TReadMeta
+// type ReadProps<TB, TReadMeta extends ReadMeta<TB>> = TReadMeta
 
-// type ReadRepository<TBase, TReadMeta extends ReadMeta<TBase>> = {
-//     read(props: ReadProps<TBase, TReadMeta>): Promise<TBase[]>;
+// type ReadRepository<TB, TReadMeta extends ReadMeta<TB>> = {
+//     read(props: ReadProps<TB, TReadMeta>): Promise<TB[]>;
 // }
-type ReadProps<TBase, TDBBase> = Optional<Partial<TBase & TDBBase>>
-type ReadRepository<TBase,TDBBase> = {
-    read(filter: ReadProps<TBase, TDBBase>): Promise<(TBase & TDBBase)[]>;
+type ReadProps<TB, TDB> = Optional<Partial<TB & TDB>>
+type ReadRepository<TB,TDB> = {
+    read(filter: ReadProps<TB, TDB>): EntitieArrayRes<TB, TDB>;
 }

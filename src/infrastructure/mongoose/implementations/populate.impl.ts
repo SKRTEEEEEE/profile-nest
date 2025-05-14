@@ -26,10 +26,10 @@ export class MongoosePopulateImpl<
     
     try {
       const res = await this.model.insertMany(docs);
+      this.resArrCheck(res);
       return res.map((doc) => this.documentToPrimary(doc as TBase & MongooseDocument));
     } catch (error) {
-      console.error('Error al poblar documentos:', error);
-      throw new DatabaseActionError("populate",'Error in the populate action');
+      throw new DatabaseActionError("populate",{optionalMessage:'Error in the populate action'});
     }
   }
 }

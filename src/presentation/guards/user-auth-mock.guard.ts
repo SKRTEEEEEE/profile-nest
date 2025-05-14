@@ -5,7 +5,7 @@ import { Observable } from 'rxjs';
 import { PUBLIC_ROUTE_KEY } from '../decorators/public-route.decorator';
 
 @Injectable()
-export class MockAuthUserGuard extends AuthGuard('mock') {
+export class UserAuthMockGuard extends AuthGuard('mock') {
   constructor(private reflector: Reflector) {
     super();
   }

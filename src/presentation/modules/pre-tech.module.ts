@@ -4,6 +4,7 @@ import { PreTechController } from 'src/presentation/controllers/pre-tech.control
 import { PreTechSchemaFactory } from 'src/infrastructure/mongoose/schemas/pre-tech.schema';
 import { PreTechService } from 'src/application/usecases/entities/pre-tech.service';
 import { MongoosePreTechRepo } from 'src/infrastructure/mongoose/entities/pre-tech.repo';
+import { RoleAuthService } from '../../application/usecases/shared/role-auth.service';
 
 
 @Module({
@@ -21,7 +22,8 @@ import { MongoosePreTechRepo } from 'src/infrastructure/mongoose/entities/pre-te
         return new PreTechService(repo)
       },
       inject: [MongoosePreTechRepo],
-    }
+    },
+    RoleAuthService
   ],
   exports: [
     // PreTechService // -> Al no utilizar-se fuera del 'modulo' -> osea el subconjunto marcado por este archivo, no es necesario exportarlo

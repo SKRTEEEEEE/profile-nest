@@ -1,4 +1,6 @@
 # Infrastructure
+## GENERAL - all layers
+- Las capas finales(mongoose/entities, shared) no necesitan usar services o nada parecido en el constructor, ya que utilizamos inyección (sino se crea un error de inyección circular)!!
 ## SHARED - **old services**
 -> Aquí van los repositorios de los Shared, osea la implementación de cosas diferentes a las Entitie (email, storage, auth, etc...)
 
@@ -39,5 +41,9 @@ Es simplemente por **convención en Clean Architecture**:
 Esto te permite hacer `useClass` dinámico, o incluso cambiar de proveedor sin tocar el dominio.
 
 ## MONGOOSE
+
+### Implementations
+
+  🧠 ⚠️ **Envolver todos los métodos con try-catch**
 
 -> Estructura dinámica para crear repositorios de mongoose de entidades

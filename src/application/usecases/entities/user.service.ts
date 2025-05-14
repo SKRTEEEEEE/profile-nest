@@ -16,7 +16,7 @@ import { UserRepository } from "src/application/interfaces/entities/user.interfa
 @Injectable()
 export class UserService<
   TDBBase 
-> {
+> implements UserRepository<TDBBase> {
   private readonly userRepository: UserRepository<TDBBase>;
 
   constructor(
@@ -24,25 +24,25 @@ export class UserService<
   ) {
     this.userRepository = userRepository;
   }
-  async create(data: Omit<UserBase, "id">): Promise<UserBase & TDBBase> {
+  async create(data: Omit<UserBase, "id">) {
     return await this.userRepository.create(data);
   }
-    async read(props: ReadProps<UserBase, TDBBase>): Promise<UserBase[]> {
+    async read(props: ReadProps<UserBase, TDBBase>) {
         return await this.userRepository.read(props);
     }
-    async readById(id: ReadByIdProps<TDBBase>): Promise<UserBase & TDBBase> {
+    async readById(id: ReadByIdProps<TDBBase>) {
         return await this.userRepository.readById(id);
     }
-    async readByAddress(address: string): Promise<UserBase & TDBBase> {
+    async readByAddress(address: string) {
         return await this.userRepository.readByAddress(address);
     }
-    async update(props: UpdateProps<UserBase, TDBBase>): Promise<UserBase> {
+    async update(props: UpdateProps<UserBase, TDBBase>) {
         return await this.userRepository.update(props);
     }
-    async updateById(props: UpdateByIdProps<UserBase, TDBBase>): Promise<UserBase & TDBBase> {
+    async updateById(props: UpdateByIdProps<UserBase, TDBBase>) {
         return await this.userRepository.updateById(props);
     }
-    async deleteById(props: DeleteByIdProps<TDBBase>): Promise<UserBase & TDBBase> {
+    async deleteById(props: DeleteByIdProps<TDBBase>) {
         return await this.userRepository.deleteById(props);
     }
 }

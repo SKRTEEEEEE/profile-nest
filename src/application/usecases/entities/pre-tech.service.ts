@@ -3,10 +3,11 @@ import { PreTechRepository } from 'src/application/interfaces/entities/pre-tech.
 
 @Injectable()
 export class PreTechService<
-TDBBase, 
+TDBBase, >
 // TReadMeta extends ReadMeta<PreTechBase, TDBBase, any, any, any>> 
 // TReadMeta extends ReadMeta<PreTechBase, TDBBase>> 
->{
+//  implements PreTechRepository<TDBBase> // Se puede implementar o no, si implementamos nos obligara a crear todas las funcs
+{
     constructor(
       private readonly preTechRepository: PreTechRepository<TDBBase>
     ) {}
@@ -24,4 +25,8 @@ TDBBase,
     async readByQuery(query: string) {
       return await this.preTechRepository.readByQuery(query)
     }
+
+    // async populate(docs: PopulateProps<PreTechBase>): Promise<(PreTechBase & TDBBase)[]> {
+    //   return await this.preTechRepository.populate(docs)
+    // }
   }
