@@ -3,7 +3,7 @@ import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { RoleType } from 'src/domain/entities/role.type';
 import { ROLES_KEY } from '../decorators/role.decorator';
-import {  RoleAuthService } from '../../application/usecases/shared/role-auth.service';
+import {  RoleAuthService } from '../../application/usecases/shareds/role-auth.service';
 import { PUBLIC_ROUTE_KEY } from '../decorators/public-route.decorator';
 
 

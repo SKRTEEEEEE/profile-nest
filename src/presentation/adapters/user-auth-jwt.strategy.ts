@@ -4,8 +4,8 @@ import { ConfigService } from "@nestjs/config";
 import { PassportStrategy } from "@nestjs/passport";
 import { Request } from "express";
 import { ExtractJwt, Strategy, StrategyOptionsWithRequest } from "passport-jwt";
-import { UserAuthJWTPayload } from "src/application/interfaces/shared/user-auth.interface";
-// import { AuthUserService } from "src/application/usecases/shared/auth-user.service";
+import { UserAuthJWTPayload } from "src/application/interfaces/shareds/user-auth.interface";
+// import { AuthUserService } from "src/application/usecases/shareds/auth-user.service";
 
 // --> NOT USED - para usar se ha de crear el guard correspondiente
 

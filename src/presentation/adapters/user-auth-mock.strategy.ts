@@ -4,7 +4,7 @@ import { Injectable, UnauthorizedException } from "@nestjs/common";
 import { PassportStrategy } from "@nestjs/passport";
 import { Request } from "express";
 import { Strategy } from "passport-custom";
-import { UserAuthJWTPayload } from "src/application/interfaces/shared/user-auth.interface";
+import { UserAuthJWTPayload } from "src/application/interfaces/shareds/user-auth.interface";
 import { RoleType } from "src/domain/entities/role.type";
 
 @Injectable()

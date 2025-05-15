@@ -4,7 +4,7 @@ import { PreTechController } from 'src/presentation/controllers/pre-tech.control
 import { PreTechSchemaFactory } from 'src/infrastructure/mongoose/schemas/pre-tech.schema';
 import { PreTechService } from 'src/application/usecases/entities/pre-tech.service';
 import { MongoosePreTechRepo } from 'src/infrastructure/mongoose/entities/pre-tech.repo';
-import { RoleAuthService } from '../../application/usecases/shared/role-auth.service';
+import { RoleAuthService } from '../../application/usecases/shareds/role-auth.service';
 
 
 @Module({

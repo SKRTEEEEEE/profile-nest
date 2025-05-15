@@ -1,5 +1,5 @@
 import { Injectable, UnauthorizedException } from "@nestjs/common";
-import { UserAuthRepository, VerifyJWTRes } from "src/application/interfaces/shared/user-auth.interface";
+import { UserAuthRepository, VerifyJWTRes } from "src/application/interfaces/shareds/user-auth.interface";
 import { createThirdwebClient } from 'thirdweb';
 import { createAuth } from 'thirdweb/auth';
 import { privateKeyToAccount } from 'thirdweb/wallets';

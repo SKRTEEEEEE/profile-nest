@@ -1,5 +1,5 @@
 import { Injectable } from "@nestjs/common";
-import { UserAuthRepository } from "src/application/interfaces/shared/user-auth.interface";
+import { UserAuthRepository } from "src/application/interfaces/shareds/user-auth.interface";
 
 
 // ⚠️ TESTING

@@ -20,9 +20,9 @@ export class PreTechController {
     
     @Get()
     @PublicRoute() // No se usara
-    @UseGuards(RoleAuthTokenGuard)
+    // @UseGuards(RoleAuthTokenGuard)
+    // @Roles(RoleType.STUDENT, RoleType.ADMIN) // Utiliza el de mayor rango -> admin
     // // @Roles() // Actuara como una ruta protegida normal (token validado)
-    @Roles(RoleType.STUDENT, RoleType.ADMIN) // Utiliza el de mayor rango -> admin
     async readPreTechByQuery(
         @Query() query: QueryDto,
     ): Promise<PreTech<MongooseBase>[]> {

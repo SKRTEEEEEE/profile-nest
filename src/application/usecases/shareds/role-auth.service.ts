@@ -1,6 +1,6 @@
 // role-authorization.service.ts
 import { Injectable, ForbiddenException } from '@nestjs/common';
-import { RoleAuthRepository } from 'src/application/interfaces/shared/role-auth.interface';
+import { RoleAuthRepository } from 'src/application/interfaces/shareds/role-auth.interface';
 import { RoleHierarchy, RoleType } from 'src/domain/entities/role.type';
 
 // export const checkHaveRoles=(requiredRoles: RoleType[]) => {

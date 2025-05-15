@@ -77,8 +77,8 @@ import { ConfigService } from "@nestjs/config";
 import { PassportStrategy } from "@nestjs/passport";
 import { Request } from "express";
 import { ExtractJwt, Strategy, StrategyOptionsWithRequest } from "passport-jwt";
-import { AuthUserJWTPayload } from "src/application/interfaces/shared/auth-user.interface";
-// import { AuthUserService } from "src/application/usecases/shared/auth-user.service";
+import { AuthUserJWTPayload } from "src/application/interfaces/shareds/auth-user.interface";
+// import { AuthUserService } from "src/application/usecases/shareds/auth-user.service";
 
 @Injectable()
 export class JwtAuthUserStrategy extends PassportStrategy(Strategy) {
@@ -144,7 +144,7 @@ import { Request } from 'express';
 import { ExtractJwt } from 'passport-jwt';
 import { Strategy } from 'passport';
 import { ethers } from 'ethers';
-import { AuthUserJWTPayload } from 'src/application/interfaces/shared/auth-user.interface';
+import { AuthUserJWTPayload } from 'src/application/interfaces/shareds/auth-user.interface';
 
 class CustomJwtStrategy extends Strategy {
   constructor(private configService: ConfigService) {

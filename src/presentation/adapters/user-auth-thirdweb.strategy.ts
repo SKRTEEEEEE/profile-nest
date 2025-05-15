@@ -2,8 +2,8 @@ import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { Strategy } from 'passport-custom';
 import { Request } from 'express';
-import { UserAuthJWTPayload } from 'src/application/interfaces/shared/user-auth.interface';
-import { UserAuthService } from 'src/application/usecases/shared/user-auth.service';
+import { UserAuthJWTPayload } from 'src/application/interfaces/shareds/user-auth.interface';
+import { UserAuthService } from 'src/application/usecases/shareds/user-auth.service';
 
 @Injectable()
 export class UserAuthThirdwebStrategy extends PassportStrategy(Strategy, 'thirdweb') {

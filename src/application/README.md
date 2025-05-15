@@ -1,6 +1,6 @@
 # App
 
-## UseCases
+## USECASES
 
 Toda la lógica ha de ir aquí, por mucho que se usen otros domains, COMO MUCHO PODEMOS TENER VARIOS 'USECASES' ->
 
@@ -11,10 +11,14 @@ Toda la lógica ha de ir aquí, por mucho que se usen otros domains, COMO MUCHO 
 -> Para los usecases consumidos por los controllers -> Le LLAMAREMOS 'usecases' 
                                                     -> app/usecases/adapters/<entitie>.usecases.ts
 
-
+## INTERFACES
+### ENTITIES 
+### SHARED(S)
+### PATTERN(S) - optional/future
+### IMPLEMENTATION
 ## Nomenclatura 
 ### Métodos application
 No nos hemos de preocupar del nombre de la app/interface ya que en app/usecases le daremos el nombre que queramos.
 ❓También en la app/usecases podríamos tener métodos que no esten incluidos en la app/interface
 ### SHARED(--old->services) VS ENTITIES
-Todo lo que sea /shared/ , nos referiremos a los 'layers' (o folders) que utilizaremos para cosas que no sean Entities. Por ejemplo, email, auth, storage, etc...
+Todo lo que sea /shareds/ , nos referiremos a los 'layers' (o folders) que utilizaremos para cosas que no sean Entities. Por ejemplo, email, auth, storage, etc...

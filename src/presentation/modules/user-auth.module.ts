@@ -6,9 +6,9 @@ import { ConfigModule } from '@nestjs/config';
 import { UserAuthThirdwebStrategy } from 'src/presentation/adapters/user-auth-thirdweb.strategy';
 import { UserAuthThirdwebGuard } from '../guards/user-auth-thirdweb.guard';
 import { Reflector } from '@nestjs/core';
-import { UserAuthThirdwebRepo } from 'src/infrastructure/shared/user-auth-thirdweb.repo';
-import { UserAuthService } from 'src/application/usecases/shared/user-auth.service';
-import { UserAuthRepository } from 'src/application/interfaces/shared/user-auth.interface';
+import { UserAuthThirdwebRepo } from 'src/infrastructure/shareds/user-auth-thirdweb.repo';
+import { UserAuthService } from 'src/application/usecases/shareds/user-auth.service';
+import { UserAuthRepository } from 'src/application/interfaces/shareds/user-auth.interface';
 
 
 @Module({
