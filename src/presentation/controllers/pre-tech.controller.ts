@@ -5,6 +5,8 @@ import { RoleAuthTokenGuard } from "../guards/role-auth-token.guard";
 import { RoleType } from "src/domain/entities/role.type";
 import { Roles } from "../decorators/role.decorator";
 import { PublicRoute } from "../decorators/public-route.decorator";
+import { QueryDto } from "../pipes/query.dto";
+
 
 @Controller("/pre-tech")
 export class PreTechController {
@@ -19,12 +21,12 @@ export class PreTechController {
     @Get()
     @PublicRoute() // No se usara
     @UseGuards(RoleAuthTokenGuard)
-    // @Roles() // Actuara como una ruta protegida normal (token validado)
+    // // @Roles() // Actuara como una ruta protegida normal (token validado)
     @Roles(RoleType.STUDENT, RoleType.ADMIN) // Utiliza el de mayor rango -> admin
     async readPreTechByQuery(
-        @Query("q") query: string,
+        @Query() query: QueryDto,
     ): Promise<PreTech<MongooseBase>[]> {
-        return await this.PreTechService.readByQuery(query);
+        return await this.PreTechService.readByQuery(query.q);
     }
 
 }

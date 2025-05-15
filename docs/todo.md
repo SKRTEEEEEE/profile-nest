@@ -25,4 +25,7 @@
 - [ ] Definir Estructura thirdweb-auth
 ## Extra
 - [ ] Crear Inyector() para 'desvincular' de nestjs
-- [ ] 
+## DTOs
+- [ ] Mirar en que capas quiero DTOs
+- [ ] Hacer DTOs
+- [ ] Integrar buen funcionamiento

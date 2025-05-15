@@ -1,11 +1,12 @@
-import { Module } from '@nestjs/common';
+import { Module, ValidationPipe } from '@nestjs/common';
 import { PreTechModule } from './pre-tech.module';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigModule } from '@nestjs/config';
-import { APP_GUARD } from '@nestjs/core';
+import { APP_GUARD, APP_PIPE } from '@nestjs/core';
 import { UserAuthThirdwebGuard } from '../guards/user-auth-thirdweb.guard';
 import { RoleAuthService } from '../../application/usecases/shared/role-auth.service';
 import { UserAuthThirdwebModule } from './user-auth.module';
+import { GlobalValidationPipe, validationOptions } from '../pipes/global.validation';
 
 
 @Module({
@@ -24,6 +25,10 @@ import { UserAuthThirdwebModule } from './user-auth.module';
       useClass: UserAuthThirdwebGuard,
       // useClass: MockAuthUserGuard
     },
+    // {
+    //   provide: APP_PIPE,
+    //   useValue: new GlobalValidationPipe(),
+    // },
     RoleAuthService
   ],
 })
