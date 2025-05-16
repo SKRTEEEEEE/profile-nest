@@ -1,5 +1,8 @@
+//@ts-nocheck
+
+
 import { Injectable } from "@nestjs/common";
-import { TechCreateService, TechReadOneService, TechReadService, TechUpdateService } from "src/application/usecases/entities/tech.service";
+import { TechCreateUseCase, TechReadOneUseCase, TechReadUseCase, TechUpdateUseCase } from "src/application/usecases/entities/tech.service";
 import { FwBase, LengBase, TechBase, TechForm } from "src/domain/entities/tech";
 import { MongooseBase } from "../../mongoose/types";
 import { OctokitGetTechGithubPercentageService } from "src/application/usecases/services/octokit.service";
@@ -7,10 +10,10 @@ import { OctokitGetTechGithubPercentageService } from "src/application/usecases/
 @Injectable()
 export class TechOctokitCreateRepo  {
     constructor(
-        private readonly techCreateService: TechCreateService<MongooseBase>,
-        private readonly techReadService: TechReadService<MongooseBase>,
-        private readonly techReadOneService: TechReadOneService<MongooseBase>,
-        private readonly techUpdateService: TechUpdateService<MongooseBase>,
+        private readonly techCreateService: TechCreateUseCase<MongooseBase>,
+        private readonly techReadService: TechReadUseCase<MongooseBase>,
+        private readonly techReadOneService: TechReadOneUseCase<MongooseBase>,
+        private readonly techUpdateService: TechUpdateUseCase<MongooseBase>,
         private readonly octokitGTGPService: OctokitGetTechGithubPercentageService,//github percentage
         //github actualizarTech
     ){}

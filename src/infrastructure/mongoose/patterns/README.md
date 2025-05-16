@@ -1,2 +1,0 @@
-
-Para comprobar que los types/patterns se implementan correctamente en el patterns/ podemos comentar alguna función 'minima' y se deberá quejar el lint.!

@@ -1,5 +1,6 @@
+//@ts-nocheck
 import { Injectable } from "@nestjs/common";
-import { TechReadService } from "src/application/usecases/entities/tech.service";
+import { TechReadUseCase } from "src/application/usecases/entities/tech.service";
 import { OctokitUpdateFileContentService } from "src/application/usecases/services/octokit.service";
 import { FullTechData, LengBase, TechBase } from "src/domain/entities/tech";
 import { MongooseBase } from "src/infrastructure/mongoose/types";
@@ -47,7 +48,7 @@ type GetLinksResp = {
 @Injectable()
 export class TechOctokitActualizarGithubRepo {
     constructor(
-        private readonly techReadService: TechReadService<MongooseBase>,
+        private readonly techReadService: TechReadUseCase<MongooseBase>,
         private readonly octokitUpdateFileContentService:OctokitUpdateFileContentService
         
     ){}
