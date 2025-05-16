@@ -17,7 +17,10 @@ implements PreTechRepository<MongooseBase>, MongooseRp<PreTechBase> {
   private jsonUrl = 'https://raw.githubusercontent.com/simple-icons/simple-icons/master/_data/simple-icons.json';
 
   constructor(@InjectModel('PreTech') private readonly preTechModel: Model<PreTechBase & Document>,) {
-    super(preTechModel, new MongooseReadImpl(preTechModel), new MongoosePopulateImpl(preTechModel));
+    super(
+      preTechModel, 
+      new MongooseReadImpl(preTechModel), 
+      new MongoosePopulateImpl(preTechModel));
   }
 
   async readByQuery(query: string): Promise<(PreTechBase & MongooseBase)[]> {

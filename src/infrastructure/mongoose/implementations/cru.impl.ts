@@ -26,7 +26,7 @@ export type MongooseCRUI<
 export class MongooseCRUImpl<
 TBase,
 > extends MongooseBaseImpl<TBase> implements MongooseCRUI<TBase>{
-    async create(data: Omit<TBase, 'id'>): Promise<TBase & MongooseBase> {
+    async create(data: Omit<TBase, 'id'>): CreateRes<TBase, MongooseBase> {
         try {
           const newDocument: TBase & MongooseDocument = new this.Model(data);
           const savedDocument = await newDocument.save();
@@ -40,7 +40,7 @@ TBase,
         }
       }
     
-      async readById(id: string): Promise<TBase & MongooseBase > {
+      async readById(id: string): ReadByIdRes<TBase , MongooseBase > {
         try {
           const document = await this.Model.findById(id);
           if (!document) {
@@ -55,7 +55,7 @@ TBase,
     
       async updateById(
         {id, updateData, options}: MongooseUpdateByIdProps<TBase>
-      ): Promise<TBase & MongooseBase > {
+      ): UpdateByIdRes<TBase, MongooseBase>{
         try {
           const updatedDocument = await this.Model.findByIdAndUpdate(id, updateData, (options ? options: {
           new: true,

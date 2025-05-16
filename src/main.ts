@@ -2,6 +2,7 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './presentation/modules/app.module';
 import { DomainErrorFilter } from './presentation/filters/domain-error.filter';
 import { GlobalValidationPipe, validationOptions } from './presentation/pipes/global.validation';
+import { RoleAuthTokenGuard } from './presentation/guards/role-auth-token.guard';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule)

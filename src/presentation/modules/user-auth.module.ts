@@ -32,7 +32,7 @@ export class UserAuthMockModule {}
   // exports: [UserAuthThirdwebStrategy, UserAuthThirdwebGuard, UserAuthService]
   // exports:[UserAuthThirdwebGuard]
 })
-export class UserAuthThirdwebModule {}
+export class UserAuthModule {}
 // IDEA for future
 // @Module({
 //     imports: [

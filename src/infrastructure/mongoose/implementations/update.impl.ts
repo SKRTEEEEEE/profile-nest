@@ -16,7 +16,7 @@ export type MongooseUpdateI<TBase> = {
 export class MongooseUpdateImpl<
 TBase,
 > extends MongooseBaseImpl <TBase> implements MongooseUpdateI<TBase> {
-    async update({filter, update, options}: MongooseUpdateProps<TBase>): Promise<(TBase & MongooseBase) > {
+    async update({filter, update, options}: MongooseUpdateProps<TBase>): UpdateRes<TBase, MongooseBase> {
         try {
             const updatedDocument: ModifyResult<TBase & MongooseDocument>|null = await this.Model.findOneAndUpdate(filter, update, options)
             return this.documentToPrimary(updatedDocument.value as TBase & MongooseDocument) as TBase & MongooseBase

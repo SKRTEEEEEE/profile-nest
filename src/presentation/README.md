@@ -89,6 +89,44 @@ Es simplemente por **convención en Clean Architecture**:
 Esto te permite hacer `useClass` dinámico, o incluso cambiar de proveedor sin tocar el dominio.
 
 ## MODULES
+### Providers
+#### `useFactory` vs `useClass` 
+
+Ambos enfoques (`useFactory` y `useClass`) son formas de registrar proveedores en NestJS, pero tienen diferencias clave en cómo se utilizan y cuándo son más apropiados.
+- (Actualmente): Podemos decir que en nuestro ejemplo en [pre-tech](./modules/pre-tech.module.ts) si inyectamos el Repo(infra), utilizo useFactory, sino queremos inyectar los Service(app) utilizo
+
+##### **`useClass`**
+- Registra una clase como implementación de una interfaz o token.
+- Úsalo cuando tienes una implementación concreta que no necesita lógica adicional para inicializarse.
+- Ventajas:
+  - Más limpio y directo.
+  - Ideal para casos donde no necesitas lógica personalizada.
+- Desventajas:
+  - Menos flexible si necesitas lógica adicional para inicializar el proveedor.
+
+##### **`useFactory`**
+- Permite crear manualmente una instancia de un proveedor utilizando una función de fábrica.
+- Úsalo cuando necesitas lógica personalizada o inicialización compleja.
+- Ventajas:
+  - Más flexible, ya que puedes agregar lógica personalizada.
+  - Útil para inicializaciones dinámicas o dependencias complejas.
+- Desventajas:
+  - Más verboso y requiere más configuración.
+
+##### **Comparación**
+
+| **Aspecto**                  | **`useClass`**                                      | **`useFactory`**                                   |
+|------------------------------|-----------------------------------------------------|----------------------------------------------------|
+| **Configuración**            | Más sencilla: NestJS resuelve automáticamente.      | Más personalizada: tú controlas la inicialización. |
+| **Flexibilidad**             | Menos flexible: siempre usa la misma implementación.| Más flexible: puedes agregar lógica adicional.      |
+| **Reutilización**            | Ideal para implementaciones genéricas y reutilizables.| Mejor para casos específicos o personalizados.    |
+| **Código**                   | Más limpio y conciso.                               | Más verboso, pero más controlado.                  |
+
+##### **¿Cuál usar?**
+- **`useClass`**: Úsalo cuando tengas una implementación concreta que no necesite lógica adicional.
+- **`useFactory`**: Úsalo cuando necesites lógica personalizada o inicialización dinámica.
+
+En general, `useClass` es más común y adecuado para la mayoría de los casos, mientras que `useFactory` es útil para escenarios más complejos o específicos.
 
 ## PIPES
 ### DTOs

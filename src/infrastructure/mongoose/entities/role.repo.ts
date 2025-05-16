@@ -6,14 +6,16 @@ import { MongooseCRUImpl } from "../implementations/cru.impl";
 import { MongooseReadImpl } from "../implementations/read.impl";
 import { MongooseDeleteByIdImpl, MongooseDeleteImpl } from "../implementations/delete.impl";
 import { MongooseCRRUDD } from "../types/patterns";
-import { RoleRepository } from "src/application/interfaces/entities/role.interface";
-import { MongooseBase } from "../types";
+// import { RoleRepository } from "src/application/interfaces/entities/role.interface";
+// import { MongooseBase } from "../types";
 import { RoleBase } from "src/domain/entities/role";
+
 
 @Injectable()
 export class MongooseRoleRepo 
 extends MongooseCRRUDDPattern<RoleBase> 
-implements MongooseCRRUDD<RoleBase>, RoleRepository<MongooseBase>
+implements MongooseCRRUDD<RoleBase>
+// , RoleRepository<MongooseBase>
 {
     constructor(@InjectModel("Role") private readonly roleModel:Model<RoleBase & Document>){
         super(

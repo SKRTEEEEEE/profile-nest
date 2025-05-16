@@ -1,37 +1,39 @@
 import { Injectable } from "@nestjs/common";
-import { RoleRepository } from "src/application/interfaces/entities/role.interface";
+import { CRRUDDRepository } from "src/application/interfaces/patterns/crrudd.interface";
 import { RoleBase } from "src/domain/entities/role";
 
 @Injectable()
-export class RoleService<
-TDBBase
-> implements RoleRepository<TDBBase>{
+export class RoleCrruddService<
+TDBase
+> 
+implements CRRUDDRepository<RoleBase, TDBase>
+{
     constructor(
-        private readonly roleRepository: RoleRepository<TDBBase>
+        private readonly crruddRepository: CRRUDDRepository<RoleBase,TDBase>
     ){}
     async create(data: Omit<RoleBase, "id">) {
-        return await this.roleRepository.create(data)
+        return await this.crruddRepository.create(data)
     }
-    async read(props?: ReadProps<RoleBase, TDBBase>): Promise<[] | (RoleBase & TDBBase)[]> {
-        return await this.roleRepository.read(props)
+    async read(props?: ReadProps<RoleBase, TDBase>): Promise<[] | (RoleBase & TDBase)[]> {
+        return await this.crruddRepository.read(props)
     }
     async readAll() {
-        return await this.roleRepository.read()
+        return await this.crruddRepository.read()
     }
-    async readById(id: ReadByIdProps<TDBBase>) {
-        return await this.roleRepository.readById(id)
+    async readById(id: ReadByIdProps<TDBase>) {
+        return await this.crruddRepository.readById(id)
     }
-    async updateRole(props: UpdateByIdProps<RoleBase, TDBBase>) {
-        return this.roleRepository.updateById(props)
+    // async updateRole(props: UpdateByIdProps<RoleBase, TDBase>) {
+    //     return this.crruddRepository.updateById(props)
+    // }
+    async updateById(props: UpdateByIdProps<RoleBase, TDBase>): Promise<RoleBase & TDBase> {
+        return this.crruddRepository.updateById(props)
     }
-    updateById(props: UpdateByIdProps<RoleBase, TDBBase>): Promise<RoleBase & TDBBase> {
-        return this.roleRepository.updateById(props)
+    async deleteById (id: DeleteByIdProps<TDBase>)  {
+        return await this.crruddRepository.deleteById(id)
     }
-    async deleteById (id: DeleteByIdProps<TDBBase>)  {
-        return await this.roleRepository.deleteById(id)
-    }
-    async delete (props: DeleteProps<RoleBase, TDBBase>)  {
-        return await this.roleRepository.delete(props)
+    async delete (props: DeleteProps<RoleBase, TDBase>)  {
+        return await this.crruddRepository.delete(props)
     }
 
 }

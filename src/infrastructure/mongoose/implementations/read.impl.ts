@@ -9,7 +9,7 @@ export type MongooseReadProps<TBase> = {
   projection?: ProjectionType<TBase> | null | undefined,
   options?: QueryOptions<TBase> | null | undefined
 }
-export type MongooseReadResponse<TBase> = Promise<(TBase & MongooseBase)[]>
+export type MongooseReadResponse<TBase> = ReadRes<TBase, MongooseBase>
 export type MongooseReadI<TBase> = {
   read(
     {filter, projection, options}:MongooseReadProps<TBase>

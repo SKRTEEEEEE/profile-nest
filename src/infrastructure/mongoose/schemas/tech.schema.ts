@@ -5,7 +5,7 @@ import { FwBase, LengBase, LibBase } from "src/domain/entities/tech";
 
 
 
-@Schema({ timestamps: true })
+@Schema({ timestamps: true, collection: "Lenguajes" })
 export class LibDocument extends Document 
 implements LibBase
 {
@@ -56,6 +56,6 @@ implements LengBase
   frameworks: FwDocument[];
 }
 
-export const LibSchema = SchemaFactory.createForClass(LibDocument);
-export const FwSchema = SchemaFactory.createForClass(FwDocument);
-export const LengSchema = SchemaFactory.createForClass(LengDocument);
+export const LibSchemaFactory = SchemaFactory.createForClass(LibDocument);
+export const FwSchemaFactory = SchemaFactory.createForClass(FwDocument);
+export const LengSchemaFactory = SchemaFactory.createForClass(LengDocument);

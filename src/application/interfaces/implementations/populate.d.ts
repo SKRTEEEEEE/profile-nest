@@ -1,10 +1,7 @@
+type PopulateRes<TB, TDB> = EntitieArrayRes<TB, TDB>;
 
+type PopulateProps<TB> = Array<TB>;
 
-
-type PopulateProps<TB> = Array<TB>
-
-type PopulateRepository<TB, TDB> = {
-    populate(
-      docs: PopulateProps<TB>,
-    ): EntitieArrayRes<TB, TDB>;
-  }
+type PopulateI<TB, TDB> = {
+    populate(docs: PopulateProps<TB>): PopulateRes<TB, TDB>;
+};

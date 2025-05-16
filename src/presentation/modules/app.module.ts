@@ -1,11 +1,14 @@
-import { Module, ValidationPipe } from '@nestjs/common';
+import { Module } from '@nestjs/common';
 import { PreTechModule } from './pre-tech.module';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigModule } from '@nestjs/config';
 import { APP_GUARD } from '@nestjs/core';
 import { UserAuthThirdwebGuard } from '../guards/user-auth-thirdweb.guard';
 import { RoleAuthService } from '../../application/usecases/shareds/role-auth.service';
-import { UserAuthThirdwebModule } from './user-auth.module';
+import { UserAuthModule } from './user-auth.module';
+import { TechModule } from './tech.module';
+import { RoleAuthModule } from './role-auth.module';
+import { TechOctokitModule } from './tech-octokit.module';
 
 
 @Module({
@@ -13,7 +16,10 @@ import { UserAuthThirdwebModule } from './user-auth.module';
     ConfigModule.forRoot(), // 👈 aquí le pasamos la conexión a dotenv
     MongooseModule.forRoot(process.env.MONGODB_URI!), // 👈 aquí le pasamos la conexión a la uri para que mongoose tenga acceso
     PreTechModule,
-    UserAuthThirdwebModule,
+    TechModule,
+    UserAuthModule,
+    RoleAuthModule,
+    // TechOctokitModule
     // MockAuthUserModule,
   ],
   controllers: [],
@@ -24,11 +30,7 @@ import { UserAuthThirdwebModule } from './user-auth.module';
       useClass: UserAuthThirdwebGuard,
       // useClass: MockAuthUserGuard
     },
-    // {
-    //   provide: APP_PIPE,
-    //   useValue: new GlobalValidationPipe(),
-    // },
     RoleAuthService
-  ],
+  ]
 })
 export class AppModule {}
