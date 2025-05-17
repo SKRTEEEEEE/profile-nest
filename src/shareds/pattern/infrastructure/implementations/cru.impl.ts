@@ -1,7 +1,7 @@
 import { QueryOptions, UpdateQuery } from "mongoose";
 import { MongooseBase, MongooseDocument } from "../types";
 import { MongooseBaseImpl } from "./base";
-import { DatabaseActionError } from "src/domain/errors/domain.error";
+import { DatabaseActionError } from "src/domain/flows/domain.error";
 export type MongooseUpdateByIdProps<TBase> = {
   id: string,
   updateData: UpdateQuery<TBase> | undefined,

@@ -19,14 +19,11 @@ export class TechOctokitCreateRepo  {
         // private readonly octokitUFCService: OctokitUpdateFileContentService//github actualizarTech
     ){}
     async create(data: TechForm, owner = "SKRTEEEEEE") { 
-const { nameId, nameBadge, web, desc, afinidad, color, experiencia, img, lengTo, fwTo } = data;
-        console.log("data", data)
+    const { nameId, nameBadge, web, desc, afinidad, color, experiencia, img, lengTo, fwTo } = data;
     try {
         // 1. Obtener el estado actual de la BD y calcular uso de GitHub
         const proyectosDB = await this.techReadService.read({});
-        console.log("proyectosDb", proyectosDB)
         const usoGithub = await this.octokit.getTechGithubPercentage(nameId, owner);
-        console.log("use github", usoGithub)
         // Calcular la siguiente preferencia disponible
         const nextPreference = await this.calculateNextPreference(proyectosDB, lengTo, fwTo);
         
@@ -97,7 +94,7 @@ const { nameId, nameBadge, web, desc, afinidad, color, experiencia, img, lengTo,
         //     }),
         //     actualizarJson()
         // ]);
-        //- HERE CONTINUES
+        // TODO -> 🚧⚠️‼️ HERE CONTINUES -- TODO ‼️⚠️🚧
         // await actualizarGithubTechsC({type: ActualizarGithubTechsType.all, create:{base: {nameId, nameBadge, web, color}, oldTechs: proyectosDB} })
 
         return { success, message };

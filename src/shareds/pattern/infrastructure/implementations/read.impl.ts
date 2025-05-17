@@ -2,7 +2,7 @@
 import { MongooseBaseImpl } from './base';
 import { MongooseBase } from '../types';
 import { FilterQuery, Model, ProjectionType, QueryOptions } from 'mongoose';
-import { DatabaseActionError } from 'src/domain/errors/domain.error';
+import { DatabaseActionError } from 'src/domain/flows/domain.error';
  
 export type MongooseReadProps<TBase> = {
   filter?: FilterQuery<TBase & MongooseBase> | undefined,

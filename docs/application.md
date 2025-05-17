@@ -10,7 +10,7 @@ Toda la lógica ha de ir aquí, por mucho que se usen otros domains, COMO MUCHO 
                         -> app/usecases/entities/<entitie>.service.ts - <Entitie>Service
 -> Para los usecases consumidos por los controllers -> Le LLAMAREMOS 'usecases' 
                                                     -> app/usecases/adapters/<entitie>.usecases.ts
-
+### ⚠️ Mantener los use cases de tipo 'Pattern' individuales ‼️
 ## INTERFACES
 ### ENTITIES 
 ### SHARED(S)

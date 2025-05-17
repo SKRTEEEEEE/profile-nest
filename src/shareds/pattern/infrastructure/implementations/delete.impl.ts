@@ -1,7 +1,7 @@
 import { QueryOptions, RootFilterQuery } from "mongoose";
 import { MongooseBase } from "../types";
 import { MongooseBaseImpl } from "./base";
-import { DatabaseActionError, DatabaseFindError } from "src/domain/errors/domain.error";
+import { DatabaseActionError, DatabaseFindError } from "src/domain/flows/domain.error";
 export type MongooseDeleteByIdI<TBase> = {
   deleteById(
     id: MongooseBase["id"]

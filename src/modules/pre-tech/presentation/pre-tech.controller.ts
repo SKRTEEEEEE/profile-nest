@@ -7,11 +7,14 @@ import { PublicRoute } from "src/shareds/jwt-auth/presentation/public-route.deco
 import { Roles } from "src/shareds/role-auth/presentation/role.decorator";
 import { QueryDto } from "src/shareds/presentation/pipes/query.dto";
 import { MongooseBase } from "src/shareds/pattern/infrastructure/types";
+import { ApiResponse } from "src/shareds/presentation/api-response.decorator";
+import { ResCodes } from "src/domain/flows/res.codes";
+import { PreTechInterface } from "../application/pre-tech.interface";
 
 
 
 @Controller("/pre-tech")
-export class PreTechController  {
+export class PreTechController implements PreTechInterface<MongooseBase> {
     constructor(private readonly preTechEndpointService: PreTechEndpointUseCase<MongooseBase>){} // Esto proviene de /app y no depende de ninguna librería tansolo del domain(typescript puro)
     // constructor(private readonly preTechEndpointService: MongoosePreTechRepo){} // Esto proviene de /infra
 
@@ -22,6 +25,10 @@ export class PreTechController  {
 
     
     @Get()
+    @ApiResponse(
+        ResCodes.ENTITIES_FOUND,
+        "Hola mundo"
+    )
     @PublicRoute() // No se usara
     // @UseGuards(RoleAuthTokenGuard)
     // @Roles(RoleType.STUDENT, RoleType.ADMIN) // Utiliza el de mayor rango -> admin
@@ -29,6 +36,6 @@ export class PreTechController  {
     async readByQuery(
         @Query() query: QueryDto,
     ): Promise<PreTech<MongooseBase>[]> {
-        return await this.preTechEndpointService.readByQuery(query.q);
+        return await this.preTechEndpointService.readByQuery(query);
     }
 }

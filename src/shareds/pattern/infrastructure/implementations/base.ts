@@ -1,6 +1,6 @@
 import { Model } from "mongoose";
 import { MongooseBase, MongooseDocument } from "../types";
-import { DatabaseFindError } from "src/domain/errors/domain.error";
+import { DatabaseFindError } from "src/domain/flows/domain.error";
 
 export abstract class MongooseBaseImpl<
   TBase,

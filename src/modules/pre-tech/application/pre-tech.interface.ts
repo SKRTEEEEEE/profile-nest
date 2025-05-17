@@ -5,5 +5,5 @@ export abstract class PreTechInterface<
 TDB> 
 {
     abstract updatePreTech(): Promise<void>;
-    abstract readByQuery(query: string): Promise<(PreTechBase & TDB)[]>;
+    abstract readByQuery(query: {q:string}): Promise<(PreTechBase & TDB)[]>;
 }

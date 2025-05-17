@@ -1,7 +1,8 @@
 import { ModifyResult, QueryOptions, RootFilterQuery, UpdateQuery } from "mongoose";
 import { MongooseBase, MongooseDocument } from "../types";
 import { MongooseBaseImpl } from "./base";
-import { DatabaseActionError } from "src/domain/errors/domain.error";
+import { DatabaseActionError } from "src/domain/flows/domain.error";
+
 export type MongooseUpdateProps<TBase> = {
     filter: RootFilterQuery<TBase & MongooseBase>, 
     update: UpdateQuery<TBase & MongooseBase>, 

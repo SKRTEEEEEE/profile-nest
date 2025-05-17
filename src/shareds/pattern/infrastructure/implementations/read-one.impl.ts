@@ -3,7 +3,7 @@
 import { Model, ProjectionType, QueryOptions, RootFilterQuery } from "mongoose";
 import { MongooseBase } from "../types";
 import { MongooseBaseImpl } from "./base";
-import { DatabaseActionError } from "src/domain/errors/domain.error";
+import { DatabaseActionError } from "src/domain/flows/domain.error";
 
 export type MongooseReadOneI<TB> = {
     readOne(

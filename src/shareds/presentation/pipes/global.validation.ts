@@ -2,6 +2,7 @@ import { ValidatorOptions } from "class-validator";
 import { PipeTransform, Injectable, ArgumentMetadata, BadRequestException } from '@nestjs/common';
 import { validate } from 'class-validator';
 import { plainToInstance } from 'class-transformer';
+import { InputParseError } from "src/domain/flows/domain.error";
 
 export const validationOptions: ValidationPipeOptions = {
   whitelist: true,  // Eliminar propiedades no definidas en DTOs -> prefiero warning y eliminar + dev msg
@@ -14,17 +15,13 @@ export const validationOptions: ValidationPipeOptions = {
 
 
 export interface ValidationPipeOptions extends ValidatorOptions {
-//   transform?: boolean;
-//   disableErrorMessages?: boolean;
-//   exceptionFactory?: (errors: ValidationError[]) => any;
-  //start
   enableDebugMessages: true;
   skipMissingProperties: false;
   skipUndefinedProperties?: false;
   skipNullProperties?: false;
   transform: true;
 }
-
+//⬆️ No integrado aun
 
 
 
@@ -40,7 +37,8 @@ export class GlobalValidationPipe implements PipeTransform<any> {
       type === 'query' &&
       (value === undefined || value === null || this.isEmptyObject(value))
     ) {
-      throw new BadRequestException('Query params are required but were not provided.');
+      // Usar tu clase de error de dominio para errores de validación
+      throw new InputParseError('Query params are required but were not provided.');
     }
 
     const object = plainToInstance(metatype, value);
@@ -60,9 +58,10 @@ export class GlobalValidationPipe implements PipeTransform<any> {
         })
         .filter(Boolean);
 
-      throw new BadRequestException({
-        message: 'Validation failed',
-        errors: errorMessages,
+      // Usar tu clase de error de dominio en lugar de BadRequestException
+      throw new InputParseError('Validation failed', {
+        optionalMessage: errorMessages.join('; '),
+        meta: { errors: errorMessages }
       });
     }
 

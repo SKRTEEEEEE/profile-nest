@@ -1,7 +1,7 @@
 import { Model } from 'mongoose';
 import { MongooseBaseImpl } from './base';
 import { MongooseBase, MongooseDocument } from '../types';
-import { DatabaseActionError, InputParseError } from 'src/domain/errors/domain.error';
+import { DatabaseActionError, InputParseError } from 'src/domain/flows/domain.error';
 
 export type MongoosePopulateProps<TBase> = Array<TBase>;
 export type MongoosePopulateResponse<TBase> = Promise<(TBase & MongooseBase)[]>;
@@ -22,7 +22,7 @@ export class MongoosePopulateImpl<
   }
 
   async populate(docs: MongoosePopulateProps<TBase>): MongoosePopulateResponse<TBase> {
-    if (docs.length === 0) throw new InputParseError("documents",'No documents to populate');
+    if (docs.length === 0) throw new InputParseError("documents",{optionalMessage:'No documents to populate'});
     
     try {
       const res = await this.model.insertMany(docs);

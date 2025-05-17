@@ -20,7 +20,7 @@ implements PreTechInterface<TDBBase> // Se puede implementar o no, si implementa
       return await this.preTechRepository.updatePreTech()
     }
   
-    async readByQuery(query: string) {
+    async readByQuery(query: {q:string}) {
       return await this.preTechRepository.readByQuery(query)
     }
     

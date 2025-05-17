@@ -26,6 +26,10 @@
 ## Extra
 - [ ] Crear Inyector() para 'desvincular' de nestjs
 ## DTOs
-- [ ] Mirar en que capas quiero DTOs
-- [ ] Hacer DTOs
-- [ ] Integrar buen funcionamiento
+- [x] Mirar en que capas quiero DTOs: controllers
+- [x] Hacer DTOs
+- [x] Integrar buen funcionamiento
+## Terminar tech-octokit/create.repo.ts
+- [ ] Hacer que saque lo necesario para actualizar.repo.ts
+## Unificar Res y ERRORS v1 
+- [ ] Incluir siempre message y success
