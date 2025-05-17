@@ -10,6 +10,7 @@ TDBBase, >
 implements PreTechInterface<TDBBase> // Se puede implementar o no, si implementamos nos obligara a crear todas las funcs
 {
   constructor(
+    @Inject('PreTechRepository') 
     private readonly preTechRepository: PreTechInterface<TDBBase>
   ) {}
   
@@ -26,20 +27,22 @@ implements PreTechInterface<TDBBase> // Se puede implementar o no, si implementa
   }
 
   @Injectable()
-export class PreTechReadUseCase {
+export class PreTechReadUseCase<TDB> {
   constructor(
-    @Inject('PreTechRepository') private readonly repo: ReadI<PreTechBase, any>
+    @Inject('PreTechRepository') 
+    private readonly repo: ReadI<PreTechBase, TDB>
   ) {}
 
-  async execute(props) {
+  async execute(props: ReadProps<PreTechBase, TDB>) {
     return this.repo.read(props);
   }
 }
 
 @Injectable()
-export class PreTechPopulateUseCase {
+export class PreTechPopulateUseCase<TDB> {
   constructor(
-    @Inject('PreTechRepository') private readonly repo: PopulateI<PreTechBase, any>
+    @Inject('PreTechRepository') 
+    private readonly repo: PopulateI<PreTechBase, TDB>
   ) {}
 
   async execute(docs) {

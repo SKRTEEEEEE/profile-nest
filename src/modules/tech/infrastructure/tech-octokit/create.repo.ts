@@ -1,11 +1,12 @@
-//@ts-nocheck
+
 
 
 import { Injectable } from "@nestjs/common";
-import { TechCreateUseCase, TechReadOneUseCase, TechReadUseCase, TechUpdateUseCase } from "src/application/usecases/entities/tech.service";
 import { FwBase, LengBase, TechBase, TechForm } from "src/domain/entities/tech";
-import { MongooseBase } from "../mongoose/types";
-import { OctokitGetTechGithubPercentageService, OctokitUpdateFileContentService } from "src/application/usecases/services/octokit.service";
+import { TechReadUseCase } from "src/modules/tech/application/tech-read.usecase";
+import { TechCreateUseCase, TechReadOneUseCase, TechUpdateUseCase } from "src/modules/tech/application/tech.usecase";
+import { MongooseBase } from "src/shareds/pattern/infrastructure/types";
+import { OctokitRepo } from "src/shareds/octokit/infrastructure/octokit.service";
 
 @Injectable()
 export class TechOctokitCreateRepo  {
@@ -14,17 +15,18 @@ export class TechOctokitCreateRepo  {
         private readonly techReadService: TechReadUseCase<MongooseBase>,
         private readonly techReadOneService: TechReadOneUseCase<MongooseBase>,
         private readonly techUpdateService: TechUpdateUseCase<MongooseBase>,
-        private readonly octokitGTGPService: OctokitGetTechGithubPercentageService,//github percentage
-        private readonly octokitUFCService: OctokitUpdateFileContentService//github actualizarTech
+        private readonly octokit: OctokitRepo,//github percentage
+        // private readonly octokitUFCService: OctokitUpdateFileContentService//github actualizarTech
     ){}
     async create(data: TechForm, owner = "SKRTEEEEEE") { 
 const { nameId, nameBadge, web, desc, afinidad, color, experiencia, img, lengTo, fwTo } = data;
-
+        console.log("data", data)
     try {
         // 1. Obtener el estado actual de la BD y calcular uso de GitHub
-        const proyectosDB = await this.techReadService.read();
-        const usoGithub = await this.octokitGTGPService.getTechGithubPercentage(nameId, owner);
-        
+        const proyectosDB = await this.techReadService.read({});
+        console.log("proyectosDb", proyectosDB)
+        const usoGithub = await this.octokit.getTechGithubPercentage(nameId, owner);
+        console.log("use github", usoGithub)
         // Calcular la siguiente preferencia disponible
         const nextPreference = await this.calculateNextPreference(proyectosDB, lengTo, fwTo);
         

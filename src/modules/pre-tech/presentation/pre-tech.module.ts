@@ -33,10 +33,10 @@ import { PreTechEndpointUseCase, PreTechReadUseCase, PreTechPopulateUseCase } fr
       useFactory:(repo) => new PreTechPopulateUseCase(repo),
       inject: ['PreTechRepository']
     },
-    {
-      provide: PreTechInterface,
-      useClass: MongoosePreTechRepo
-    },
+    // {
+    //   provide: PreTechInterface,
+    //   useClass: MongoosePreTechRepo
+    // }, // -> Puedo comentarlo porque le 'inyecto' PreTechRepository 
     // PreTechReadUseCase,
     // PreTechPopulateUseCase,
     PreTechEndpointUseCase,

@@ -7,12 +7,16 @@ import { ReadOneRepository } from "src/shareds/pattern/application/usecases/read
 import { TechReadUseCase } from "../application/tech-read.usecase";
 import { LengSchemaFactory } from "../infrastructure/tech.schema";
 import { MongooseTechRepo } from "../infrastructure/tech.repo";
+import { OctokitModule } from "src/shareds/octokit/presentation/octokit.module";
+import { TechOctokitCreateRepo } from "../infrastructure/tech-octokit/create.repo";
+import { TechCreateUseCase, TechReadOneUseCase, TechUpdateUseCase } from "../application/tech.usecase";
 
 @Module({
     imports: [
         MongooseModule.forFeature([
             { name: "Lenguaje", schema: LengSchemaFactory },
         ]),
+        OctokitModule
     ],
     controllers: [TechController],
     providers: [
@@ -24,13 +28,14 @@ import { MongooseTechRepo } from "../infrastructure/tech.repo";
             provide: ReadOneRepository,
             useClass: MongooseTechRepo
         },
-        // TechCreateUseCase, // Nuevo servicio para crear
+        TechOctokitCreateRepo,
+        TechCreateUseCase, // Nuevo servicio para crear
         TechReadUseCase, // Nuevo servicio para leer
         // TechReadByIdUseCase, // Nuevo servicio para leer por ID
-        // TechUpdateUseCase, // Nuevo servicio para actualizar
+        TechUpdateUseCase, // Nuevo servicio para actualizar
         // TechUpdateByIdUseCase, // Nuevo servicio para actualizar por ID
         // TechDeleteUseCase,
-        // TechReadOneUseCase
+        TechReadOneUseCase
         // RoleAuthUseCase, // RoleAuthUseCase ya está registrado
     ],
     // exports: [

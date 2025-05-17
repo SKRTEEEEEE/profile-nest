@@ -1,9 +1,9 @@
-//@ts-nocheck
+
 import { Injectable } from "@nestjs/common";
-import { TechReadUseCase } from "src/application/usecases/entities/tech.service";
-import { OctokitUpdateFileContentService } from "src/application/usecases/services/octokit.service";
 import { FullTechData, LengBase, TechBase } from "src/domain/entities/tech";
-import { MongooseBase } from "src/infrastructure/mongoose/types";
+import { TechReadUseCase } from "src/modules/tech/application/tech-read.usecase";
+import { MongooseBase } from "src/shareds/pattern/infrastructure/types";
+import { OctokitRepo } from "src/shareds/octokit/infrastructure/octokit.service";
 
 // ⚠️ Hay que arreglar esto ⬇️⬇️
 const baseOptions = {
@@ -49,7 +49,7 @@ type GetLinksResp = {
 export class TechOctokitActualizarGithubRepo {
     constructor(
         private readonly techReadService: TechReadUseCase<MongooseBase>,
-        private readonly octokitUpdateFileContentService:OctokitUpdateFileContentService
+        private readonly octokit: OctokitRepo
         
     ){}
     async actualizar (props:ActualizarGithubTechsProps){
@@ -126,7 +126,7 @@ ${techsHeaderBanner}
                 }
             });
     
-            await this.octokitUpdateFileContentService.updateFileContent(path.md, baseOptions,{message:"Actualizar archivo .md", content:newMdContent});
+            await this.octokit.updateFileContent(path.md, baseOptions,{message:"Actualizar archivo .md", content:newMdContent});
             console.log("Archivo Markdown actualizado");
         } catch (error) {
             console.error("Error actualizando el archivo .md:", error);
@@ -172,7 +172,7 @@ private async  actualizarJson(flattenTechs: FullTechData[]) {
     }, {});
 
 
-    await this.octokitUpdateFileContentService.updateFileContent(path.json, baseOptions,{message:"Actualizar archivo .json",content: JSON.stringify(newJsonData, null, 2)});
+    await this.octokit.updateFileContent(path.json, baseOptions,{message:"Actualizar archivo .json",content: JSON.stringify(newJsonData, null, 2)});
     console.log("Archivo Json actualizado");
 }
     

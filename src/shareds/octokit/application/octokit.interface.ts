@@ -19,7 +19,7 @@ export type LengPercentage = {
     name: string;
     percentage: number;
 }
-export type OctokitRepository = {
+export type OctokitInterface = {
     getReposDetails: (owner: string) => Promise<RepoDetailsRes>
     updateFileContent: (filePath: string,baseOptions: GithubOptionsBase ,updateOptions: GithubOptionsUpdate, maxRetries?: number) => Promise<void> // hay que cambiar por mensaje unificado
     getTechGithubPercentage: (nameId: string, owner: string) => Promise<number>

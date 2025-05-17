@@ -19,7 +19,7 @@ import { PreTechModule } from './modules/pre-tech/presentation/pre-tech.module';
     TechModule,
     JwtAuthModule,
     RoleAuthModule,
-    // TechOctokitModule
+    // OctokitModule
     // MockAuthUserModule,
   ],
   controllers: [],
