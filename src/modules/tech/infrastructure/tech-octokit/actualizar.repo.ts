@@ -22,7 +22,9 @@ type ActualizarGithubTechsProps = {
     create?: {
         base:PreTechBase
         oldTechs: (LengBase & MongooseBase)[]
-    }
+    },
+    // techs: ReadAllFlattenTechsRes<MongooseBase>["techs"],
+    // flattenTechs: ReadAllFlattenTechsRes<MongooseBase>["flattenTechs"]
 }
 type TechJsonData = {
     name: string;
@@ -52,7 +54,11 @@ export class TechOctokitActualizarGithubRepo {
         private readonly octokit: OctokitRepo
         
     ){}
-    async actualizar (props:ActualizarGithubTechsProps){
+    async actualizar (props:{type: ActualizarGithubTechsType,
+    create?: {
+        base:PreTechBase
+        oldTechs: (LengBase & MongooseBase)[]
+    }}){
     const {flattenTechs, techs} = await this.techReadService.readAllC()
     if(props.create!==undefined){
         try {
@@ -106,7 +112,6 @@ ${techsHeaderBanner}
 </a>
 </p>\n\n\n***\n\n\n`;
             if(create){
-                console.log("create: ", create)
                 newMdContent += this.createBadgeTech(create.base, true)
             }
             
@@ -150,7 +155,6 @@ private async  actualizarJson(flattenTechs: FullTechData[]) {
 
     const newJsonData = flattenTechs.reduce<{ [key: string]: TechJsonData }>( (acc, proyecto) => {
         const lenguajeName = proyecto.nameBadge; // Nombre del lenguaje como clave
-        console.log("depuring in actualizar.repo.ts: ", proyecto.valueAfin , proyecto.valueExp)
         // Crear el objeto con los datos correspondientes
         const languageData: TechJsonData = {
             name: proyecto.nameId,

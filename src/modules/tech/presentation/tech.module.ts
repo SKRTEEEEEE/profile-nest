@@ -10,6 +10,8 @@ import { MongooseTechRepo } from "../infrastructure/tech.repo";
 import { OctokitModule } from "src/shareds/octokit/presentation/octokit.module";
 import { TechOctokitCreateRepo } from "../infrastructure/tech-octokit/create.repo";
 import { TechCreateUseCase, TechReadOneUseCase, TechUpdateUseCase } from "../application/tech.usecase";
+import { TechOctokitActualizarGithubRepo } from "../infrastructure/tech-octokit/actualizar.repo";
+import { TechOctokitUpdateRepo } from "../infrastructure/tech-octokit/update.repo";
 
 @Module({
     imports: [
@@ -28,12 +30,14 @@ import { TechCreateUseCase, TechReadOneUseCase, TechUpdateUseCase } from "../app
             provide: ReadOneRepository,
             useClass: MongooseTechRepo
         },
+        TechOctokitUpdateRepo, // nuevo
+        TechOctokitActualizarGithubRepo,
         TechOctokitCreateRepo,
-        TechCreateUseCase, // Nuevo servicio para crear
-        TechReadUseCase, // Nuevo servicio para leer
-        // TechReadByIdUseCase, // Nuevo servicio para leer por ID
-        TechUpdateUseCase, // Nuevo servicio para actualizar
-        // TechUpdateByIdUseCase, // Nuevo servicio para actualizar por ID
+        TechCreateUseCase, // 
+        TechReadUseCase, //
+        // TechReadByIdUseCase, 
+        TechUpdateUseCase, 
+        // TechUpdateByIdUseCase, 
         // TechDeleteUseCase,
         TechReadOneUseCase
         // RoleAuthUseCase, // RoleAuthUseCase ya está registrado

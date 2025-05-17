@@ -7,6 +7,7 @@ import { TechReadUseCase } from "src/modules/tech/application/tech-read.usecase"
 import { TechCreateUseCase, TechReadOneUseCase, TechUpdateUseCase } from "src/modules/tech/application/tech.usecase";
 import { MongooseBase } from "src/shareds/pattern/infrastructure/types";
 import { OctokitRepo } from "src/shareds/octokit/infrastructure/octokit.service";
+import { ActualizarGithubTechsType, TechOctokitActualizarGithubRepo } from "./actualizar.repo";
 
 @Injectable()
 export class TechOctokitCreateRepo  {
@@ -16,6 +17,7 @@ export class TechOctokitCreateRepo  {
         private readonly techReadOneService: TechReadOneUseCase<MongooseBase>,
         private readonly techUpdateService: TechUpdateUseCase<MongooseBase>,
         private readonly octokit: OctokitRepo,//github percentage
+        private readonly techOctokitActualizarGithubRepo: TechOctokitActualizarGithubRepo
         // private readonly octokitUFCService: OctokitUpdateFileContentService//github actualizarTech
     ){}
     async create(data: TechForm, owner = "SKRTEEEEEE") { 
@@ -95,9 +97,9 @@ export class TechOctokitCreateRepo  {
         //     actualizarJson()
         // ]);
         // TODO -> 🚧⚠️‼️ HERE CONTINUES -- TODO ‼️⚠️🚧
-        // await actualizarGithubTechsC({type: ActualizarGithubTechsType.all, create:{base: {nameId, nameBadge, web, color}, oldTechs: proyectosDB} })
+        await this.techOctokitActualizarGithubRepo.actualizar({type: ActualizarGithubTechsType.all, create:{base: {nameId, nameBadge, web, color}, oldTechs: proyectosDB} })
 
-        return { success, message };
+        return  message ;
 
     } catch (error) {
         console.error("Error al publicar la tecnología:", error);

@@ -1,13 +1,14 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigModule } from '@nestjs/config';
-import { APP_GUARD } from '@nestjs/core';
+import { APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
 import { JwtAuthThirdwebGuard } from './shareds/jwt-auth/presentation/jwt-auth-thirdweb.guard';
 import { JwtAuthModule } from './shareds/jwt-auth/presentation/jwt-auth.module';
 import { RoleAuthModule } from './shareds/role-auth/presentation/role-auth.module';
 import { RoleAuthUseCase } from './shareds/role-auth/application/role-auth.usecase';
 import { TechModule } from './modules/tech/presentation/tech.module';
 import { PreTechModule } from './modules/pre-tech/presentation/pre-tech.module';
+import { ResponseInterceptor } from './shareds/presentation/response.guard';
 
 
 
@@ -29,6 +30,10 @@ import { PreTechModule } from './modules/pre-tech/presentation/pre-tech.module';
       provide: APP_GUARD,
       useClass: JwtAuthThirdwebGuard,
       // useClass: MockAuthUserGuard
+    },
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: ResponseInterceptor,
     },
     RoleAuthUseCase
   ]

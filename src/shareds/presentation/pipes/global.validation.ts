@@ -60,8 +60,7 @@ export class GlobalValidationPipe implements PipeTransform<any> {
 
       // Usar tu clase de error de dominio en lugar de BadRequestException
       throw new InputParseError('Validation failed', {
-        optionalMessage: errorMessages.join('; '),
-        meta: { errors: errorMessages }
+        optionalMessage: errorMessages.join('; ')
       });
     }
 

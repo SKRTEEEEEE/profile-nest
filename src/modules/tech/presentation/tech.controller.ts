@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post } from "@nestjs/common";
+import { Body, Controller, Get, Param, Post, Put } from "@nestjs/common";
 
 import { TechForm } from "src/domain/entities/tech";
 import { TechReadUseCase } from "../application/tech-read.usecase";
@@ -6,11 +6,16 @@ import { TechDeleteUseCase, TechReadByIdUseCase, TechUpdateByIdUseCase, TechUpda
 import { PublicRoute } from "src/shareds/jwt-auth/presentation/public-route.decorator";
 import { MongooseBase } from "src/shareds/pattern/infrastructure/types";
 import { TechOctokitCreateRepo } from "src/modules/tech/infrastructure/tech-octokit/create.repo";
+import { ActualizarGithubTechsType, TechOctokitActualizarGithubRepo } from "../infrastructure/tech-octokit/actualizar.repo";
+import { InputParseError } from "src/domain/flows/domain.error";
+import { TechOctokitUpdateRepo } from "../infrastructure/tech-octokit/update.repo";
 
 @Controller("/tech")
 export class TechController {
     constructor(
         // private readonly techCreateService: TechCreateUseCase<MongooseBase>,
+        private readonly techOctokitUpdateRepo: TechOctokitUpdateRepo,
+        private readonly techOctokitActualizarGithubRepo: TechOctokitActualizarGithubRepo,
         private readonly techOctokitCreateRepo: TechOctokitCreateRepo,
         private readonly techReadService: TechReadUseCase<MongooseBase>,
         // private readonly techReadByIdService: TechReadByIdUseCase<MongooseBase>,
@@ -23,6 +28,18 @@ export class TechController {
     @PublicRoute()
     async readAll() {
         return await this.techReadService.read({});
+    }
+
+    @Post("/:type")
+    @PublicRoute()
+    async actualizarGithub(@Param("type")type: string){
+        if(!Object.values(ActualizarGithubTechsType).includes(type))throw new InputParseError("Invalid route")
+        return await this.techOctokitActualizarGithubRepo.actualizar({type:ActualizarGithubTechsType[type]})
+    }
+
+    @Put()
+    async update(@Body() tech: TechForm) {
+        return await this.techOctokitUpdateRepo.update(tech)
     }
 
     @Post()

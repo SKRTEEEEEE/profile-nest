@@ -24,7 +24,7 @@ export class TechReadUseCase<TDB> {
     }
     // Este tiene logica ponerlo aqui porque es una excision de read
     async readAllC(): Promise<ReadAllFlattenTechsRes<TDB>>  {
-    const proyectosDB = await this.crruudRepository.read()
+    const proyectosDB = await this.crruudRepository.read({})
     const dispoLeng = proyectosDB?.map((lenguaje: {nameId:string}) => ({ name: lenguaje.nameId }));
     const dispoFw = proyectosDB?.flatMap((lenguaje) => {
         if (Array.isArray(lenguaje.frameworks) && lenguaje.frameworks.length > 0) {

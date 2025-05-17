@@ -9,6 +9,7 @@ import { JwtAuthUseCase } from 'src/shareds/jwt-auth/application/jwt-auth.usecas
 import { JwtAuthInterface } from 'src/shareds/jwt-auth/application/jwt-auth.interface';
 import { JwtAuthMockStrategy } from './adapters/jwt-auth-mock.strategy';
 import { JwtAuthThirdwebStrategy } from './adapters/jwt-auth-thirdweb.strategy';
+import { ThirdWebModule } from 'src/shareds/thirdweb/thirdweb.module';
 
 
 @Module({
@@ -17,7 +18,7 @@ import { JwtAuthThirdwebStrategy } from './adapters/jwt-auth-thirdweb.strategy';
 })
 export class JwtAuthMockModule {}
 @Module({
-  imports: [ConfigModule],
+  imports: [ConfigModule, ThirdWebModule],
   providers: [
     JwtAuthThirdwebStrategy,
     JwtAuthThirdwebGuard,

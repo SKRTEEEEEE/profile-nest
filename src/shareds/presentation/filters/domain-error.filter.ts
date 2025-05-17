@@ -9,7 +9,8 @@ const errorCodeToStatus: Record<ErrorCodes, HttpStatus> = {
   [ErrorCodes.DATABASE_ACTION]: HttpStatus.INTERNAL_SERVER_ERROR,
   [ErrorCodes.DATABASE_FIND]: HttpStatus.NOT_FOUND,
   [ErrorCodes.INPUT_PARSE]: HttpStatus.BAD_REQUEST,
-  [ErrorCodes.SET_ENV]: HttpStatus.INTERNAL_SERVER_ERROR
+  [ErrorCodes.SET_ENV]: HttpStatus.INTERNAL_SERVER_ERROR,
+  [ErrorCodes.UNAUTHORIZED_ACTION]: HttpStatus.UNAUTHORIZED
   // Añade más según tus ErrorCodes
 };
 

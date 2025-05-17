@@ -28,11 +28,11 @@ export class PreTechController implements PreTechInterface<MongooseBase> {
     @ApiResponse(
         ResCodes.ENTITIES_FOUND,
         "Hola mundo"
-    )
+    ) // Decorator opcional para dar mas info del endpoint en la respuesta
     @PublicRoute() // No se usara
-    // @UseGuards(RoleAuthTokenGuard)
-    // @Roles(RoleType.STUDENT, RoleType.ADMIN) // Utiliza el de mayor rango -> admin
-    // // @Roles() // Actuara como una ruta protegida normal (token validado)
+    @UseGuards(RoleAuthTokenGuard)
+    @Roles(RoleType.STUDENT, RoleType.ADMIN) // Utiliza el de mayor rango -> admin
+    // // @Roles() // Actuara como una ruta protegida normal (token validado - sin rol -> pasara ok)
     async readByQuery(
         @Query() query: QueryDto,
     ): Promise<PreTech<MongooseBase>[]> {

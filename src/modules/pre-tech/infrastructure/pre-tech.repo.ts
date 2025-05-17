@@ -29,12 +29,12 @@ MongoosePopulateI<PreTechBase>
       new MongoosePopulateImpl(preTechModel));
   }
 
-  async readByQuery(query: string): Promise<(PreTechBase & MongooseBase)[]> {
+  async readByQuery(query: {q:string}): Promise<(PreTechBase & MongooseBase)[]> {
     const opt = {
       filter: {
         $or: [
-          { nameId: { $regex: query, $options: 'i' } },
-          { nameBadge: { $regex: query, $options: 'i' } },
+          { nameId: { $regex: query.q, $options: 'i' } },
+          { nameBadge: { $regex: query.q, $options: 'i' } },
         ],
       },
       projections: {},

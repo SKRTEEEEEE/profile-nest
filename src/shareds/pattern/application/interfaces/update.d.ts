@@ -1,8 +1,8 @@
 type UpdateRes<TB, TDB> = EntitieRes<TB, TDB>;
 
 type UpdateProps<TB, TDB> = {
-    filter: Partial<TB & TDB>;
-    update: Partial<TB & TDB>;
+    filter: Partial<TB & TDB>|Record<string|any>;
+    update: Partial<TB & TDB>|Record<string, any>;
     options:Record<string, any>;
 };
 

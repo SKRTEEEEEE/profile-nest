@@ -1,7 +1,13 @@
 # ToDo
 ## Test
 - [x] Falta testear la parte del auth, conexion, nextjs - nestjs, mediante JWT
-## UNIFICAR TIPOS
+## Documentar
+- [ ] Estructura nombres -> user-auth-mock, role-auth-token, ...
+- [ ] Estructura carpetas
+## Extra
+- [ ] Crear 'warn' personalizado para notificar acciones y no utilizar nunca console.log y reservar el warn para warn reales (casos en los que se esta haciendo algo mal como programador pero que no causa error - normalmente porque ya esta manejado)
+- [ ] Crear Inyector() para 'desvincular' de nestjs
+## Unificar tipos
 - [x] Pensar una logica de tipos para las PROPS y las RES
     - Pensar a raíz de que punto crear el resto, pero utilizar una base y evitar duplicar tipos 
 
@@ -19,17 +25,13 @@
         -> Pero hay que analizar-lo bien y documentar-lo
 
         - Se pueden utilizar tipos distintos de entrada mientras estos no interfieran uno frente al otro (osea han de ser 'equivalentes', haciendo que uno sea mas pobre que el otro en tipado)
-## Documentar
-- [ ] Estructura nombres -> user-auth-mock, role-auth-token, ...
-- [ ] Definir Estructura role-auth
-- [ ] Definir Estructura thirdweb-auth
-## Extra
-- [ ] Crear Inyector() para 'desvincular' de nestjs
+### Unificar Res y ERRORS v1 
+- [x] Incluir siempre message y success
 ## DTOs
-- [x] Mirar en que capas quiero DTOs: controllers
-- [x] Hacer DTOs
+- [x] Mirar en que capas quiero DTOs: controllers - se pueden reutilizar si tiene sentido en infra
+- [ ] Hacer DTOs
 - [x] Integrar buen funcionamiento
 ## Terminar tech-octokit/create.repo.ts
-- [ ] Hacer que saque lo necesario para actualizar.repo.ts
-## Unificar Res y ERRORS v1 
-- [ ] Incluir siempre message y success
+- [x] Hacer que saque lo necesario para actualizar.repo.ts
+
+
