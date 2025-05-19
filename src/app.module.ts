@@ -9,6 +9,7 @@ import { RoleAuthUseCase } from './shareds/role-auth/application/role-auth.useca
 import { TechModule } from './modules/tech/presentation/tech.module';
 import { PreTechModule } from './modules/pre-tech/presentation/pre-tech.module';
 import { ResponseInterceptor } from './shareds/presentation/response.guard';
+import { UserModule } from './modules/user/presentation/user.module';
 
 
 
@@ -18,6 +19,7 @@ import { ResponseInterceptor } from './shareds/presentation/response.guard';
     MongooseModule.forRoot(process.env.MONGODB_URI!), // 👈 aquí le pasamos la conexión a la uri para que mongoose tenga acceso
     PreTechModule,
     TechModule,
+    UserModule,
     JwtAuthModule,
     RoleAuthModule,
     // OctokitModule

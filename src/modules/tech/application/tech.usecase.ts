@@ -1,21 +1,10 @@
-import { Injectable } from "@nestjs/common";
+import { Inject, Injectable } from "@nestjs/common";
 import { CRRUUDRepository } from "src/shareds/pattern/application/usecases/crruud.interface";
-import { ReadOneRepository } from "src/shareds/pattern/application/usecases/read-one.interface";
+// import { ReadOneRepository } from "src/shareds/pattern/application/usecases/read-one.interface";
 import {  LengBase, TechBase } from "src/domain/entities/tech";
 
 // Si esto funciona asi, probablemente sea la mejor manera asi expongo los Service que quiero
 
-@Injectable()
-export class TechReadOneUseCase<TDB> implements ReadOneRepository<LengBase, TDB>{
-    constructor(
-        private readonly readOneRepository: ReadOneRepository<LengBase, TDB>
-    ){}
-    async readOne(filter: ReadOneProps<LengBase, TDB>){
-        return await this.readOneRepository.readOne(filter)
-    }
-}
-
-// Service for creating a Tech entity
 @Injectable()
 export class TechCreateUseCase<TDB> {
     constructor(
@@ -26,10 +15,6 @@ export class TechCreateUseCase<TDB> {
         return await this.crruudRepository.create(data as LengBase);
     }
 }
-
-
-
-// Service for reading a Tech entity by ID
 @Injectable()
 export class TechReadByIdUseCase<TDB> {
     constructor(
@@ -40,10 +25,20 @@ export class TechReadByIdUseCase<TDB> {
         return await this.crruudRepository.readById(id);
     }
 }
-
-// Service for updating Tech entities
+//El read normal esta en usecase separado
 @Injectable()
-export class TechUpdateUseCase<TDB> {
+export class TechReadOneUseCase<TDB> implements ReadOneI<LengBase, TDB>{
+    constructor(
+        @Inject("TechRepository")
+        private readonly readOneRepository: ReadOneI<LengBase, TDB>
+    ){}
+    async readOne(filter: ReadOneProps<LengBase, TDB>){
+        return await this.readOneRepository.readOne(filter)
+    }
+}
+
+@Injectable()
+export class TechUpdateUseCase<TDB> implements UpdateI<TechBase, TDB> {
     constructor(
         private readonly crruudRepository: CRRUUDRepository<LengBase, TDB>
     ) {}
@@ -52,10 +47,8 @@ export class TechUpdateUseCase<TDB> {
         return await this.crruudRepository.update(props);
     }
 }
-
-// Service for updating a Tech entity by ID
 @Injectable()
-export class TechUpdateByIdUseCase<TDB> {
+export class TechUpdateByIdUseCase<TDB>  {
     constructor(
         private readonly crruudRepository: CRRUUDRepository<LengBase, TDB>
     ) {}
@@ -64,10 +57,8 @@ export class TechUpdateByIdUseCase<TDB> {
         return await this.crruudRepository.updateById(props);
     }
 }
-
-// Service for deleting Tech entities
 @Injectable()
-export class TechDeleteUseCase<TDB> {
+export class TechDeleteUseCase<TDB> implements DeleteI<PreTechBase, TDB> {
     constructor(
         private readonly crruudRepository: CRRUUDRepository<LengBase, TDB>
     ) {}

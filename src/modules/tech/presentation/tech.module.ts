@@ -2,16 +2,16 @@ import { Module } from "@nestjs/common";
 import { MongooseModule } from "@nestjs/mongoose";
 import { TechController } from "./tech.controller";
 import { CRRUUDRepository } from "src/shareds/pattern/application/usecases/crruud.interface";
-import { RoleAuthUseCase } from "src/shareds/role-auth/application/role-auth.usecase";
 import { ReadOneRepository } from "src/shareds/pattern/application/usecases/read-one.interface";
 import { TechReadUseCase } from "../application/tech-read.usecase";
 import { LengSchemaFactory } from "../infrastructure/tech.schema";
 import { MongooseTechRepo } from "../infrastructure/tech.repo";
 import { OctokitModule } from "src/shareds/octokit/presentation/octokit.module";
 import { TechOctokitCreateRepo } from "../infrastructure/tech-octokit/create.repo";
-import { TechCreateUseCase, TechReadOneUseCase, TechUpdateUseCase } from "../application/tech.usecase";
+import { TechCreateUseCase, TechDeleteUseCase, TechReadOneUseCase, TechUpdateUseCase } from "../application/tech.usecase";
 import { TechOctokitActualizarGithubRepo } from "../infrastructure/tech-octokit/actualizar.repo";
 import { TechOctokitUpdateRepo } from "../infrastructure/tech-octokit/update.repo";
+import { TechFindDeleteRepo } from "../infrastructure/delete.repo";
 
 @Module({
     imports: [
@@ -26,44 +26,34 @@ import { TechOctokitUpdateRepo } from "../infrastructure/tech-octokit/update.rep
             provide: CRRUUDRepository, // Registra la interfaz CRRUUDRepository
             useClass: MongooseTechRepo, // Usa MongooseTechRepo como implementación
         },
+        // {
+        //     provide: ReadOneRepository,
+        //     useClass: MongooseTechRepo
+        // },
         {
-            provide: ReadOneRepository,
+            provide: "TechRepository",
             useClass: MongooseTechRepo
         },
         TechOctokitUpdateRepo, // nuevo
         TechOctokitActualizarGithubRepo,
         TechOctokitCreateRepo,
         TechCreateUseCase, // 
+        TechFindDeleteRepo,
         TechReadUseCase, //
         // TechReadByIdUseCase, 
         TechUpdateUseCase, 
         // TechUpdateByIdUseCase, 
-        // TechDeleteUseCase,
-        TechReadOneUseCase
+        TechDeleteUseCase,
+        // TechReadOneUseCase // cambio por ->
+        {
+            provide: TechReadOneUseCase,
+            useFactory: (repo) => new TechReadOneUseCase(repo),
+            inject: ["TechRepository"]
+        }
         // RoleAuthUseCase, // RoleAuthUseCase ya está registrado
     ],
     // exports: [
-        //Aquí he de exportar los servicios que se usen en shared!?
+        //Aquí he de exportar los servicios que se usen en otros modules(como projects, etc...)
     // ]
 })
 export class TechModule {}
-// @Module({
-//     imports: [
-//         MongooseModule.forFeature([
-//             { name: "Lenguaje", schema: LengSchemaFactory },
-//         ]),
-//     ],
-//     controllers: [TechController],
-//     providers: [
-//         {
-//             provide: TechCrruudService, // Servicio
-//             useFactory: (repo: MongooseTechRepo) => {
-//                 return new TechCrruudService(repo); // Creación manual del servicio
-//             },
-//             inject: [MongooseTechRepo], // Inyección del repositorio
-//         },
-//         MongooseTechRepo, // Registro directo del repositorio
-//         RoleAuthUseCase, // Otros servicios necesarios
-//     ],
-// })
-// export class TechModule {}

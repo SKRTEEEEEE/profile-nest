@@ -16,7 +16,11 @@
 //     read(props: ReadProps<TB, TReadMeta>): Promise<TB[]>;
 // }
 type ReadRes<TB, TDB> = EntitieArrayRes<TB,TDB>
-type ReadProps<TB, TDB> = Optional<Partial<TB & TDB>>
+type ReadProps<TB, TDB> = {
+    filter: Optional<Partial<TB & TDB>> , 
+    projection: Optional<string | AnyObject>,
+    options: Optional<undefined | null | AnyObject>
+} | {}
 type ReadI<TB,TDB> = {
     read(filter: ReadProps<TB, TDB>): EntitieArrayRes<TB, TDB>;
 }

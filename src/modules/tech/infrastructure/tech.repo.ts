@@ -17,8 +17,9 @@ extends MongooseCRRUUDPattern<LengBase>
 implements MongooseCRRUUD<LengBase>,
 MongooseReadOneI<LengBase>
 {
+    private mongooseReadOne: MongooseReadOneImpl<LengBase>
     constructor(
-        @InjectModel("Lenguaje") private  readonly lengModel: Model<LengBase & MongooseBase & Document>)
+        @InjectModel("Lenguaje") private readonly lengModel: Model<LengBase & MongooseBase & Document>)
     {
         super(
             lengModel,
@@ -26,10 +27,11 @@ MongooseReadOneI<LengBase>
             new MongooseReadImpl(lengModel),
             new MongooseUpdateImpl(lengModel),
             new MongooseDeleteImpl(lengModel),
-            new MongooseReadOneImpl(lengModel) // extra - externo del Pattern
         )
+        // extra - externo del Pattern
+        this.mongooseReadOne = new MongooseReadOneImpl(lengModel) 
     }
     async readOne(props: MongooseReadOneProps<LengBase>): MongooseReadOneRes<LengBase> {
-        return await this.readOne(props)
+        return await this.mongooseReadOne.readOne(props)
     }
 }

@@ -3,14 +3,14 @@
 import { Model, ProjectionType, QueryOptions, RootFilterQuery } from "mongoose";
 import { MongooseBase } from "../types";
 import { MongooseBaseImpl } from "./base";
-import { DatabaseActionError } from "src/domain/flows/domain.error";
+import { DatabaseActionError, DatabaseFindError } from "src/domain/flows/domain.error";
 
 export type MongooseReadOneI<TB> = {
     readOne(
         props: MongooseReadOneProps<TB>
     ): MongooseReadOneRes<TB>
 }
-export type MongooseReadOneRes<TB> = ReadOneRes<TB, MongooseBase>
+export type MongooseReadOneRes<TB> = ReadOneRes<TB, MongooseBase> 
 export type MongooseReadOneProps<TB> = {
     filter?: RootFilterQuery<TB>,
     projection?: ProjectionType<TB> | null,
@@ -29,8 +29,10 @@ implements MongooseReadOneI<TBase>
         props: MongooseReadOneProps<TBase>
     ){
         try {
+            console.log("props", props)
             const doc = await this.Model.findOne(props)
-            return this.documentToPrimary(doc)
+            
+            return doc 
         } catch (error) {
             console.error("Error al leer los documentos: ",error)
             throw new DatabaseActionError("readOne",{optionalMessage: "Error en la operación de lectura"})

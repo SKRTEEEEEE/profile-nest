@@ -58,6 +58,6 @@ export abstract class MongooseBaseImpl<
 
   protected resArrCheck(docs: TBase & MongooseBase[] | any[] | undefined | null): void {
     if(!docs) throw new DatabaseFindError({optionalMessage:"Failed to find the documents"});
-    if(docs.length === 0) throw new DatabaseFindError({optionalMessage:"No documents found"});
+    if(Array.isArray(docs) && docs.length === 0) console.warn(`La consulta fue exitosa pero no hay documentos que coincidan ${docs}`);
   }
 }

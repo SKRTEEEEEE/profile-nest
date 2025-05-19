@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post, Put } from "@nestjs/common";
+import { Body, Controller, Delete, Get, Param, Post, Put } from "@nestjs/common";
 
 import { TechForm } from "src/domain/entities/tech";
 import { TechReadUseCase } from "../application/tech-read.usecase";
@@ -9,6 +9,7 @@ import { TechOctokitCreateRepo } from "src/modules/tech/infrastructure/tech-octo
 import { ActualizarGithubTechsType, TechOctokitActualizarGithubRepo } from "../infrastructure/tech-octokit/actualizar.repo";
 import { InputParseError } from "src/domain/flows/domain.error";
 import { TechOctokitUpdateRepo } from "../infrastructure/tech-octokit/update.repo";
+import { TechFindDeleteRepo } from "../infrastructure/delete.repo";
 
 @Controller("/tech")
 export class TechController {
@@ -17,6 +18,7 @@ export class TechController {
         private readonly techOctokitUpdateRepo: TechOctokitUpdateRepo,
         private readonly techOctokitActualizarGithubRepo: TechOctokitActualizarGithubRepo,
         private readonly techOctokitCreateRepo: TechOctokitCreateRepo,
+        private readonly techFindAndDeleteRepo: TechFindDeleteRepo,
         private readonly techReadService: TechReadUseCase<MongooseBase>,
         // private readonly techReadByIdService: TechReadByIdUseCase<MongooseBase>,
         // private readonly techUpdateService: TechUpdateUseCase<MongooseBase>,
@@ -24,10 +26,17 @@ export class TechController {
         // private readonly techDeleteService: TechDeleteUseCase<MongooseBase>
     ) {}
 
+    @Delete()
+    @PublicRoute()
+    async delete(@Body() body: {nameId: string}) {
+        return await this.techFindAndDeleteRepo.findAndDelete(body.nameId)
+    }
+
     @Get("/all")
     @PublicRoute()
     async readAll() {
-        return await this.techReadService.read({});
+        const res =  await this.techReadService.readAllC();
+        return res.flattenTechs
     }
 
     @Post("/:type")

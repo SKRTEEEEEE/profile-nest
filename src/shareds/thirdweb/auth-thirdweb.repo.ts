@@ -50,6 +50,7 @@ export class AuthThirdwebRepo {
   }
 
   async verifyPayload(params: VerifyLoginPayloadParams) {
+    console.log("params in auth-thirdweb.repo", params)
     const res = await this.auth.verifyPayload(params);
     return res;
   }

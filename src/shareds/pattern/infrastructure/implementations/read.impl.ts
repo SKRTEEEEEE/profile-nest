@@ -27,10 +27,11 @@ TOptions extends Partial<Record<keyof TBase & MongooseBase, (value: any) => any>
     }
     // -> Read All
     async read(
-      {filter, projection, options}: MongooseReadProps<TBase> 
+      props: MongooseReadProps<TBase> 
     ): MongooseReadResponse<TBase> {
       try {
-        const docs = await this.Model.find(filter || {}, projection, options) // Usa un objeto vacío si filter es undefined
+        const { filter = {}, projection, options } = props;
+        const docs = await this.Model.find(filter, projection, options);
         this.resArrCheck(docs)
         return docs.map(doc=>this.documentToPrimary(doc))
       } catch (error) {

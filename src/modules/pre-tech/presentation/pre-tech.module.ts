@@ -3,7 +3,6 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { PreTechSchemaFactory } from '../infrastructure/pre-tech.schema';
 import { PreTechController } from './pre-tech.controller';
 import { MongoosePreTechRepo } from '../infrastructure/pre-tech.repo';
-import { PreTechInterface } from '../application/pre-tech.interface';
 import { PreTechEndpointUseCase, PreTechReadUseCase, PreTechPopulateUseCase } from '../application/pre-tech.usecase';
 
 

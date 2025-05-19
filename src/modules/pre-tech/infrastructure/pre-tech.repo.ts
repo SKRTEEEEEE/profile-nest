@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 
 import { Document, Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
@@ -29,19 +29,21 @@ MongoosePopulateI<PreTechBase>
       new MongoosePopulateImpl(preTechModel));
   }
 
-  async readByQuery(query: {q:string}): Promise<(PreTechBase & MongooseBase)[]> {
-    const opt = {
-      filter: {
-        $or: [
-          { nameId: { $regex: query.q, $options: 'i' } },
-          { nameBadge: { $regex: query.q, $options: 'i' } },
-        ],
-      },
-      projections: {},
-      options: { limit: 50 },
-    };
-    return this.read(opt);
-  }
+  async readByQuery(query: { q: string }): Promise<(PreTechBase & MongooseBase)[]> {
+  const opt = {
+    filter: {
+      $or: [
+        { nameId: { $regex: query.q, $options: 'i' } },
+        { nameBadge: { $regex: query.q, $options: 'i' } },
+      ]
+    },
+    projections: {},
+    options: { limit: 50 },
+  };
+  return this.read(opt);
+}
+
+
 
   async updatePreTech(): Promise<void> {
     try {
