@@ -9,16 +9,17 @@ import { UnauthorizedError } from "src/domain/flows/domain.error";
 @Injectable()
 export class UserThirdWebCreateUseCase<TDB> {
     constructor(
-        private readonly userCreateRepository: UserCreateUseCase<TDB>,
-        private readonly userReadOneRepository: UserReadOneUseCase<TDB>,
-        private readonly authThirdwebRepository: AuthThirdwebRepo
+        private readonly userCreateService: UserCreateUseCase<TDB>,
+        private readonly userReadOneService: UserReadOneUseCase<TDB>,
+        private readonly authThirdWebRepository: AuthThirdwebRepo
     ) {}
 
     async create(payload: VerifyLoginPayloadParams): Promise<UserBase & TDB> {
-        const verifiedPayload = await this.authThirdwebRepository.verifyPayload(payload);
+        console.log("creating", payload)
+        const verifiedPayload = await this.authThirdWebRepository.verifyPayload(payload);
         if (!verifiedPayload.valid) throw new UnauthorizedError("Payload not valid")
-        let user = await this.userReadOneRepository.readByAddress(verifiedPayload.payload.address);
-        if(!user) return await this.userCreateRepository.create({ address: verifiedPayload.payload.address as string, roleId: null, role: null, solicitud: null, img: null, email: null , isVerified: false});
+        let user = await this.userReadOneService.readByAddress(verifiedPayload.payload.address);
+        if(!user) return await this.userCreateService.create({ address: verifiedPayload.payload.address as string, roleId: null, role: null, solicitud: null, img: null, email: null , isVerified: false, nick: null});
         return user;
     }
 }

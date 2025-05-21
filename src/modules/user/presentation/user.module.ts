@@ -8,6 +8,8 @@ import { UserController } from "./user.controller";
 import { UserThirdWebCreateUseCase } from "../application/user-thirdweb.usecase";
 import { ThirdWebModule } from "src/shareds/thirdweb/thirdweb.module";
 import { ReadOneRepository } from "src/shareds/pattern/application/usecases/read-one.interface";
+import { NodemailerModule } from "src/shareds/nodemailer/nodemailer.module";
+import { UserNodemailerUpdateUseCase } from "../application/user-nodemailer.usecase";
 
 @Module({
     imports: [
@@ -15,6 +17,7 @@ import { ReadOneRepository } from "src/shareds/pattern/application/usecases/read
             {name: "User", schema: UserSchemaFactory},
     ]),
     ThirdWebModule,
+    NodemailerModule
     ],
     controllers: [
         UserController
@@ -28,13 +31,14 @@ import { ReadOneRepository } from "src/shareds/pattern/application/usecases/read
             provide: ReadOneRepository,
             useClass: MongooseUserRepo
         },
+        UserNodemailerUpdateUseCase,
         UserCreateUseCase,
         UserThirdWebCreateUseCase,
         UserReadOneUseCase,
         UserReadUseCase,
-        // UserReadByIdUseCase,
+        UserReadByIdUseCase,
         // UserUpdateUseCase,
-        // UserUpdateByIdUseCase,
+        UserUpdateByIdUseCase,
         // UserDeleteByIdUseCase,
     ]
 })

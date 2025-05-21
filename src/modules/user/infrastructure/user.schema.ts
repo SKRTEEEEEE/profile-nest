@@ -25,8 +25,8 @@ export class UserDocument extends Document {
   @Prop({ type: String, default: null })
   email: string | null;
 
-  @Prop()
-  nick: string;
+  @Prop({type: String, default: null})
+  nick: string | null;
 
   @Prop({ type: Boolean, default: false })
   isVerified: boolean;

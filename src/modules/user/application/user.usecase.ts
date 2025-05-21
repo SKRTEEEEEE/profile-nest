@@ -45,7 +45,7 @@ export class UserReadByIdUseCase<TDB> {
         private readonly crruudRepository: CRRUUDIdRepository<UserBase, TDB>
     ) {}
 
-    async readById(id: ReadByIdProps<TDB>): Promise<UserBase & TDB> {
+    async readById(id: ReadByIdProps<TDB>): ReadByIdRes<UserBase, TDB> {
         return await this.crruudRepository.readById(id);
     }
 }
