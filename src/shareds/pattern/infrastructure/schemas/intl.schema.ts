@@ -1,5 +1,5 @@
 import { Prop, Schema } from "@nestjs/mongoose";
-import { IntlBase } from "src/domain/entities/intl";
+import { IntlBase } from "src/domain/entities/intl.type";
 
 @Schema()
 export class IntlSchema implements IntlBase{
