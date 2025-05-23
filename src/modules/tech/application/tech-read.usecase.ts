@@ -1,13 +1,8 @@
 import { Injectable } from "@nestjs/common"
 import { CRRUUDRepository } from "src/shareds/pattern/application/usecases/crruud.interface"
-import { FullTechData, LengBase } from "src/domain/entities/tech"
+import { FullTechData, LengBase, ReadAllFlattenTechsRes } from "src/domain/entities/tech"
 
-type ReadAllFlattenTechsRes<TDB> = {
-    techs: (LengBase & TDB)[]
-    flattenTechs: FullTechData[],
-    dispoFw: {name:string}[]
-    dispoLeng: {name:string}[]
-}
+
 type BadgeAndValue = {
     badge: string;
     value: string;

@@ -27,7 +27,6 @@ export class TechController {
     ) {}
 
     @Delete()
-    @PublicRoute()
     async delete(@Body() body: {nameId: string}) {
         return await this.techFindAndDeleteRepo.findAndDelete(body.nameId)
     }
@@ -39,7 +38,7 @@ export class TechController {
         return res.flattenTechs
     }
 
-    @Post("/:type")
+    @Post("/:type") // can be /all or /json or /md
     @PublicRoute()
     async actualizarGithub(@Param("type")type: string){
         if(!Object.values(ActualizarGithubTechsType).includes(type))throw new InputParseError("Invalid route")
@@ -52,7 +51,6 @@ export class TechController {
     }
 
     @Post()
-    @PublicRoute()
     async create(@Body() tech: TechForm) {
         return await this.techOctokitCreateRepo.create(tech)
     }
