@@ -85,7 +85,7 @@ export class TechFindDeleteRepo {
         throw new DatabaseActionError("delete tech");
     } catch (error) {
         console.error('Error eliminando la tecnología:', error);
-        throw new Error('Error eliminando la tecnología');
+        throw new DatabaseActionError('Error desconoci eliminando la tecnología');
     }
 }
 }

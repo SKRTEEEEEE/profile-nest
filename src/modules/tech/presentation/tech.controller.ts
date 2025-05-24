@@ -34,12 +34,11 @@ export class TechController {
     @Get("/all")
     @PublicRoute()
     async readAll() {
-        const res =  await this.techReadService.readAllC();
-        return res.flattenTechs
+        return await this.techReadService.readAllC();
+        
     }
 
     @Post("/:type") // can be /all or /json or /md
-    @PublicRoute()
     async actualizarGithub(@Param("type")type: string){
         if(!Object.values(ActualizarGithubTechsType).includes(type))throw new InputParseError("Invalid route")
         return await this.techOctokitActualizarGithubRepo.actualizar({type:ActualizarGithubTechsType[type]})

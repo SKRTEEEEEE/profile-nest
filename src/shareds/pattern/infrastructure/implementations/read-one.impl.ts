@@ -30,8 +30,7 @@ implements MongooseReadOneI<TBase>
     ){
         try {
             console.log("props", props)
-            const doc = await this.Model.findOne(props)
-            
+            const doc = await this.Model.findOne(props.filter, props.projection, props.options)
             return doc 
         } catch (error) {
             console.error("Error al leer los documentos: ",error)
