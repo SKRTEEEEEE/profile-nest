@@ -6,7 +6,7 @@ import { DatabaseFindError, SetEnvError } from "src/domain/flows/domain.error";
 
 export type UserUpdateNodemailer<TDB> = {
     payload: VerifyLoginPayloadParams,
-    formData: UserFormS&{ id: any}
+    formData: UserFormS&{ id: any }
 }
 
 @Injectable()

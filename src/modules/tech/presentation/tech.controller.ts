@@ -31,7 +31,7 @@ export class TechController {
         return await this.techFindAndDeleteRepo.findAndDelete(body.nameId)
     }
 
-    @Get("/all")
+    @Get()
     @PublicRoute()
     async readAll() {
         return await this.techReadService.readAllC();
