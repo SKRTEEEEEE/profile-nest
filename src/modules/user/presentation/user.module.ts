@@ -5,13 +5,13 @@ import { CRRUUDIdRepository } from "src/shareds/pattern/application/usecases/crr
 import { MongooseUserRepo } from "../infrastructure/user.repo";
 import {  UserCreateUseCase, UserDeleteByIdUseCase, UserReadByIdUseCase, UserReadOneUseCase, UserReadUseCase, UserUpdateByIdUseCase, UserUpdateUseCase, UserVerifyEmailUseCase } from "../application/user.usecase";
 import { UserController } from "./user.controller";
-import { UserThirdWebCreateUseCase } from "../application/user-thirdweb.usecase";
+// import { UserThirdWebLoginUseCase } from "../application/user-thirdweb.usecase";
 import { ThirdWebModule } from "src/shareds/thirdweb/thirdweb.module";
 import { ReadOneRepository } from "src/shareds/pattern/application/usecases/read-one.interface";
 import { NodemailerModule } from "src/shareds/nodemailer/nodemailer.module";
-import { UserNodemailerUpdateUseCase } from "../application/user-nodemailer.usecase";
-import { UserRoleThirdWebDeleteUseCase, UserRoleThirdwebGiveRoleUseCase } from "../application/user-role-thirdweb.usecase";
+// import { UserRoleThirdWebDeleteUseCase, UserRoleThirdwebGiveRoleUseCase } from "../application/user-role-thirdweb.usecase";
 import { RoleModule } from "src/modules/role/presentation/role.module";
+import { UserNodemailerUpdateUseCase } from "../application/user-nodemailer.usecase";
 
 @Module({
     imports: [
@@ -34,10 +34,10 @@ import { RoleModule } from "src/modules/role/presentation/role.module";
             provide: ReadOneRepository,
             useClass: MongooseUserRepo
         },
-        UserRoleThirdWebDeleteUseCase,
-        UserRoleThirdwebGiveRoleUseCase,
+        // UserRoleThirdWebDeleteUseCase,
+        // UserRoleThirdwebGiveRoleUseCase,
         UserNodemailerUpdateUseCase,
-        UserThirdWebCreateUseCase,
+        // UserThirdWebLoginUseCase,
         UserCreateUseCase,
         UserReadOneUseCase,
         UserReadUseCase,

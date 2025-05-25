@@ -1,9 +1,10 @@
 import { Injectable } from "@nestjs/common";
-import { JwtAuthInterface, VerifyJWTRes } from "../jwt-auth/application/jwt-auth.interface";
+import { VerifyJWTRes } from "../jwt-auth/application/jwt-auth.interface";
 import { UnauthorizedError } from "src/domain/flows/domain.error";
 import { createThirdwebClient, ThirdwebClient } from 'thirdweb';
 import { createAuth, VerifyLoginPayloadParams } from 'thirdweb/auth';
 import { Account, privateKeyToAccount } from 'thirdweb/wallets';
+import { AuthThirdWebVerifyPayloadDto } from "./auth-thirdweb.dto";
 
 @Injectable()
 // TESTING
@@ -49,7 +50,7 @@ export class AuthThirdwebRepo {
     }
   }
 
-  async verifyPayload(params: VerifyLoginPayloadParams) {
+  async verifyPayload(params: AuthThirdWebVerifyPayloadDto) {
     const res = await this.auth.verifyPayload(params);
     return res;
   }

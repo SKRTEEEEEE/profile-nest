@@ -1,3 +1,4 @@
+```ts
 import { Injectable } from "@nestjs/common";
 import { AuthThirdwebRepo } from "src/shareds/thirdweb/auth-thirdweb.repo";
 import { UserDeleteByIdUseCase, UserReadByIdUseCase, UserReadOneUseCase, UserUpdateByIdUseCase, UserUpdateUseCase } from "./user.usecase";
@@ -73,3 +74,4 @@ export class UserRoleThirdwebGiveRoleUseCase<TDB extends PersistedEntity = Persi
     }})
 }
 }
+```

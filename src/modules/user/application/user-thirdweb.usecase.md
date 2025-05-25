@@ -1,3 +1,4 @@
+```ts
 import { VerifyLoginPayloadParams } from "thirdweb/auth";
 import { AuthThirdwebRepo } from "src/shareds/thirdweb/auth-thirdweb.repo";
 import { Injectable } from "@nestjs/common";
@@ -5,16 +6,16 @@ import { UserCreateUseCase, UserReadOneUseCase } from "./user.usecase";
 import { UnauthorizedError } from "src/domain/flows/domain.error";
 
 
-
+// Es mejor si no se crea capa app para el shared importado, mejor no crear usecase, por lo tanto, crear la función en el controller
 @Injectable()
-export class UserThirdWebCreateUseCase<TDB> {
+export class UserThirdWebLoginUseCase<TDB> {
     constructor(
         private readonly userCreateService: UserCreateUseCase<TDB>,
         private readonly userReadOneService: UserReadOneUseCase<TDB>,
         private readonly authThirdWebRepository: AuthThirdwebRepo
     ) {}
 
-    async create(payload: VerifyLoginPayloadParams): Promise<UserBase & TDB> {
+    async login(payload: VerifyLoginPayloadParams): Promise<UserBase & TDB> {
         const verifiedPayload = await this.authThirdWebRepository.verifyPayload(payload);
         if (!verifiedPayload.valid) throw new UnauthorizedError("Payload not valid")
         let user = await this.userReadOneService.readByAddress(verifiedPayload.payload.address);
@@ -22,3 +23,4 @@ export class UserThirdWebCreateUseCase<TDB> {
         return user;
     }
 }
+```

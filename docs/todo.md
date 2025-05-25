@@ -1,11 +1,13 @@
 # ToDo
 ## ThirdWeb
-- [ ] Desvincular tipos de modules/[..]/app - no pueden aver tipos de thirdWeb -> para eso:
-- [ ] Crear capa aplicación ⁉️
-- [ ] Esta parte es la única que sera común con el frontend -> ⁉️ Vale la pena tener la app como submodule, o todo el 'shared/modulo' ⁉️
+- [x] Desvincular tipos de modules/[..]/app - no pueden aver tipos de thirdWeb -> para eso:
+  - [ ] ⁉️ Desvincular nodemailer
+  - [x] Crear capa aplicación 🤔 -> No es necesario, ya que probablemente en cada app (diferentes server - frontend-info, frontend-app, backend) queremos expones mas o menos métodos, aparte que no tiene mucho sentido ya que los inputs (props) siempre dependen del sdk (infra)
+  - [x] Esta parte es la única que sera común con el frontend ->  Vale la pena tener la app como submodule, o todo el 'shared/modulo' ❌
+
 ## DTOs
 - [ ] Hacer DTOs
-- [ ] Utilizar los DTOs lo mas abajo posible (app si es posible) -> para ello, creo que lo mejor es utilizar-los en los casos en los se utiliza un shared (role-tech, user-thirdweb, etc..) pero ver que se necesita en Presentation y ver hasta que abajo (app-infra-presentation) 'tiene sentido' utilizar-lo para no duplicar
+- [x] Utilizar los DTOs lo mas abajo posible (app si es posible) -> para ello, creo que lo mejor es utilizar-los en los casos en los se utiliza un shared (role-tech, user-thirdweb, etc..) pero ver que se necesita en Presentation y ver hasta que abajo (app-infra-presentation) 'tiene sentido' utilizar-lo para no duplicar 🤔 -> Prefiero no utilizar-lo en la capa app y respetar la norma de que solo la capa presentation contiene lógica del framework
 - [x] Mirar en que capas quiero DTOs: controllers - se pueden reutilizar si tiene sentido en infra
 - [x] Integrar buen funcionamiento
 ## User

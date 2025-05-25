@@ -8,6 +8,7 @@ import { MongooseRpPattern } from 'src/shareds/pattern/infrastructure/patterns/r
 import { MongooseBase } from 'src/shareds/pattern/infrastructure/types';
 import { MongooseReadI, MongooseReadImpl } from 'src/shareds/pattern/infrastructure/implementations/read.impl';
 import { MongoosePopulateI, MongoosePopulateImpl } from 'src/shareds/pattern/infrastructure/implementations/populate.impl';
+import { QueryDto } from 'src/shareds/presentation/pipes/query.dto';
 
 
 @Injectable()
@@ -29,7 +30,7 @@ MongoosePopulateI<PreTechBase>
       new MongoosePopulateImpl(preTechModel));
   }
 
-  async readByQuery(query: { q: string }): Promise<(PreTechBase & MongooseBase)[]> {
+  async readByQuery(query: QueryDto): Promise<(PreTechBase & MongooseBase)[]> {
   const opt = {
     filter: {
       $or: [

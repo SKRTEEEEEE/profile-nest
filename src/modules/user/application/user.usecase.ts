@@ -86,7 +86,7 @@ export class UserVerifyEmailUseCase<TDB extends PersistedEntity = PersistedEntit
     constructor(
         private readonly crruudRepository: CRRUUDIdRepository<UserBase, TDB>
     ) {}
-    async verifyEmail(props: {id: string, verifyToken: string}): Promise<boolean> {
+    async verifyEmail(props: {id:string, verifyToken:string}): Promise<boolean> {
         const user = await this.crruudRepository.readById(props.id as ReadByIdProps<TDB>);
     if (!user) {
         console.error("Error at find user");
