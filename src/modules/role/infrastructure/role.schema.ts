@@ -1,4 +1,5 @@
-import { Prop, Schema } from "@nestjs/mongoose";
+import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
+import { Document } from "mongoose";
 import { RoleBase } from "src/domain/entities/role";
 import { RoleType } from "src/domain/entities/role.type";
 
@@ -19,3 +20,4 @@ export class RoleSchemaDocument extends Document implements RoleBase {
   @Prop()
   subscriptionStatus?: string;
 }
+export const RoleSchemaFactory = SchemaFactory.createForClass(RoleSchemaDocument)

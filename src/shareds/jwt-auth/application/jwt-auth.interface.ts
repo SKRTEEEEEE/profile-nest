@@ -23,7 +23,7 @@ export type VerifyJWTRes = Promise<{
   parsedJWT: JWTPayload
 }|null| undefined>
 export type UserAuthJWTPayload = JWTPayload<JWTContext>
-type UserAuth = UserAuthJWTPayload["ctx"]
+
 
 //Tiene sentido pasar esta parte de arriba a domain ⬆️⬆️ -- cuando tenga clara la estructura de domain, y este mas avanzada la app pasar
 

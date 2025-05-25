@@ -15,7 +15,6 @@ export class UserThirdWebCreateUseCase<TDB> {
     ) {}
 
     async create(payload: VerifyLoginPayloadParams): Promise<UserBase & TDB> {
-        console.log("creating", payload)
         const verifiedPayload = await this.authThirdWebRepository.verifyPayload(payload);
         if (!verifiedPayload.valid) throw new UnauthorizedError("Payload not valid")
         let user = await this.userReadOneService.readByAddress(verifiedPayload.payload.address);

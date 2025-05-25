@@ -2,6 +2,7 @@ import { Model } from "mongoose";
 import { MongooseBase, MongooseDocument } from "../types";
 import { DatabaseFindError } from "src/domain/flows/domain.error";
 
+
 export abstract class MongooseBaseImpl<
   TBase,
   TOptions extends Partial<Record<keyof TBase & MongooseBase, (value: any) => any>> = {}

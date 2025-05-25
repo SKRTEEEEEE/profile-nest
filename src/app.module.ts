@@ -10,6 +10,7 @@ import { TechModule } from './modules/tech/presentation/tech.module';
 import { PreTechModule } from './modules/pre-tech/presentation/pre-tech.module';
 import { ResponseInterceptor } from './shareds/presentation/response.guard';
 import { UserModule } from './modules/user/presentation/user.module';
+import { RoleModule } from './modules/role/presentation/role.module';
 
 
 
@@ -22,6 +23,7 @@ import { UserModule } from './modules/user/presentation/user.module';
     UserModule,
     JwtAuthModule,
     RoleAuthModule,
+    RoleModule,
     // OctokitModule
     // MockAuthUserModule,
   ],

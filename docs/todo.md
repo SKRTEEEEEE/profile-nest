@@ -1,4 +1,18 @@
 # ToDo
+## ThirdWeb
+- [ ] Desvincular tipos de modules/[..]/app - no pueden aver tipos de thirdWeb -> para eso:
+- [ ] Crear capa aplicación ⁉️
+- [ ] Esta parte es la única que sera común con el frontend -> ⁉️ Vale la pena tener la app como submodule, o todo el 'shared/modulo' ⁉️
+## DTOs
+- [ ] Hacer DTOs
+- [ ] Utilizar los DTOs lo mas abajo posible (app si es posible) -> para ello, creo que lo mejor es utilizar-los en los casos en los se utiliza un shared (role-tech, user-thirdweb, etc..) pero ver que se necesita en Presentation y ver hasta que abajo (app-infra-presentation) 'tiene sentido' utilizar-lo para no duplicar
+- [x] Mirar en que capas quiero DTOs: controllers - se pueden reutilizar si tiene sentido en infra
+- [x] Integrar buen funcionamiento
+## User
+- [ ] Integrar ThirdWeb y DTOs correctamente
+- [ ] Mejorar lógica backend - sobretodo funciones compartidas(user-role-thirdweb.usecase.ts, user-nodemailer.usecase)
+  - [ ] Comprobar que campos son necesarios y cuales no
+  - [ ] Fijarse en que algunos datos se pueden obtener del JWT -> como id del usuario que hace la acción
 ## Test
 - [ ] Falta testear la parte de update-tech-octokit
 - [x] Falta testear la parte del auth, conexion, nextjs - nestjs, mediante JWT
@@ -28,10 +42,7 @@
         - Se pueden utilizar tipos distintos de entrada mientras estos no interfieran uno frente al otro (osea han de ser 'equivalentes', haciendo que uno sea mas pobre que el otro en tipado)
 ### Unificar Res y ERRORS v1 
 - [x] Incluir siempre message y success
-## DTOs
-- [x] Mirar en que capas quiero DTOs: controllers - se pueden reutilizar si tiene sentido en infra
-- [ ] Hacer DTOs
-- [x] Integrar buen funcionamiento
+
 ## Terminar tech-octokit/create.repo.ts
 - [x] Hacer que saque lo necesario para actualizar.repo.ts
 

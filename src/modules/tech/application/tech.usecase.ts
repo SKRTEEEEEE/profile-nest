@@ -6,7 +6,7 @@ import {  LengBase, TechBase } from "src/domain/entities/tech";
 // Si esto funciona asi, probablemente sea la mejor manera asi expongo los Service que quiero
 
 @Injectable()
-export class TechCreateUseCase<TDB> {
+export class TechCreateUseCase<TDB>  {
     constructor(
         private readonly crruudRepository: CRRUUDRepository<LengBase, TDB>
     ) {}

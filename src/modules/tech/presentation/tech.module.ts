@@ -49,7 +49,7 @@ import { TechFindDeleteRepo } from "../infrastructure/delete.repo";
             provide: TechReadOneUseCase,
             useFactory: (repo) => new TechReadOneUseCase(repo),
             inject: ["TechRepository"]
-        }
+        },
         // RoleAuthUseCase, // RoleAuthUseCase ya está registrado
     ],
     // exports: [

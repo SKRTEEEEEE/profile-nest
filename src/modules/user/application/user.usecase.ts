@@ -1,4 +1,6 @@
 import { Injectable } from "@nestjs/common";
+import { DatabaseActionError } from "src/domain/flows/domain.error";
+import { PersistedEntity } from "src/shareds/pattern/application/interfaces/adapter.type";
 import { CRRUUDIdRepository } from "src/shareds/pattern/application/usecases/crruud-id.interface";
 import { ReadOneRepository } from "src/shareds/pattern/application/usecases/read-one.interface";
 
@@ -24,7 +26,8 @@ export class UserReadOneUseCase<TDB> {
         return this.readOneRepository.readOne(props)
     }
     async readByAddress(address: string){
-        return this.readOneRepository.readOne({address})
+        const debug = await this.readOneRepository.readOne({ filter: { "address": address } })
+        return debug
     }
 }
 
@@ -76,5 +79,35 @@ export class UserDeleteByIdUseCase<TDB> {
     ) {}
     async deleteById(props: DeleteByIdProps<TDB>): DeleteByIdRes<UserBase, TDB>{
         return this.crruudRepository.deleteById(props)
+    }
+}
+@Injectable()
+export class UserVerifyEmailUseCase<TDB extends PersistedEntity = PersistedEntity> {
+    constructor(
+        private readonly crruudRepository: CRRUUDIdRepository<UserBase, TDB>
+    ) {}
+    async verifyEmail(props: {id: string, verifyToken: string}): Promise<boolean> {
+        const user = await this.crruudRepository.readById(props.id as ReadByIdProps<TDB>);
+    if (!user) {
+        console.error("Error at find user");
+        return false;
+    } 
+    if (user.verifyToken !== props.verifyToken) {
+        console.error("Error at validate token");
+        return false;
+    }
+    if (user.verifyTokenExpire && new Date(user.verifyTokenExpire) <= new Date()) {
+        console.error("Error with token time");
+        return false;
+    }
+    user.isVerified = true;
+    user.verifyToken = undefined;
+    user.verifyTokenExpire = undefined;
+    // ⚠️‼️ Esta parte en el futuro sera un botón de "subscripción"
+
+    const sUser = await this.crruudRepository.updateById({id: user.id, updateData:user})
+    if(!sUser) throw new DatabaseActionError("update user")
+    console.log(sUser)
+    return true;
     }
 }

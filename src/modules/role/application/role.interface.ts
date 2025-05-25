@@ -1,6 +1,7 @@
 // import { RoleBase } from "src/domain/entities/role";
 // import { CRRUDDRepository } from "../patterns/crrudd.interface";
 
+
 // export abstract class RoleRepository<TDB>
 // extends CRRUDDRepository<RoleBase, TDB>
 // {
@@ -17,3 +18,6 @@
 // //     abstract deleteById(id: DeleteByIdProps<TDBBase>): DeleteByIdRes<RoleBase, TDBBase>;
 // //     abstract delete(props: DeleteProps<RoleBase, TDBBase>): DeleteRes<RoleBase, TDBBase>;
 // }
+export abstract class RoleInterface {
+    abstract isAdmin(address: string): Promise<boolean>;
+}
