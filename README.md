@@ -1,10 +1,10 @@
 <img src="https://user-images.githubusercontent.com/73097560/115834477-dbab4500-a447-11eb-908a-139a6edaec5c.gif">
 
 # Profile Page NestJS Backend
-<a href="https://github.com/SKRTEEEEEE">
+<a href="https://profile-skrt.vercel.app/">
 <div align="center">
-  <img  src="https://github.com/SKRTEEEEEE/SKRTEEEEEE/blob/main/resources/img/grid-snake.svg"
-       alt="snake" />
+  <img src="./docs/img/profile-page.gif"
+       alt="banner" style="width: 100%"/>
 </div>
 </a>
 

@@ -25,7 +25,7 @@ export class TechOctokitCreateRepo  {
     try {
         // 1. Obtener el estado actual de la BD y calcular uso de GitHub
         const proyectosDB = await this.techReadService.read({});
-        const usoGithub = await this.octokit.getTechGithubPercentage(nameId, owner);
+        const {topicSizePer:usoGithub} = await this.octokit.getTopicsGithubData(nameId, owner);
         // Calcular la siguiente preferencia disponible
         const nextPreference = await this.calculateNextPreference(proyectosDB, lengTo, fwTo);
         

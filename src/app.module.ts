@@ -8,7 +8,7 @@ import { RoleAuthModule } from './shareds/role-auth/presentation/role-auth.modul
 import { RoleAuthUseCase } from './shareds/role-auth/application/role-auth.usecase';
 import { TechModule } from './modules/tech/presentation/tech.module';
 import { PreTechModule } from './modules/pre-tech/presentation/pre-tech.module';
-import { ResponseInterceptor } from './shareds/presentation/response.guard';
+import { ResponseInterceptor } from './shareds/presentation/response.interceptor';
 import { UserModule } from './modules/user/presentation/user.module';
 import { RoleModule } from './modules/role/presentation/role.module';
 

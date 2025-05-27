@@ -15,6 +15,9 @@
 - [ ] Mejorar lógica backend - sobretodo funciones compartidas(user-role-thirdweb.usecase.ts, user-nodemailer.usecase)
   - [ ] Comprobar que campos son necesarios y cuales no
   - [ ] Fijarse en que algunos datos se pueden obtener del JWT -> como id del usuario que hace la acción
+## Chart/Dynamic Banners
+- [ ] Delete unused libraries -> `"canvas": "^3.1.0"` - `"chart.js": "^4.4.9"` - `"@types/chart.js": "^2.9.41"`
+- [ ] Banner de tecnologías para el README - Esta parte HAY QUE devolverla en un endpoint para cuando la cambie se cambie en todos los README
 ## Test
 - [ ] Falta testear la parte de update-tech-octokit
 - [x] Falta testear la parte del auth, conexion, nextjs - nestjs, mediante JWT
