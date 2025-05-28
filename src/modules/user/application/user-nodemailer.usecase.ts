@@ -1,6 +1,6 @@
 
 import { Injectable } from "@nestjs/common";
-import { EmailNodemailerRepository } from "src/shareds/nodemailer/email-nodemailer.repo";
+import { EmailNodemailerRepo } from "src/shareds/nodemailer/email-nodemailer.repo";
 import { UserReadByIdUseCase, UserUpdateByIdUseCase, UserUpdateUseCase } from "./user.usecase";
 import { VerifyLoginPayloadParams } from "@thirdweb-dev/auth";
 import { DatabaseFindError, SetEnvError } from "src/domain/flows/domain.error";
@@ -13,7 +13,7 @@ export type UserNodemailerUpdateProps =
 @Injectable()
 export class UserNodemailerUpdateUseCase<TDB> {
     constructor(
-        private readonly nodemailerRepository: EmailNodemailerRepository,
+        private readonly nodemailerRepository: EmailNodemailerRepo,
         private readonly userUpdateByIdService: UserUpdateByIdUseCase<TDB>,
         private readonly userReadByIdService: UserReadByIdUseCase<TDB>
     ){}

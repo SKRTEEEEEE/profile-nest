@@ -14,10 +14,10 @@ Aunque la separación entre esta capa y la de `Infrastructure` es muy relativa. 
 - Son los encargados de manejar los endpoints.
 - También se crearán los métodos compuestos, exclusivos de la entidad, aquí.
 ### 🖊️ Controllers -> `<module>.controller.ts`
-## * PROVIDERS
-Los Providers en NestJS son clases que pueden ser inyectadas en otras clases. En nuestra arquitectura, los utilizamos principalmente en las capas de `application` e `infrastructure`.
+## PROVIDERS
+Los Providers en NestJS son clases que pueden ser inyectadas en otras clases. En nuestra arquitectura, los utilizamos principalmente en las capas de `application -> use case` e `infrastructure -> repo`. Aunque otros patrones como `strategy` y muchos mas también lo són.
 
-### 🤔 (SERVICES) - USE CASES 
+### 🤔 (SERVICES) - USE CASES *
 Los Use Cases (conocido como Services) son la implementación de la lógica de negocio. En esta implementación:
 - Implementan interfaces específicas (ej: `ReadOneI`, `UpdateI`, `DeleteI`)
 - Son genéricos para permitir flexibilidad con diferentes tipos de datos
@@ -40,8 +40,25 @@ Las Connections son responsables de:
 ### 🤔 HELPERS
 Clases de utilidad que proporcionan funcionalidades comunes.
 
+### STRATEGY
+El **patrón Strategy** es un patrón de diseño de comportamiento que permite definir una familia de algoritmos, encapsular cada uno de ellos y hacerlos intercambiables. Su propósito es permitir que el algoritmo varíe independientemente de los clientes que lo utilizan.
+
+#### 🔍 ¿Qué problema resuelve?
+
+Cuando tienes múltiples formas de realizar una tarea (como diferentes formas de autenticar a un usuario, ordenar datos, calcular descuentos, etc.), y no quieres llenar tu código de `if`/`switch`, el patrón Strategy te permite delegar esa lógica en clases separadas y seleccionarlas dinámicamente.
+
+
+
+#### 🧱 Estructura básica
+
+* **Context**: el objeto que usa una estrategia.
+* **Strategy (interfaz)**: declara una interfaz común para todas las estrategias concretas.
+* **Concrete Strategies**: implementan distintas variantes del algoritmo.
+
+
+
 ### * Utilizado en la capas de `application` y `infrastructure`
-- En este caso, son las clases que se utilizan en app e infra y son inyectables.
+- En este caso, comúnmente son las clases que se utilizan en app e infra y son inyectables.
 - Se utiliza en dichas capas (app e infra) pero solo el decorador `@Injectable()` de NestJS. 
 - Para desvincular estos repositorios del Framework, podemos crear un decorador de ts personalizado que en esta parte de la aplicación (NestJS) utilice el `@Injectable()` de NestJS.
 
@@ -288,6 +305,7 @@ export class CacheInterceptor implements NestInterceptor {
 ### 🖊️ Decorator -> `<module>.decorator.ts`
 
 ## ‼️ NOT USE ❌ ADAPTERS - **part of old infra/service (w. guard)**
+### Son parte de PROVIDERS
 -> Son los encargados de 'adaptar' la lógica de la infraestructura
 
     🤖 Adaptadores: Los adaptadores (o "adapters") que se utilizan para interactuar con servicios externos, bases de datos, o cualquier otra infraestructura deberían estar en la capa de infraestructura. Esto incluye adaptadores para APIs externas, bases de datos, etc. Su función es traducir las llamadas de la capa de aplicación a las interfaces específicas de la infraestructura.

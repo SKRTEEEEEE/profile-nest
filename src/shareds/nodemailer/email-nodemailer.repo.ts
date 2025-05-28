@@ -8,7 +8,7 @@ import * as nodemailer from "nodemailer"
 
 
 @Injectable()
-export class EmailNodemailerRepository implements EmailInterface{
+export class EmailNodemailerRepo implements EmailInterface{
     private _transporter;
     private host = process.env.SMTP_HOST;
     private port = process.env.SMTP_PORT;

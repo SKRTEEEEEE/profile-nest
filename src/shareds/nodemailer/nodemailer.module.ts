@@ -1,12 +1,12 @@
 import { Module } from "@nestjs/common";
-import { EmailNodemailerRepository } from "./email-nodemailer.repo";
+import { EmailNodemailerRepo } from "./email-nodemailer.repo";
 
 @Module({
     providers: [
-        EmailNodemailerRepository,
+        EmailNodemailerRepo,
     ],
     exports: [
-        EmailNodemailerRepository
+        EmailNodemailerRepo
     ]
 })
 export class NodemailerModule{}

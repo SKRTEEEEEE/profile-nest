@@ -7,8 +7,8 @@ import { Reflector } from '@nestjs/core';
 import { JwtAuthThirdwebRepo } from 'src/shareds/jwt-auth/infrastructure/jwt-auth-thirdweb.repo';
 import { JwtAuthUseCase } from 'src/shareds/jwt-auth/application/jwt-auth.usecase';
 import { JwtAuthInterface } from 'src/shareds/jwt-auth/application/jwt-auth.interface';
-import { JwtAuthMockStrategy } from './adapters/jwt-auth-mock.strategy';
-import { JwtAuthThirdwebStrategy } from './adapters/jwt-auth-thirdweb.strategy';
+import { JwtAuthMockStrategy } from './jwt-auth-mock.strategy';
+import { JwtAuthThirdwebStrategy } from './jwt-auth-thirdweb.strategy';
 import { ThirdWebModule } from 'src/shareds/thirdweb/thirdweb.module';
 
 
