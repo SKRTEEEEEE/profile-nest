@@ -1,7 +1,7 @@
 import SMTPTransport from "nodemailer/lib/smtp-transport";
 
 
-type EmailRepository = {
+type EmailInterface = {
     sendMail(params: SendMailParams): Promise<SMTPTransport.SentMessageInfo>
     createVerificationEmail(verificationLink: string): string;
 }

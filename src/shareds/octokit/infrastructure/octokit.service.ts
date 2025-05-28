@@ -1,12 +1,20 @@
 //Toda esta parte deberá tener su propio módulo
 
 import { Injectable } from "@nestjs/common";
-import { GithubOptionsBase, GithubOptionsUpdate, LengPercentage, OctokitInterface, RepoDetailsRes } from "src/shareds/octokit/application/octokit.interface";
+import { GithubOptionsBase, GithubOptionsUpdate,  OctokitInterface, RepoDetailsRes } from "src/shareds/octokit/application/octokit.interface";
 import { OctokitConfig } from "./octokit.conn";
+import { AllTopicSizePercentagesRes } from "src/shareds/topic/application/topic-calculator.interface";
+import { TopicCalculatorUseCase } from "src/shareds/topic/application/topic-calculator.usecase";
+export type LengPercentage = {
+    name: string;
+    percentage: number;
+}
 
 @Injectable()
 export class OctokitRepo extends OctokitConfig implements OctokitInterface {
-    constructor() {
+    constructor(
+        private readonly topicCalculatorUseCase: TopicCalculatorUseCase
+    ) {
         super();
     }
     //Aparte
@@ -88,137 +96,87 @@ export class OctokitRepo extends OctokitConfig implements OctokitInterface {
     }
 
 
-    // 2. Porcentaje de repositorios en los que se utiliza un lenguaje (topic) en un usuario de github
-    async getTopicsGithubData(nameId: string, owner: string): Promise<{ topicSizePer: number, topicRepoPer: number, topicRepoFrac: string, topicImportanceScore: number }> {
+    async getTopicGithubData(nameId: string, owner: string): Promise<{ topicSizePer: number, topicRepoPer: number, topicRepoFrac: string, topicImportanceScore: number }> {
         const reposDetails = await this.getReposDetails(owner);
-        const lengPor = this.calculateLanguagePercentages(reposDetails);
-        const allTopics = this.getAllTopicsRepoPercentage(reposDetails);
-        console.log(allTopics);
+        return this.topicCalculatorUseCase.calculateTopicGithubData(nameId,this.topicCalculatorUseCase.calculateAllTopicSizePercentages(reposDetails),this.topicCalculatorUseCase.calculateAllTopicsRepoPercentages(reposDetails))
+        // const lengPor = this.getAllTopicsSizePercentage(reposDetails);
+        // const allTopics = this.getAllTopicsRepoPercentage(reposDetails);
+        // console.log(allTopics);
 
-        const replaceDashWithDot = (str: string) => str.replace(/-/g, '.');
-        const normalizedName = replaceDashWithDot(nameId.toLowerCase());
+        // const replaceDashWithDot = (str: string) => str.replace(/-/g, '.');
+        // const normalizedName = replaceDashWithDot(nameId.toLowerCase());
 
-        // Buscar el porcentaje de tamaño (useGithub)
-        const usogithubString = lengPor.find(lenguaje => {
-            const searchedName = replaceDashWithDot(lenguaje.name.toLowerCase());
-            return normalizedName === searchedName;
-        })?.percentage ?? 0;
+        // // Buscar el porcentaje de tamaño (useGithub)
+        // const usogithubString = lengPor.find(lenguaje => {
+        //     const searchedName = replaceDashWithDot(lenguaje.name.toLowerCase());
+        //     return normalizedName === searchedName;
+        // })?.percentage ?? 0;
 
-        // Buscar el porcentaje y fracción de repos (useReposPor, useReposFrac)
-        const topicStats = allTopics.find(topic => {
-            const searchedName = replaceDashWithDot(topic.name.toLowerCase());
-            return normalizedName === searchedName;
-        });
+        // // Buscar el porcentaje y fracción de repos (useReposPor, useReposFrac)
+        // const topicStats = allTopics.find(topic => {
+        //     const searchedName = replaceDashWithDot(topic.name.toLowerCase());
+        //     return normalizedName === searchedName;
+        // });
 
-        const useReposPor = topicStats?.topicRepoPer ?? 0;
-        const useReposFrac = topicStats?.topicRepoFrac ?? "0/0";
+        // const useReposPor = topicStats?.topicRepoPer ?? 0;
+        // const useReposFrac = topicStats?.topicRepoFrac ?? "0/0";
 
-        // Métrica de importancia combinada
-        const useImportancePor = parseFloat(((usogithubString * useReposPor) / 100).toFixed(2));
+        // // Métrica de importancia combinada
+        // const useImportancePor = parseFloat(((usogithubString * useReposPor) / 100).toFixed(2));
 
-        return {
-            topicSizePer: usogithubString,
-            topicRepoPer: useReposPor,
-            topicRepoFrac: useReposFrac,
-            topicImportanceScore: useImportancePor
-        };
+        // return {
+        //     topicSizePer: usogithubString,
+        //     topicRepoPer: useReposPor,
+        //     topicRepoFrac: useReposFrac,
+        //     topicImportanceScore: useImportancePor
+        // };
     }
-    // async getTechGithubPercentages(nameId: string, owner: string): Promise<{ useGithub: number, useReposPor: number, useReposFrac: string, useImportancePor: number }> {
-    //     const reposDetails = await this.getReposDetails(owner);
-    //     const lengPor = this.calculateLanguagePercentages(reposDetails);
-    //     const lengRepoPor = this.getReposWithTopicPercentage(nameId, reposDetails)
-    //     console.log(lengPor);
-    //     if (Math.round(this.sumarPorcentajes(lengPor)) !== 100) console.error("Error at calculate Language Percentages, sum is ", this.sumarPorcentajes(lengPor), lengPor)
-    //     const replaceDashWithDot = (str: string) => str.replace(/-/g, '.');
-    //     const usogithubString = lengPor.find(lenguaje => {
-    //         const normalizedName = nameId.toLowerCase();
-    //         const modifiedName = replaceDashWithDot(normalizedName);
-    //         const searchedName = replaceDashWithDot(lenguaje.name.toLowerCase());
-    //         return modifiedName === searchedName;
-    //     })?.percentage ?? 0;
-    //     return {
-    //         useGithub: usogithubString,
-    //         useReposPor: lengRepoPor.percentage,
-    //         useReposFrac: lengRepoPor.fraction,
-    //         useImportancePor: parseFloat(((usogithubString * lengRepoPor.percentage) / 10).toFixed(2))
-    //     }
-    // }
 
-    // 1. Porcentaje de uso de un lenguaje(topic) en todos los repositorios de un usuario (con topics - se excluyen los repos que no tienen topics -)
-    // async getTechGithubPercentage(nameId: string, owner: string): Promise<number> {
-    //     const reposDetails = await this.getReposDetails(owner);
-    //     const lengPor = this.calculateLanguagePercentages(reposDetails);
-    //     console.log(lengPor);
-    //     if (Math.round(this.sumarPorcentajes(lengPor)) !== 100) console.error("Error at calculate Language Percentages, sum is ", this.sumarPorcentajes(lengPor), lengPor)
-    //     const replaceDashWithDot = (str: string) => str.replace(/-/g, '.');
-    //     const usogithubString = lengPor.find(lenguaje => {
-    //         const normalizedName = nameId.toLowerCase();
-    //         const modifiedName = replaceDashWithDot(normalizedName);
-    //         const searchedName = replaceDashWithDot(lenguaje.name.toLowerCase());
-    //         return modifiedName === searchedName;
-    //     })?.percentage.toFixed(2);
-    //     return usogithubString !== undefined ? parseFloat(usogithubString) : 0;
-    // }
     private sumarPorcentajes(lengPor: { name: string; percentage: number }[]): number {
         return lengPor.reduce((acc, curr) => acc + curr.percentage, 0);
     }
-    // getReposWithTopicPercentage(nameId: string, reposDetails: RepoDetailsRes): { percentage: number, fraction: string } {
+
+    // private getAllTopicsRepoPercentage(reposDetails: RepoDetailsRes): { name: string, topicRepoPer: number, topicRepoFrac: string }[] {
     //     const filteredRepos = reposDetails.filter(repo => repo.topics.length > 0);
+    //     const total = filteredRepos.length;
+    //     if (total === 0) return [];
 
-    //     if (filteredRepos.length === 0) return { percentage: 0, fraction: "0/0" };
+    //     // Cuenta cuántos repos usan cada topic
+    //     const topicCount: { [topic: string]: number } = {};
+    //     filteredRepos.forEach(repo => {
+    //         repo.topics.forEach(topic => {
+    //             topicCount[topic] = (topicCount[topic] || 0) + 1;
+    //         });
+    //     });
 
-    //     const normalizedTopic = nameId.toLowerCase().replace(/-/g, '.');
-    //     const reposWithTopic = filteredRepos.filter(repo =>
-    //         repo.topics.some(t => t.toLowerCase().replace(/-/g, '.') === normalizedTopic)
-    //     );
-
-    //     const percentage = (reposWithTopic.length / filteredRepos.length) * 100;
-    //     return {
-    //         percentage: parseFloat(percentage.toFixed(2)),
-    //         fraction: `${reposWithTopic.length}/${filteredRepos.length}`
-    //     };
+    //     // Devuelve el array con porcentaje y fracción
+    //     return Object.entries(topicCount).map(([name, count]) => ({
+    //         name,
+    //         topicRepoPer: parseFloat(((count / total) * 100).toFixed(2)),
+    //         topicRepoFrac: `${count}/${total}`
+    //     }));
     // }
-    private getAllTopicsRepoPercentage(reposDetails: RepoDetailsRes): { name: string, topicRepoPer: number, topicRepoFrac: string }[] {
-        const filteredRepos = reposDetails.filter(repo => repo.topics.length > 0);
-        const total = filteredRepos.length;
-        if (total === 0) return [];
-
-        // Cuenta cuántos repos usan cada topic
-        const topicCount: { [topic: string]: number } = {};
-        filteredRepos.forEach(repo => {
-            repo.topics.forEach(topic => {
-                topicCount[topic] = (topicCount[topic] || 0) + 1;
-            });
-        });
-
-        // Devuelve el array con porcentaje y fracción
-        return Object.entries(topicCount).map(([name, count]) => ({
-            name,
-            topicRepoPer: parseFloat(((count / total) * 100).toFixed(2)),
-            topicRepoFrac: `${count}/${total}`
-        }));
-    }
-    //Original
-    private calculateLanguagePercentages(reposDetails: RepoDetailsRes): LengPercentage[] {
-        const filteredReposDetails = reposDetails.filter(repo => repo.topics.length > 0);
-        const totalSize = filteredReposDetails.reduce((acc, repo) => acc + repo.size, 0);
-        const languageWeights: { [key: string]: number } = {};
-        filteredReposDetails.forEach(repo => {
-            const weightPerLanguage = repo.size / repo.topics.length;
-            repo.topics.forEach(topic => {
-                if (languageWeights[topic]) {
-                    languageWeights[topic] += weightPerLanguage;
-                } else {
-                    languageWeights[topic] = weightPerLanguage;
-                }
-            });
-        });
-        const languagePercentages: LengPercentage[] = [];
-        for (const [language, weight] of Object.entries(languageWeights)) {
-            languagePercentages.push({ name: language, percentage: (weight / totalSize) * 100 });
-        }
-        return languagePercentages;
-    }
+    // //Original
+    // private getAllTopicsSizePercentage(reposDetails: RepoDetailsRes): AllTopicSizePercentagesRes {
+    //     const filteredReposDetails = reposDetails.filter(repo => repo.topics.length > 0);
+    //     const totalSize = filteredReposDetails.reduce((acc, repo) => acc + repo.size, 0);
+    //     const languageWeights: { [key: string]: number } = {};
+    //     filteredReposDetails.forEach(repo => {
+    //         const weightPerLanguage = repo.size / repo.topics.length;
+    //         repo.topics.forEach(topic => {
+    //             if (languageWeights[topic]) {
+    //                 languageWeights[topic] += weightPerLanguage;
+    //             } else {
+    //                 languageWeights[topic] = weightPerLanguage;
+    //             }
+    //         });
+    //     });
+    //     const languagePercentages: AllTopicSizePercentagesRes = Object.entries(languageWeights).map(([language, weight]) => ({
+    //         name: language,
+    //         percentage: (weight / totalSize) * 100
+    //     }));
+    //     return languagePercentages;
+    // }
 
     // Aparte
     private async fetchFileSha(filePath: string, options: GithubOptionsBase): Promise<string | undefined> {
@@ -248,8 +206,4 @@ export class OctokitRepo extends OctokitConfig implements OctokitInterface {
             throw error;
         }
     }
-
-
-
-
 }

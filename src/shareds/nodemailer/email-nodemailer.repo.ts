@@ -1,5 +1,5 @@
 import { Injectable } from "@nestjs/common";
-import { EmailRepository, SendMailParams } from "./email.interface";
+import { EmailInterface, SendMailParams } from "./email.interface";
 import SMTPTransport from "nodemailer/lib/smtp-transport";
 import { SetEnvError } from "src/domain/flows/domain.error";
 import { verificationEmailTemplate } from "./verification-email-template";
@@ -8,7 +8,7 @@ import * as nodemailer from "nodemailer"
 
 
 @Injectable()
-export class EmailNodemailerRepository implements EmailRepository{
+export class EmailNodemailerRepository implements EmailInterface{
     private _transporter;
     private host = process.env.SMTP_HOST;
     private port = process.env.SMTP_PORT;

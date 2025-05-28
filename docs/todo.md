@@ -18,6 +18,7 @@
 ## Chart/Dynamic Banners
 - [ ] Delete unused libraries -> `"canvas": "^3.1.0"` - `"chart.js": "^4.4.9"` - `"@types/chart.js": "^2.9.41"`
 - [ ] Banner de tecnologías para el README - Esta parte HAY QUE devolverla en un endpoint para cuando la cambie se cambie en todos los README
+### Añadir cache backend (CDN/generación semanal) i http, necesidad de registrar usuario, etc..
 ## Test
 - [ ] Falta testear la parte de update-tech-octokit
 - [x] Falta testear la parte del auth, conexion, nextjs - nestjs, mediante JWT
