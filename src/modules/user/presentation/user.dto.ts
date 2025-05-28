@@ -5,6 +5,7 @@ import { MongooseBase } from "src/shareds/pattern/infrastructure/types";
 import { AuthThirdWebVerifyPayloadDto } from "src/shareds/thirdweb/auth-thirdweb.dto";
 import { LoginPayload } from "thirdweb/auth";
 import { UserNodemailerUpdateProps } from "../application/user-nodemailer.usecase";
+import { ApiProperty } from "@nestjs/swagger";
 
 type UserRoleThirdWebDeleteProps = {
     payload: {
@@ -33,7 +34,7 @@ type UserRoleThirdWebGiveRoleProps = {
     payload: {
   signature: `0x${string}` | string;
   payload: LoginPayload;
-}, id: ReadByIdProps<MongooseBase>, solicitud: RoleType.ADMIN
+}, id: ReadByIdProps<MongooseBase>, solicitud: RoleType
 }
 export class UserRoleThirdWebGiveRoleDto implements UserRoleThirdWebGiveRoleProps {
     @ValidateNested()
@@ -43,8 +44,9 @@ export class UserRoleThirdWebGiveRoleDto implements UserRoleThirdWebGiveRoleProp
     @IsString()
     id: ReadByIdProps<MongooseBase>;
 
+    @ApiProperty({ enum: RoleType }) // <-- Cambia aquí
     @IsEnum(RoleType)
-    solicitud: RoleType.ADMIN;
+    solicitud: RoleType;
 }
 
 export class UserUpdateSolicitudDto {

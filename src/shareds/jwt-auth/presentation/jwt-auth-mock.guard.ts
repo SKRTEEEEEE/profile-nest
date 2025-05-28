@@ -3,6 +3,7 @@ import { Reflector } from '@nestjs/core';
 import { AuthGuard } from '@nestjs/passport';
 import { Observable } from 'rxjs';
 import { PUBLIC_ROUTE_KEY } from './public-route.decorator';
+import { UnauthorizedError } from 'src/domain/flows/domain.error';
 
 @Injectable()
 export class JwtAuthMockGuard extends AuthGuard('mock') {
@@ -30,7 +31,7 @@ export class JwtAuthMockGuard extends AuthGuard('mock') {
   handleRequest(err, user, info) {
     // Customize error handling
     if (err || !user) {
-      throw err || new UnauthorizedException('Mock authentication failed');
+      throw err || new UnauthorizedError('Mock authentication failed');
     }
     return user;
   }

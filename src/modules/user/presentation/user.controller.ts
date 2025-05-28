@@ -87,7 +87,7 @@ export class UserController {
         return this.userReadByIdService.readById(json.id)
     }
     @Get()
-    @PublicRoute()
+    // @PublicRoute()
     async readAll(){
         return this.userReadService.read({})
     }

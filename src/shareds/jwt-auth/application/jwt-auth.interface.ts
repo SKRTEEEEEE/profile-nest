@@ -22,8 +22,8 @@ export type VerifyJWTRes = Promise<{
   valid: boolean
   parsedJWT: JWTPayload
 }|null| undefined>
-export type UserAuthJWTPayload = JWTPayload<JWTContext>
 
+export type UserAuthJWTPayload = JWTPayload<JWTContext>
 
 //Tiene sentido pasar esta parte de arriba a domain ⬆️⬆️ -- cuando tenga clara la estructura de domain, y este mas avanzada la app pasar
 

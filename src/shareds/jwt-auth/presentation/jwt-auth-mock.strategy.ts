@@ -12,6 +12,7 @@ export class JwtAuthMockStrategy extends PassportStrategy(Strategy, 'mock') {
   async validate(req: Request): Promise<UserAuthJWTPayload["ctx"]> {
     const authHeader = req.headers['authorization'];
     const token = authHeader?.split(' ')[1];
+    console.log(token)
 
     if (token !== 'megustajs') {
       throw new UnauthorizedException('Token mock inválido');

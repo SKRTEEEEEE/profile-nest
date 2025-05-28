@@ -10,6 +10,7 @@ import { MongooseBase } from "src/shareds/pattern/infrastructure/types";
 import { ApiResponse } from "src/shareds/presentation/api-response.decorator";
 import { ResCodes } from "src/domain/flows/res.codes";
 import { PreTechInterface } from "../application/pre-tech.interface";
+import { ApiBearerAuth, ApiExcludeEndpoint } from "@nestjs/swagger";
 
 
 
@@ -20,6 +21,7 @@ export class PreTechController implements PreTechInterface<MongooseBase> {
 
     @Post()
     @ApiResponse(ResCodes.ENTITY_UPDATED)
+    @ApiBearerAuth("access-token")
     @UseGuards(RoleAuthTokenGuard)
     @Roles(RoleType.ADMIN)
     async updatePreTech(): Promise<void> {
@@ -27,11 +29,11 @@ export class PreTechController implements PreTechInterface<MongooseBase> {
     }
 
     
+    // @ApiResponse(
+        //     ResCodes.ENTITIES_FOUND,
+        //     "Hola mundo"
+        // ) // Sobre-escribe la respuesta por defecto - recomendado siempre -> Decorator opcional para dar mas info del endpoint en la respuesta 
     @Get()
-    @ApiResponse(
-        ResCodes.ENTITIES_FOUND,
-        "Hola mundo"
-    ) // Sobre-escribe la respuesta por defecto - recomendado siempre -> Decorator opcional para dar mas info del endpoint en la respuesta 
     @PublicRoute() // No se usara
     // @UseGuards(RoleAuthTokenGuard)
     // @Roles(RoleType.STUDENT, RoleType.ADMIN) // Utiliza el de mayor rango -> admin

@@ -3,7 +3,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigModule } from '@nestjs/config';
 import { APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
 import { JwtAuthThirdwebGuard } from './shareds/jwt-auth/presentation/jwt-auth-thirdweb.guard';
-import { JwtAuthModule } from './shareds/jwt-auth/presentation/jwt-auth.module';
+import { JwtAuthMockModule, JwtAuthThirdWebModule } from './shareds/jwt-auth/presentation/jwt-auth.module';
 import { RoleAuthModule } from './shareds/role-auth/presentation/role-auth.module';
 import { RoleAuthUseCase } from './shareds/role-auth/application/role-auth.usecase';
 import { TechModule } from './modules/tech/presentation/tech.module';
@@ -11,6 +11,7 @@ import { PreTechModule } from './modules/pre-tech/presentation/pre-tech.module';
 import { ResponseInterceptor } from './shareds/presentation/response.interceptor';
 import { UserModule } from './modules/user/presentation/user.module';
 import { RoleModule } from './modules/role/presentation/role.module';
+import { JwtAuthMockGuard } from './shareds/jwt-auth/presentation/jwt-auth-mock.guard';
 
 
 
@@ -21,7 +22,7 @@ import { RoleModule } from './modules/role/presentation/role.module';
     PreTechModule,
     TechModule,
     UserModule,
-    JwtAuthModule,
+    process.env.JWT_STRATEGY === "mock" ?JwtAuthMockModule:JwtAuthThirdWebModule,
     RoleAuthModule,
     RoleModule,
     // OctokitModule
@@ -32,8 +33,7 @@ import { RoleModule } from './modules/role/presentation/role.module';
      // Aplicar el JwtAuthGuard globalmente (todas las rutas requieren autenticación por defecto) - se utiliza aquí porque requiere de reflector y no necesita new ...
      {
       provide: APP_GUARD,
-      useClass: JwtAuthThirdwebGuard,
-      // useClass: MockAuthUserGuard
+      useClass: process.env.JWT_STRATEGY === "mock" ? JwtAuthMockGuard: JwtAuthThirdwebGuard,
     },
     {
       provide: APP_INTERCEPTOR,

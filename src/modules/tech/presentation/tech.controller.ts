@@ -10,6 +10,7 @@ import { ActualizarGithubTechsType, TechOctokitActualizarGithubRepo } from "../i
 import { InputParseError } from "src/domain/flows/domain.error";
 import { TechOctokitUpdateRepo } from "../infrastructure/tech-octokit/update.repo";
 import { TechFindDeleteRepo } from "../infrastructure/delete.repo";
+import { ApiBearerAuth } from "@nestjs/swagger";
 
 @Controller("/tech")
 export class TechController {
@@ -26,6 +27,7 @@ export class TechController {
         // private readonly techDeleteService: TechDeleteUseCase<MongooseBase>
     ) {}
 
+    @ApiBearerAuth("access-token")
     @Delete()
     async delete(@Body() body: {nameId: string}) {
         return await this.techFindAndDeleteRepo.findAndDelete(body.nameId)
@@ -38,17 +40,20 @@ export class TechController {
         
     }
 
+    @ApiBearerAuth("access-token")
     @Post("/:type") // can be /all or /json or /md
     async actualizarGithub(@Param("type")type: string){
         if(!Object.values(ActualizarGithubTechsType).includes(type))throw new InputParseError("Invalid route")
         return await this.techOctokitActualizarGithubRepo.actualizar({type:ActualizarGithubTechsType[type]})
     }
-
+    
+    @ApiBearerAuth("access-token")
     @Put()
     async update(@Body() tech: TechForm) {
         return await this.techOctokitUpdateRepo.update(tech)
     }
 
+    @ApiBearerAuth("access-token")
     @Post()
     async create(@Body() tech: TechForm) {
         return await this.techOctokitCreateRepo.create(tech)
