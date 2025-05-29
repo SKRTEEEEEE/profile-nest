@@ -10,12 +10,10 @@ import { RoleType } from "src/domain/entities/role.type";
 @Injectable()
 export class JwtAuthMockStrategy extends PassportStrategy(Strategy, 'mock') {
   async validate(req: Request): Promise<UserAuthJWTPayload["ctx"]> {
-    const authHeader = req.headers['authorization'];
-    const token = authHeader?.split(' ')[1];
-    console.log(token)
-
+    const authHeader = req.headers['authorization']
+    const token = authHeader?.split(' ')[1]
     if (token !== 'megustajs') {
-      throw new UnauthorizedException('Token mock inválido');
+      throw new UnauthorizedException('Token mock inválido')
     }
 
     return {

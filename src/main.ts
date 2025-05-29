@@ -17,7 +17,7 @@ const getBearerAuthConfig = (jwtType: string) => {
         name: 'Authorization',
         description: 'Ingrese el token mock en el campo',
       } as SecuritySchemeObject,
-      name: 'mock-token'
+      name: 'access-token'
   }
    else return {
     options: {

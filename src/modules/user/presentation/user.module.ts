@@ -12,6 +12,7 @@ import { NodemailerModule } from "src/shareds/nodemailer/nodemailer.module";
 // import { UserRoleThirdWebDeleteUseCase, UserRoleThirdwebGiveRoleUseCase } from "../application/user-role-thirdweb.usecase";
 import { RoleModule } from "src/modules/role/presentation/role.module";
 import { UserNodemailerUpdateUseCase } from "../application/user-nodemailer.usecase";
+import { SignatureAuthModule } from "src/shareds/signature-auth/presentation/signature-auth.module";
 
 @Module({
     imports: [
@@ -20,7 +21,8 @@ import { UserNodemailerUpdateUseCase } from "../application/user-nodemailer.usec
     ]),
     ThirdWebModule,
     NodemailerModule,
-    RoleModule
+    RoleModule,
+    SignatureAuthModule
     ],
     controllers: [
         UserController

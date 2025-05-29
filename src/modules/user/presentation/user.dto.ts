@@ -9,17 +9,17 @@ import { ApiProperty } from "@nestjs/swagger";
 
 //delete
 type UserRoleThirdWebDeleteProps = {
-    payload: {
-        signature: `0x${string}` | string;
-        payload: LoginPayload;
-    };
+    // payload: {
+    //     signature: `0x${string}` | string;
+    //     payload: LoginPayload;
+    // };
     id: string;
     address: string;
 };
 export class UserRoleThirdWebDeleteDto implements UserRoleThirdWebDeleteProps {
-    @ValidateNested()
-    @Type(() => AuthThirdWebVerifyPayloadDto)
-    payload: AuthThirdWebVerifyPayloadDto;
+    // @ValidateNested()
+    // @Type(() => AuthThirdWebVerifyPayloadDto)
+    // payload: AuthThirdWebVerifyPayloadDto;
 
     @IsString()
     id: string;
@@ -29,15 +29,16 @@ export class UserRoleThirdWebDeleteDto implements UserRoleThirdWebDeleteProps {
 }
 //give role
 type UserRoleThirdWebGiveRoleProps = {
-    payload: {
-  signature: `0x${string}` | string;
-  payload: LoginPayload;
-}, id: ReadByIdProps<MongooseBase>, solicitud: RoleType
+//     payload: {
+//   signature: `0x${string}` | string;
+//   payload: LoginPayload;
+// }, 
+id: ReadByIdProps<MongooseBase>, solicitud: RoleType
 }
 export class UserRoleThirdWebGiveRoleDto implements UserRoleThirdWebGiveRoleProps {
-    @ValidateNested()
-    @Type(() => AuthThirdWebVerifyPayloadDto)
-    payload: AuthThirdWebVerifyPayloadDto;
+    // @ValidateNested()
+    // @Type(() => AuthThirdWebVerifyPayloadDto)
+    // payload: AuthThirdWebVerifyPayloadDto;
 
     @IsString()
     id: ReadByIdProps<MongooseBase>;

@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Post, Put } from "@nestjs/common";
+import { Body, Controller, Delete, Get, Param, Post, Put, Req, UseGuards } from "@nestjs/common";
 import { UserCreateUseCase, UserDeleteByIdUseCase, UserReadByIdUseCase, UserReadOneUseCase, UserReadUseCase, UserUpdateByIdUseCase, UserVerifyEmailUseCase } from "../application/user.usecase";
 import { MongooseBase } from "src/shareds/pattern/infrastructure/types";
 import { PublicRoute } from "src/shareds/jwt-auth/presentation/public-route.decorator";
@@ -12,6 +12,10 @@ import { RoleCreateUseCase, RoleDeleteByIdUseCase } from "src/modules/role/appli
 import { UserNodemailerUpdateDto, UserRoleThirdWebDeleteDto, UserRoleThirdWebGiveRoleDto, UserUpdateSolicitudDto, UserVerifyEmailDto } from "./user.dto";
 import { AuthThirdWebVerifyPayloadDto } from "src/shareds/thirdweb/auth-thirdweb.dto";
 import { UserNodemailerUpdateUseCase } from "../application/user-nodemailer.usecase";
+import { Request } from "express";
+import { SignatureAuthModule } from "src/shareds/signature-auth/presentation/signature-auth.module";
+import { SignatureAuthThirdwebGuard } from "src/shareds/signature-auth/presentation/signature-auth-thirdweb.guard";
+import { ApiBearerAuth, ApiHeader } from "@nestjs/swagger";
 
 
 @Controller("/user")
@@ -32,15 +36,16 @@ export class UserController {
         // private readonly userRoleThirdWebDeleteService: UserRoleThirdWebDeleteUseCase<MongooseBase>,
         private readonly roleCreateService: RoleCreateUseCase<MongooseBase>,
         // private readonly userRoleThirdwebGiveRoleService: UserRoleThirdwebGiveRoleUseCase<MongooseBase>, 
-    ){}
-    
+    ) { }
+
     @Post()
     @PublicRoute()
-    async login(@Body() payload: AuthThirdWebVerifyPayloadDto) {
+    async login(@Body() payload: AuthThirdWebVerifyPayloadDto) // falta hacer este
+    {
         const verifiedPayload = await this.authThirdWebRepository.verifyPayload(payload);
         if (!verifiedPayload.valid) throw new UnauthorizedError("Payload not valid")
         let user = await this.userReadOneService.readByAddress(verifiedPayload.payload.address);
-        if(!user) return await this.userCreateService.create({ address: verifiedPayload.payload.address as string, roleId: null, role: null, solicitud: null, img: null, email: null , isVerified: false, nick: null});
+        if (!user) return await this.userCreateService.create({ address: verifiedPayload.payload.address as string, roleId: null, role: null, solicitud: null, img: null, email: null, isVerified: false, nick: null });
         return user;
     }
     @Put()
@@ -48,34 +53,50 @@ export class UserController {
         return this.userNodemailerUpdateService.update(json)
     } //🚧⚠️⁉️
     //should be tested
+    @ApiHeader({
+        name: 'x-signed-payload',
+        description: 'Payload firmado por el usuario (JSON stringificado)',
+        required: true,
+        schema: { type: 'string' }
+    })
+    @UseGuards(SignatureAuthThirdwebGuard)
     @Delete("/:id")
-    async delete(@Param()id: string,@Body() json: UserRoleThirdWebDeleteDto) {
-        const v = await this.authThirdWebRepository.verifyPayload(json.payload)
-        if (!v.valid) throw new UnauthorizedError("Error with payload auth")
-        if (v.payload.address !== json.address) throw new UnauthorizedError("User only can delete her address")
-    
+    async delete(@Param() id: string, @Body() json: UserRoleThirdWebDeleteDto, @Req() req) {
+        // const v = await this.authThirdWebRepository.verifyPayload(json.payload)
+        // if (!v.valid) throw new UnauthorizedError("Error with payload auth")
+        if (req.verifiedPayload.payload.address !== json.address) throw new UnauthorizedError("User only can delete her address")
+
         //deleteUser(id)
         const user = await this.userReadByIdService.readById(json.id)
-        if (!user) throw new DatabaseFindError({optionalMessage:"User not found"})
+        if (!user) throw new DatabaseFindError({ optionalMessage: "User not found" })
         if (user.roleId !== null) {
-        await this.roleDeleteByIdService.deleteById(user.roleId as DeleteByIdProps<MongooseBase>);
+            await this.roleDeleteByIdService.deleteById(user.roleId as DeleteByIdProps<MongooseBase>);
         }
         await this.userDeleteByIdService.deleteById(json.id)
     }
+    @ApiHeader({
+        name: 'x-signed-payload',
+        description: 'Payload firmado por el usuario (JSON stringificado)',
+        required: true,
+        schema: { type: 'string' }
+    })
+    @UseGuards(SignatureAuthThirdwebGuard)
     @Put("/role")
-    async giveRole(@Body() props: UserRoleThirdWebGiveRoleDto) {
-           const v = await this.authThirdWebRepository.verifyPayload(props.payload)
-    if (!v.valid) throw new UnauthorizedError("payload auth")
-      const signUser = await this.userReadOneService.readByAddress(props.payload.payload.address)
-    if (!signUser) throw new DatabaseFindError({optionalMessage:"signer user not found"})
-    if (signUser.role!=="ADMIN") throw new UnauthorizedError("Only admins")
+    async giveRole(@Body() props: UserRoleThirdWebGiveRoleDto, @Req() req) {
+        //        const v = await this.authThirdWebRepository.verifyPayload(props.payload)
+        // if (!v.valid) throw new UnauthorizedError("payload auth")
+        const signUser = await this.userReadOneService.readByAddress(req.verifiedPayload.payload.payload.address)
+        if (!signUser) throw new DatabaseFindError({ optionalMessage: "signer user not found" })
+        if (signUser.role !== "ADMIN") throw new UnauthorizedError("Only admins")
         const user = await this.userReadByIdService.readById(props.id)
-        if(!user)throw new DatabaseFindError({entitie:"user", optionalMessage: "User not found at give role action"})
-    const createdRole = await this.roleCreateService.create({address: props.payload.payload.address,permissions: props.solicitud})
-    await this.userUpdateByIdService.updateById({id: props.id, updateData:{
-       address: user.address, roleId: createdRole.id,
-      role: props.solicitud, solicitud: null, img: user.img, email: user.email, isVerified: user.isVerified
-    }})
+        if (!user) throw new DatabaseFindError({ entitie: "user", optionalMessage: "User not found at give role action" })
+        const createdRole = await this.roleCreateService.create({ address: req.verifiedPayload.payload.payload.address, permissions: props.solicitud })
+        await this.userUpdateByIdService.updateById({
+            id: props.id, updateData: {
+                address: user.address, roleId: createdRole.id,
+                role: props.solicitud, solicitud: null, img: user.img, email: user.email, isVerified: user.isVerified
+            }
+        })
     }
     @Post("/verify-email")
     async verifyEmail(@Body() json: UserVerifyEmailDto) {
@@ -84,17 +105,18 @@ export class UserController {
 
     @Get("/:id")
     @PublicRoute()
-    async readById(@Param() json: {id: string}) {
+    async readById(@Param() json: { id: string }) {
         return this.userReadByIdService.readById(json.id)
     }
+    @ApiBearerAuth("access-token")
     @Get()
     // @PublicRoute()
-    async readAll(){
+    async readAll() {
         return this.userReadService.read({})
     }
 
     @Put("/solicitud")
-    async updateSolicitud(@Body() json:UserUpdateSolicitudDto) {
-        return this.userUpdateByIdService.updateById({id:json.id, updateData:{solicitud:json.solicitud}})
+    async updateSolicitud(@Body() json: UserUpdateSolicitudDto) {
+        return this.userUpdateByIdService.updateById({ id: json.id, updateData: { solicitud: json.solicitud } })
     }
 }
