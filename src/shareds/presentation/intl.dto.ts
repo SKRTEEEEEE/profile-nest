@@ -4,33 +4,39 @@ import { ApiProperty } from "@nestjs/swagger";
 import { ApiDtoMetadata } from "../swagger/dto-metadata.decorator";
 
 @ApiDtoMetadata({
-    description: 'A DTO representing an internationalization identifier for translations in multiple languages.',
+    description: 'Internationalization identifier for translations in multiple languages.',
     title: 'Internationalization',
     group: 'Shared'
 })
 export class IntlDto implements IntlBase {
     @ApiProperty({
-        title: "test",
+        title: "es - Español",
         description: 'The identifier for the message in Spanish.',
         example: 'Un texto en Español',
     })
     @IsString()
     es: string;
-@ApiProperty({
-        description: 'The identifier for the message in Spanish.',
-        example: 'Un texto en Español',
+
+    @ApiProperty({
+        title: "en - English",
+        description: 'The identifier for the message in English.',
+        example: 'A text in English',
     })
     @IsString()
     en: string;
-@ApiProperty({
-        description: 'The identifier for the message in Spanish.',
-        example: 'Un texto en Español',
+
+    @ApiProperty({
+        title: "ca - Català",
+        description: 'The identifier for the message in Catalan.',
+        example: 'Un text en Català',
     })
     @IsString()
     ca: string;
-@ApiProperty({
-        description: 'The identifier for the message in Spanish.',
-        example: 'Un texto en Español',
+
+    @ApiProperty({
+        title: "de - Deutsch",
+        description: 'The identifier for the message in German.',
+        example: 'Ein Text auf Deutsch',
     })
     @IsString()
     de: string;

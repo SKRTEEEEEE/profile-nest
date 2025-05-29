@@ -1,4 +1,4 @@
-// response.decorators.ts
+// response.decorators.ts - ⚠️ INTEGRAR CON SWAGGER
 
 import { applyDecorators, SetMetadata } from "@nestjs/common";
 import { ResCodes } from "src/domain/flows/res.codes";

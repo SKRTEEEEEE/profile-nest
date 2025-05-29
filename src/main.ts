@@ -5,8 +5,32 @@ import { AppModule } from './app.module';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { SWAGGER_CONFIGS } from './shareds/swagger/swagger.config';
 import { dtoRegistry } from './shareds/swagger/dto.register';
+import { SecuritySchemeObject } from '@nestjs/swagger/dist/interfaces/open-api-spec.interface';
 
-
+const getBearerAuthConfig = (jwtType: string) => {
+  if(jwtType == "mock")return{
+    options: {
+        type: 'http',
+        scheme: 'bearer',
+        bearerFormat: 'JWT',
+        in: 'header',
+        name: 'Authorization',
+        description: 'Ingrese el token mock en el campo',
+      } as SecuritySchemeObject,
+      name: 'mock-token'
+  }
+   else return {
+    options: {
+        type: 'http',
+        scheme: 'bearer',
+        bearerFormat: 'JWT',
+        in: 'header',
+        name: 'Authorization',
+        description: 'Ingrese el token JWT en el campo',
+      } as SecuritySchemeObject,
+      name: 'access-token'
+  }
+}
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.useGlobalFilters(new DomainErrorFilter());
@@ -20,17 +44,7 @@ async function bootstrap() {
     .setTitle(cfg.title)
     .setDescription(cfg.description)
     .setVersion(cfg.version)
-    .addBearerAuth(
-      {
-        type: 'http',
-        scheme: 'bearer',
-        bearerFormat: 'JWT',
-        in: 'header',
-        name: 'Authorization',
-        description: 'Ingrese el token JWT en el campo',
-      },
-      'access-token'
-    )
+    .addBearerAuth(getBearerAuthConfig(process.env.JWT_STRATEGY).options,getBearerAuthConfig(process.env.JWT_STRATEGY).name)
     .build();
 
   const documentFactory = SwaggerModule.createDocument(app, config);
@@ -54,18 +68,21 @@ async function bootstrap() {
 
   // Safely transform schemas with explicit type narrowing
   const components = documentFactory.components;
-  console.log(components)
   if (components) {
+    console.log(components.schemas?.TechFormDto)
     const schemas = components.schemas;
     if (schemas) {
       Object.entries(schemas).forEach(([schemaName, schema]) => {
         if (schema) {
           schemas[schemaName] = transformSchema(schema, schemaName);
+          // console.log(schemas[schemaName])
         }
       });
     } else {
       console.warn('No schemas found in document components.');
     }
+    console.log(components.schemas?.TechFormDto)
+
   } else {
     console.warn('No components found in Swagger document.');
   }

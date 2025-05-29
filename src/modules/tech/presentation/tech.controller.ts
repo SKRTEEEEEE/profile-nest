@@ -12,6 +12,8 @@ import { TechOctokitUpdateRepo } from "../infrastructure/tech-octokit/update.rep
 import { TechFindDeleteRepo } from "../infrastructure/delete.repo";
 import { ApiBearerAuth } from "@nestjs/swagger";
 import { TechFormDto } from "./tech.dto";
+import { ApiErrorResponse } from "src/shareds/presentation/api-error.decorator";
+import { ErrorCodes } from "src/domain/flows/error.codes";
 
 @Controller("/tech")
 export class TechController {
@@ -48,12 +50,14 @@ export class TechController {
         return await this.techOctokitActualizarGithubRepo.actualizar({type:ActualizarGithubType[type]})
     }
     
+    @ApiErrorResponse("auto") //should test
     @ApiBearerAuth("access-token")
     @Put()
     async update(@Body() tech: TechFormDto) {
         return await this.techOctokitUpdateRepo.update(tech)
     }
 
+    @ApiErrorResponse(ErrorCodes.INPUT_PARSE , ErrorCodes.DATABASE_FIND)
     @ApiBearerAuth("access-token")
     @Post()
     async create(@Body() tech: TechFormDto) {

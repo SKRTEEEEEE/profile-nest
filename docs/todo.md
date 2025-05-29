@@ -10,14 +10,21 @@
   - [ ] Desvincular el tipo -> export enum ActualizarGithubType {"md", "json", "all"}
   - [ ] Crear enfoque ApiProperty (swagger/nest.js) para el tipo
 
+## ERRORS
+- [ ] Mejorar errors para manejar mensaje para el dev - vs - mensaje que se devuelve al final
+- [ ] Ambos errores han de tener un formato bonito (emoji y formato reducido pero descriptivo)
+- [ ] Documentar-los muy bien el Swagger (solo es una vez :D)
+
+
 ## DTOs
-- [ ] Hacer DTOs
+- [x] Hacer DTOs
 - [x] Utilizar los DTOs lo mas abajo posible (app si es posible) -> para ello, creo que lo mejor es utilizar-los en los casos en los se utiliza un shared (role-tech, user-thirdweb, etc..) pero ver que se necesita en Presentation y ver hasta que abajo (app-infra-presentation) 'tiene sentido' utilizar-lo para no duplicar 🤔 -> Prefiero no utilizar-lo en la capa app y respetar la norma de que solo la capa presentation contiene lógica del framework
 - [x] Mirar en que capas quiero DTOs: controllers - se pueden reutilizar si tiene sentido en infra
 - [x] Integrar buen funcionamiento
 ### Swagger
 - [ ] Terminar de entender como funciona la personalización del documento -> [`dto-metadata.decorator.ts`](../src/shareds/swagger/dto-metadata.decorator.ts) | [`main.ts`](../src/main.ts)
 - [ ] Desvincular configuración del [`main.ts`](../src/main.ts) 
+#### ⚠️ Documentar ‼️🧠
 ## User
 - [ ] Integrar ThirdWeb y DTOs correctamente
 - [ ] Mejorar lógica backend - sobretodo funciones compartidas(user-role-thirdweb.usecase.ts, user-nodemailer.usecase)
@@ -61,3 +68,5 @@
 - [x] Hacer que saque lo necesario para actualizar.repo.ts
 
 
+##### Prompt
+mira chat, me gustaria explorar la parte de las secciones o diferentes implementaciones en swagger de nestjs, ya que yo tengo como dos apps distintas, una -mock, y otro -thirdweb, segun el jwt-auth enfoque se utilize, me gustaria configurarlo todo bien 
