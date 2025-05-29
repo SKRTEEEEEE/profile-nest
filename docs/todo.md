@@ -4,12 +4,20 @@
   - [ ] ⁉️ Desvincular nodemailer
   - [x] Crear capa aplicación 🤔 -> No es necesario, ya que probablemente en cada app (diferentes server - frontend-info, frontend-app, backend) queremos expones mas o menos métodos, aparte que no tiene mucho sentido ya que los inputs (props) siempre dependen del sdk (infra)
   - [x] Esta parte es la única que sera común con el frontend ->  Vale la pena tener la app como submodule, o todo el 'shared/modulo' ❌
+## Tech
+### Desvincular 'actualizarGithub' de [actualizar.repo.ts](../src/modules/tech/infrastructure/tech-octokit/actualizar.repo.ts)
+- [ ] Desvincular la lógica de octokit, creando una función genérica para actualizar.repo
+  - [ ] Desvincular el tipo -> export enum ActualizarGithubType {"md", "json", "all"}
+  - [ ] Crear enfoque ApiProperty (swagger/nest.js) para el tipo
 
 ## DTOs
 - [ ] Hacer DTOs
 - [x] Utilizar los DTOs lo mas abajo posible (app si es posible) -> para ello, creo que lo mejor es utilizar-los en los casos en los se utiliza un shared (role-tech, user-thirdweb, etc..) pero ver que se necesita en Presentation y ver hasta que abajo (app-infra-presentation) 'tiene sentido' utilizar-lo para no duplicar 🤔 -> Prefiero no utilizar-lo en la capa app y respetar la norma de que solo la capa presentation contiene lógica del framework
 - [x] Mirar en que capas quiero DTOs: controllers - se pueden reutilizar si tiene sentido en infra
 - [x] Integrar buen funcionamiento
+### Swagger
+- [ ] Terminar de entender como funciona la personalización del documento -> [`dto-metadata.decorator.ts`](../src/shareds/swagger/dto-metadata.decorator.ts) | [`main.ts`](../src/main.ts)
+- [ ] Desvincular configuración del [`main.ts`](../src/main.ts) 
 ## User
 - [ ] Integrar ThirdWeb y DTOs correctamente
 - [ ] Mejorar lógica backend - sobretodo funciones compartidas(user-role-thirdweb.usecase.ts, user-nodemailer.usecase)

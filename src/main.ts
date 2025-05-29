@@ -4,16 +4,17 @@ import { GlobalValidationPipe } from './shareds/presentation/pipes/global.valida
 import { AppModule } from './app.module';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { SWAGGER_CONFIGS } from './shareds/swagger/swagger.config';
+import { dtoRegistry } from './shareds/swagger/dto.register';
 
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule)
-  app.useGlobalFilters(new DomainErrorFilter())
-  app.useGlobalPipes(new GlobalValidationPipe())
+  const app = await NestFactory.create(AppModule);
+  app.useGlobalFilters(new DomainErrorFilter());
+  app.useGlobalPipes(new GlobalValidationPipe());
   const cfg = SWAGGER_CONFIGS.ADMIN;
   if (!process.env.JWT_STRATEGY) {
-  throw new Error('JWT_STRATEGY env variable is required');
-}
+    throw new Error('JWT_STRATEGY env variable is required');
+  }
 
   const config = new DocumentBuilder()
     .setTitle(cfg.title)
@@ -21,29 +22,72 @@ async function bootstrap() {
     .setVersion(cfg.version)
     .addBearerAuth(
       {
-      type: 'http',
-      scheme: 'bearer',
-      bearerFormat: 'JWT',
-      in: 'header',
-      name: 'Authorization',
-      description: 'Ingrese el token JWT en el campo',
-    },
+        type: 'http',
+        scheme: 'bearer',
+        bearerFormat: 'JWT',
+        in: 'header',
+        name: 'Authorization',
+        description: 'Ingrese el token JWT en el campo',
+      },
       'access-token'
     )
-    // .addBearerAuth({
-    //   type: "http",
-    //   scheme: "custom",
-    //   in: "header",
-    //   name: "my-token",
-    //   description: "esto es un test",
-    // }, "test-token")
     .build();
 
-    
-  const documentFactory = ()=>SwaggerModule.createDocument(app, config);
- 
-  SwaggerModule.setup('api', app, documentFactory);
+  const documentFactory = SwaggerModule.createDocument(app, config);
 
-  await app.listen(process.env.PORT ?? 3001)
+  // Custom transformer to apply metadata to schemas using the registry
+  const transformSchema = (schema: any, schemaName: string) => {
+    const constructor = dtoRegistry[schemaName];
+    if (constructor) {
+      const description = Reflect.getMetadata('swagger/apiDtoDescription', constructor);
+      const title = Reflect.getMetadata('swagger/apiDtoTitle', constructor);
+      const group = Reflect.getMetadata('swagger/apiDtoGroup', constructor);
+
+      if (description) schema.description = description;
+      if (title) schema.title = title;
+      if (group) schema['x-group'] = group;
+    } else {
+      console.warn(`No constructor found in registry for schema: ${schemaName}`);
+    }
+    return schema;
+  };
+
+  // Safely transform schemas with explicit type narrowing
+  const components = documentFactory.components;
+  console.log(components)
+  if (components) {
+    const schemas = components.schemas;
+    if (schemas) {
+      Object.entries(schemas).forEach(([schemaName, schema]) => {
+        if (schema) {
+          schemas[schemaName] = transformSchema(schema, schemaName);
+        }
+      });
+    } else {
+      console.warn('No schemas found in document components.');
+    }
+  } else {
+    console.warn('No components found in Swagger document.');
+  }
+
+  // Setup Swagger UI
+  SwaggerModule.setup('api', app, documentFactory, {
+    customCss: `
+      .opblock-tag { display: none; }
+      .schemes { display: flex; flex-wrap: wrap; }
+      .scheme-container { margin: 10px; }
+      .scheme-container h3 { font-size: 1.2em; margin-bottom: 5px; }
+      .scheme-container .model { border: 1px solid #ccc; padding: 10px; border-radius: 5px; }
+    `,
+    // customSiteTitle: 'Your API Documentation',
+    // swaggerOptions: {
+    //   docExpansion: 'list',
+    //   filter: true,
+    //   tagsSorter: 'alpha',
+    //   operationsSorter: 'alpha',
+    // },
+  });
+
+  await app.listen(process.env.PORT ?? 3001);
 }
 bootstrap();

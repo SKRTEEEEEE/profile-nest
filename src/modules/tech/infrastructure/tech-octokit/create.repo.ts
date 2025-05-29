@@ -7,7 +7,7 @@ import { TechReadUseCase } from "src/modules/tech/application/tech-read.usecase"
 import { TechCreateUseCase, TechReadOneUseCase, TechUpdateUseCase } from "src/modules/tech/application/tech.usecase";
 import { MongooseBase } from "src/shareds/pattern/infrastructure/types";
 import { OctokitRepo } from "src/shareds/octokit/infrastructure/octokit.service";
-import { ActualizarGithubTechsType, TechOctokitActualizarGithubRepo } from "./actualizar.repo";
+import { ActualizarGithubType, TechOctokitActualizarGithubRepo } from "./actualizar.repo";
 
 @Injectable()
 export class TechOctokitCreateRepo  {
@@ -97,7 +97,7 @@ export class TechOctokitCreateRepo  {
         //     actualizarJson()
         // ]);
         // TODO -> 🚧⚠️‼️ HERE CONTINUES -- TODO ‼️⚠️🚧
-        await this.techOctokitActualizarGithubRepo.actualizar({type: ActualizarGithubTechsType.all, create:{base: {nameId, nameBadge, web, color}, oldTechs: proyectosDB} })
+        await this.techOctokitActualizarGithubRepo.actualizar({type: ActualizarGithubType.all, create:{base: {nameId, nameBadge, web, color}, oldTechs: proyectosDB} })
 
         return  message ;
 

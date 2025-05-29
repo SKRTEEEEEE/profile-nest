@@ -1,4 +1,4 @@
-export enum AppMainParts {
+enum AppMainParts {
   ADMIN = "ADMIN",
   // Puedes añadir más partes aquí si tu app crece
 }

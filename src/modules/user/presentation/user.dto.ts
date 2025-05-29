@@ -7,6 +7,7 @@ import { LoginPayload } from "thirdweb/auth";
 import { UserNodemailerUpdateProps } from "../application/user-nodemailer.usecase";
 import { ApiProperty } from "@nestjs/swagger";
 
+//delete
 type UserRoleThirdWebDeleteProps = {
     payload: {
         signature: `0x${string}` | string;
@@ -15,9 +16,6 @@ type UserRoleThirdWebDeleteProps = {
     id: string;
     address: string;
 };
-
-
-
 export class UserRoleThirdWebDeleteDto implements UserRoleThirdWebDeleteProps {
     @ValidateNested()
     @Type(() => AuthThirdWebVerifyPayloadDto)
@@ -29,7 +27,7 @@ export class UserRoleThirdWebDeleteDto implements UserRoleThirdWebDeleteProps {
     @IsString()
     address: string;
 }
-
+//give role
 type UserRoleThirdWebGiveRoleProps = {
     payload: {
   signature: `0x${string}` | string;

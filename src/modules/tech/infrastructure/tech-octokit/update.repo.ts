@@ -1,7 +1,7 @@
 import { Injectable } from "@nestjs/common";
 import { TechUpdateUseCase } from "../../application/tech.usecase";
 import { MongooseBase } from "src/shareds/pattern/infrastructure/types";
-import { ActualizarGithubTechsType, TechOctokitActualizarGithubRepo } from "./actualizar.repo";
+import { ActualizarGithubType, TechOctokitActualizarGithubRepo } from "./actualizar.repo";
 import { TechForm } from "src/domain/entities/tech";
 
 @Injectable()
@@ -64,7 +64,7 @@ export class TechOctokitUpdateRepo {
         if (!proyectoActualizado) {
             return `No se encontró un proyecto llamado ${updateData.nameId}.`;
         }
-        await this.techOctokitActualizarGithubRepo.actualizar({type: ActualizarGithubTechsType.json});
+        await this.techOctokitActualizarGithubRepo.actualizar({type: ActualizarGithubType.json});
         return `El proyecto ${updateData.nameId} ha sido actualizado correctamente.`
     } catch (error) {
         console.error('Error actualizando el proyecto:', error);

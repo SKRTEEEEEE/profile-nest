@@ -16,10 +16,10 @@ const path = { md: "about/techs.md", json: "sys/techs.json" };
 
 // Banner de tecnologías para el README - Esta parte HAY QUE devolverla en un endpoint para cuando la cambie se cambie en todos los README
 const techsHeaderBanner = `<img src="https://skillicons.dev/icons?i=solidity,ipfs,git,github,obsidian,md,html,css,styledcomponents,tailwind,threejs,react,js,ts,prisma,sqlite,mongodb,mysql,nextjs,nodejs,express,py,php,c,cpp,sentry,redux,firebase,vercel,bash,powershell,npm,vscode,notion,ableton,windows&perline=18" />`
-export enum ActualizarGithubTechsType {"md", "json", "all"}
+export enum ActualizarGithubType {"md", "json", "all"}
 type ActualizarGithubTechsProps = {
     
-    type: ActualizarGithubTechsType
+    type: ActualizarGithubType
     create?: {
         base:PreTechBase
         oldTechs: (LengBase & MongooseBase)[]
@@ -55,7 +55,7 @@ export class TechOctokitActualizarGithubRepo {
         private readonly octokit: OctokitRepo
         
     ){}
-    async actualizar (props:{type: ActualizarGithubTechsType,
+    async actualizar (props:{type: ActualizarGithubType,
     create?: {
         base:PreTechBase
         oldTechs: (LengBase & MongooseBase)[]
@@ -70,11 +70,11 @@ export class TechOctokitActualizarGithubRepo {
         }
     } else {
         try {
-            if(props.type === ActualizarGithubTechsType.all){
+            if(props.type === ActualizarGithubType.all){
                 await this.actualizarMd({proyectosDB:techs})
                 await this.actualizarJson(flattenTechs)
             } 
-            if(props.type === ActualizarGithubTechsType.json){
+            if(props.type === ActualizarGithubType.json){
                 await this.actualizarJson(flattenTechs)
             }
         } catch (error) {

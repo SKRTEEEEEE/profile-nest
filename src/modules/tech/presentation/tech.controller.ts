@@ -6,11 +6,12 @@ import { TechDeleteUseCase, TechReadByIdUseCase, TechUpdateByIdUseCase, TechUpda
 import { PublicRoute } from "src/shareds/jwt-auth/presentation/public-route.decorator";
 import { MongooseBase } from "src/shareds/pattern/infrastructure/types";
 import { TechOctokitCreateRepo } from "src/modules/tech/infrastructure/tech-octokit/create.repo";
-import { ActualizarGithubTechsType, TechOctokitActualizarGithubRepo } from "../infrastructure/tech-octokit/actualizar.repo";
+import { ActualizarGithubType, TechOctokitActualizarGithubRepo } from "../infrastructure/tech-octokit/actualizar.repo";
 import { InputParseError } from "src/domain/flows/domain.error";
 import { TechOctokitUpdateRepo } from "../infrastructure/tech-octokit/update.repo";
 import { TechFindDeleteRepo } from "../infrastructure/delete.repo";
 import { ApiBearerAuth } from "@nestjs/swagger";
+import { TechFormDto } from "./tech.dto";
 
 @Controller("/tech")
 export class TechController {
@@ -43,19 +44,19 @@ export class TechController {
     @ApiBearerAuth("access-token")
     @Post("/:type") // can be /all or /json or /md
     async actualizarGithub(@Param("type")type: string){
-        if(!Object.values(ActualizarGithubTechsType).includes(type))throw new InputParseError("Invalid route")
-        return await this.techOctokitActualizarGithubRepo.actualizar({type:ActualizarGithubTechsType[type]})
+        if(!Object.values(ActualizarGithubType).includes(type))throw new InputParseError("Invalid route")
+        return await this.techOctokitActualizarGithubRepo.actualizar({type:ActualizarGithubType[type]})
     }
     
     @ApiBearerAuth("access-token")
     @Put()
-    async update(@Body() tech: TechForm) {
+    async update(@Body() tech: TechFormDto) {
         return await this.techOctokitUpdateRepo.update(tech)
     }
 
     @ApiBearerAuth("access-token")
     @Post()
-    async create(@Body() tech: TechForm) {
+    async create(@Body() tech: TechFormDto) {
         return await this.techOctokitCreateRepo.create(tech)
     }
 }

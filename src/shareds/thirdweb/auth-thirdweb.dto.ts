@@ -8,3 +8,8 @@ export class AuthThirdWebVerifyPayloadDto implements VerifyLoginPayloadParams {
     // No validation for payload, as it's a complex object from thirdweb/auth
     payload: LoginPayload;
 }
+
+export class AuthThirdWebVerifyJwtDto {
+    @IsString()
+    token: string
+} 
