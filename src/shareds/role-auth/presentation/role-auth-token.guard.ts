@@ -39,28 +39,4 @@ export class RoleAuthTokenGuard implements CanActivate {
     })
   }
 }
-// @Injectable()
-// export class RoleAuthTokenGuard implements CanActivate {
-//   constructor(
-//     private reflector: Reflector,
-//     private readonly roleAuthService: RoleAuthUseCase
-//   ) {}
 
-//   canActivate(context: ExecutionContext): boolean {
-//     const requiredRoles = this.reflector.getAllAndOverride<RoleType[]>(ROLES_KEY, [
-//       context.getHandler(),
-//       context.getClass(),
-//     ]);
-//     // if (!requiredRoles || requiredRoles.length === 0) {      
-//     //   console.warn("No roles defined in Role decorator")
-//     //   return true
-//     // }
-
-//     const request = context.switchToHttp().getRequest();
-//     const userRole = request.user?.ctx.role ?? null;
-
-//     if (!userRole) throw new ForbiddenException('Insufficient role privileges');
-
-//     return this.roleAuthService.checkAccess(userRole, requiredRoles)
-//   }
-// }

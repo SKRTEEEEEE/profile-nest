@@ -263,7 +263,7 @@ export class LoggingInterceptor implements NestInterceptor {
 
     return next.handle().pipe(
       tap(() => {
-        console.log(`${method} ${url} ${Date.now() - now}ms`);
+        console.debug(`${method} ${url} ${Date.now() - now}ms`);
       }),
     );
   }

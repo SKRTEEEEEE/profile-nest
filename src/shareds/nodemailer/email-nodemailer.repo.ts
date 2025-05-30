@@ -28,9 +28,7 @@ export class EmailNodemailerRepo implements EmailInterface{
               user: this.user ,
               pass:this.pass,
             },
-          };
-          console.log(smtpOptions)
-      
+          };      
           return nodemailer.createTransport(smtpOptions);
     }
     protected get transporter(){
@@ -38,7 +36,7 @@ export class EmailNodemailerRepo implements EmailInterface{
     }
 
     async sendMail(params: SendMailParams): Promise<SMTPTransport.SentMessageInfo>{
-        if(!this.mFrom)throw new SetEnvError("mail sender")
+        if(!this.mFrom)throw new SetEnvError("mail sender",EmailNodemailerRepo)
         const mailOpt = {...params, from: this.mFrom}
         return await this.transporter.sendMail(mailOpt)
     }

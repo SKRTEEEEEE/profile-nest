@@ -38,7 +38,7 @@ export class GlobalValidationPipe implements PipeTransform<any> {
       (value === undefined || value === null || this.isEmptyObject(value))
     ) {
       // Usar tu clase de error de dominio para errores de validación
-      throw new InputParseError('Query params are required but were not provided.');
+      throw new InputParseError(GlobalValidationPipe,'Query params are required but were not provided.');
     }
 
     const object = plainToInstance(metatype, value);
@@ -59,7 +59,7 @@ export class GlobalValidationPipe implements PipeTransform<any> {
         .filter(Boolean);
 
       // Usar tu clase de error de dominio en lugar de BadRequestException
-      throw new InputParseError('Validation failed', {
+      throw new InputParseError(GlobalValidationPipe,'Validation failed', {
         optionalMessage: errorMessages.join('; ')
       });
     }

@@ -12,7 +12,8 @@
 
 ## ERRORS
 - [ ] Mejorar errors para manejar mensaje para el dev - vs - mensaje que se devuelve al final
-- [ ] Ambos errores han de tener un formato bonito (emoji y formato reducido pero descriptivo)
+- [ ] Ambos errores han de tener un formato bonito (emoji y formato reducido pero descriptivo) -> Incluir:
+  - [ ] (dev) Localización del archivo (donde se ha llamado al error dentro del código) + ?linea del archivo?🤔
 - [ ] Documentar-los muy bien el Swagger (solo es una vez :D)
 
 

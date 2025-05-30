@@ -14,7 +14,7 @@ import { AuthThirdWebVerifyPayloadDto } from "./auth-thirdweb.dto";
     Por ejemplo, si hacemos un Thirdweb
 
 */
-export class AuthThirdwebRepo {
+export class AuthThirdWebRepo {
   private client: ThirdwebClient;
   private account: Account;
   private auth: Record<string, Function>;
@@ -37,16 +37,15 @@ export class AuthThirdwebRepo {
 
   async verifyJWT(token: string): Promise<VerifyJWTRes> {
     if (!token) {
-      throw new UnauthorizedError('No token provided');
+      throw new UnauthorizedError(AuthThirdWebRepo,'No token provided');
     }
 
     try {
       const res = await this.auth.verifyJWT({ jwt: token });
-      if (!res.valid) throw new UnauthorizedError("No valid token");
+      if (!res.valid) throw new UnauthorizedError(AuthThirdWebRepo,"No valid token");
       return res;
     } catch (error) {
-      console.error("Error at VerifyJWT");
-      throw error;
+      throw new UnauthorizedError(AuthThirdWebRepo, "Error at auth.verifyJwt")
     }
   }
 

@@ -6,6 +6,7 @@ import { Request } from "express";
 import { Strategy } from "passport-custom";
 import { UserAuthJWTPayload } from "src/shareds/jwt-auth/application/jwt-auth.interface";
 import { RoleType } from "src/domain/entities/role.type";
+import { UnauthorizedError } from "src/domain/flows/domain.error";
 
 @Injectable()
 export class JwtAuthMockStrategy extends PassportStrategy(Strategy, 'mock') {
@@ -13,7 +14,7 @@ export class JwtAuthMockStrategy extends PassportStrategy(Strategy, 'mock') {
     const authHeader = req.headers['authorization']
     const token = authHeader?.split(' ')[1]
     if (token !== 'megustajs') {
-      throw new UnauthorizedException('Token mock inválido')
+      throw new UnauthorizedError(JwtAuthMockStrategy,'Token mock inválido')
     }
 
     return {

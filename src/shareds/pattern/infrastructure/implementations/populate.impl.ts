@@ -22,14 +22,14 @@ export class MongoosePopulateImpl<
   }
 
   async populate(docs: MongoosePopulateProps<TBase>): MongoosePopulateResponse<TBase> {
-    if (docs.length === 0) throw new InputParseError("documents",{optionalMessage:'No documents to populate'});
+    if (docs.length === 0) throw new InputParseError(MongoosePopulateImpl,'No documents to populate');
     
     try {
       const res = await this.model.insertMany(docs);
       this.resArrCheck(res);
       return res.map((doc) => this.documentToPrimary(doc as TBase & MongooseDocument));
     } catch (error) {
-      throw new DatabaseActionError("populate",{optionalMessage:'Error in the populate action'});
+      throw new DatabaseActionError("populate",MongoosePopulateImpl,{optionalMessage:'Error in the populate action'});
     }
   }
 }

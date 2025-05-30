@@ -31,7 +31,7 @@ export class JwtAuthMockGuard extends AuthGuard('mock') {
   handleRequest(err, user, info) {
     // Customize error handling
     if (err || !user) {
-      throw err || new UnauthorizedError('Mock authentication failed');
+      throw err || new UnauthorizedError(JwtAuthMockGuard,'Mock authentication failed');
     }
     return user;
   }

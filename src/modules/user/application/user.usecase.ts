@@ -1,5 +1,5 @@
 import { Injectable } from "@nestjs/common";
-import { DatabaseActionError } from "src/domain/flows/domain.error";
+import { DatabaseActionError, DatabaseFindError, UnauthorizedError } from "src/domain/flows/domain.error";
 import { PersistedEntity } from "src/shareds/pattern/application/interfaces/adapter.type";
 import { CRRUUDIdRepository } from "src/shareds/pattern/application/usecases/crruud-id.interface";
 import { ReadOneRepository } from "src/shareds/pattern/application/usecases/read-one.interface";
@@ -89,16 +89,13 @@ export class UserVerifyEmailUseCase<TDB extends PersistedEntity = PersistedEntit
     async verifyEmail(props: {id:string, verifyToken:string}): Promise<boolean> {
         const user = await this.crruudRepository.readById(props.id as ReadByIdProps<TDB>);
     if (!user) {
-        console.error("Error at find user");
-        return false;
+        throw new DatabaseFindError("readById",UserVerifyEmailUseCase,{opt:{function: "verifyEmail"}})
     } 
     if (user.verifyToken !== props.verifyToken) {
-        console.error("Error at validate token");
-        return false;
+        throw new UnauthorizedError(UserVerifyEmailUseCase,"Error at validate token");
     }
     if (user.verifyTokenExpire && new Date(user.verifyTokenExpire) <= new Date()) {
-        console.error("Error with token time");
-        return false;
+        throw new UnauthorizedError(UserVerifyEmailUseCase,"Error with token time");
     }
     user.isVerified = true;
     user.verifyToken = undefined;
@@ -106,8 +103,7 @@ export class UserVerifyEmailUseCase<TDB extends PersistedEntity = PersistedEntit
     // ⚠️‼️ Esta parte en el futuro sera un botón de "subscripción"
 
     const sUser = await this.crruudRepository.updateById({id: user.id, updateData:user})
-    if(!sUser) throw new DatabaseActionError("update user")
-    console.log(sUser)
+    if(!sUser) throw new DatabaseActionError("updateById",UserVerifyEmailUseCase)
     return true;
     }
 }

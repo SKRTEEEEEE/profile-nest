@@ -37,8 +37,9 @@ shared/
 - **ThirdWeb**: Integración con servicios Web3
 - **Stripe**: Integración con pagos
 - **Nodemailer**: Servicios de email
+- **Cloud Storage**: Almacenaje distribuido de archivos
 
-#### 2. Módulos de Autenticación y Autorización
+#### 2. Módulos del Autenticación y Autorización
 - **Role-Auth**: Gestión de roles y permisos
 - **JWT**: Manejo de tokens
 - **OAuth**: Autenticación con proveedores externos

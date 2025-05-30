@@ -26,7 +26,6 @@ export class OctokitController {
         @Res() res: Response,
         @Query('top') top?: string
     ) {
-        console.log('Fetching repositories for user:', username);
         const repos = await this.octokitRepository.getReposDetails(username);
         // const data1 = this.octokitRepository['getAllTopicsSizePercentage'](repos);
         // const data2 = this.octokitRepository["getAllTopicsRepoPercentage"](repos)
@@ -36,23 +35,7 @@ export class OctokitController {
         // res.setHeader('Cache-Control', 'public, max-age=604800');//Añadir una vez terminado - ⚠️🧠 Crear también cache interna
         res.send(buffer);
     }
-    //     @Get('pie/:owner')
-    // @PublicRoute()
-    // async getPieChart(
-    //     @Param('owner') username: string,
-    //     @Res() res: Response,
-    //     @Query('top') top?: string
-    // ) {
-    //     console.log('Fetching repositories for user:', username);
-    //     const repos = await this.octokitRepository.getReposDetails(username);
-    //     const data1 = this.octokitRepository['getAllTopicsSizePercentage'](repos);
-    //     const data2 = this.octokitRepository["getAllTopicsRepoPercentage"](repos)
-    //     const buffer = await this.chartService.renderBarChart(username,data1, data2);
 
-    //     res.setHeader('Content-Type', 'image/svg+xml');
-    //     // res.setHeader('Cache-Control', 'public, max-age=604800');//Añadir una vez terminado - ⚠️🧠 Crear también cache interna
-    //     res.send(buffer);
-    // }
 
 
     @Get("details/:owner")

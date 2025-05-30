@@ -3,7 +3,7 @@ import { TechDeleteUseCase, TechReadOneUseCase } from "../application/tech.useca
 import { MongooseBase } from "src/shareds/pattern/infrastructure/types";
 import { FwBase } from "src/domain/entities/tech";
 import { Document } from "mongoose";
-import { DatabaseActionError } from "src/domain/flows/domain.error";
+import { DatabaseActionError, DatabaseFindError } from "src/domain/flows/domain.error";
 import { FwDocument, LibDocument } from "./tech.schema";
 // type LibDocument = LibBase & Document
 // type FwDocument = FwBase & Document
@@ -19,7 +19,6 @@ export class TechFindDeleteRepo {
     async findAndDelete(name: string) {
         
     try {
-        console.log("name in deleteTech", name)
         let proyectoActualizado = null;
 
         // Buscar en librerías
@@ -34,9 +33,6 @@ export class TechFindDeleteRepo {
             const lenAny: any = lenguaje
             proyectoActualizado = await lenAny.save();
             if (proyectoActualizado) {
-                // await deleteImageUC(libreria.img)
-                // const res = await doDelete("Librería", name);
-                // return res;
                 return proyectoActualizado
             }
         }
@@ -46,11 +42,7 @@ export class TechFindDeleteRepo {
         if (lenguaje) {
             const frameworkIndex = lenguaje.frameworks.findIndex((fw:FwDocument) => fw.nameId === name);
             const framework = lenguaje.frameworks.find((fw:FwDocument) => fw.nameId === name);
-
-            // Eliminar imágenes de librerías asociadas al framework
-            // for (const libreria of framework.librerias) {
-            //     await deleteImageUC(libreria.img);
-            // }
+            if(!framework)throw new DatabaseFindError("findIndex-find",TechFindDeleteRepo)
 
             // Eliminar el framework
             lenguaje.frameworks.splice(frameworkIndex, 1);
@@ -58,10 +50,6 @@ export class TechFindDeleteRepo {
             const lenAny: any = lenguaje
             proyectoActualizado = await lenAny.save();
             if (proyectoActualizado) {
-                //Aqui hay que hacer el doDelete, por cada lib que tubiere si las tubiere
-                // await deleteImageUC(framework.img)
-                // const res = await doDelete("Framework", name);
-                // return res;
                 return proyectoActualizado
             }
         }
@@ -69,23 +57,11 @@ export class TechFindDeleteRepo {
         // Buscar en lenguajes
         const lenguajeEliminado = await this.techDeleteService.delete({filter:{ nameId: name }});
         if (lenguajeEliminado) {
-             // Eliminar imágenes de frameworks y librerías
-            //  for (const framework of lenguajeEliminado.frameworks) {
-            //     await deleteImageUC(framework.img);
-            //     for (const libreria of framework.librerias) {
-            //         await deleteImageUC(libreria.img);
-            //     }
-            // }
-            // await deleteImageUC(lenguajeEliminado.img)
-            // const res = await doDelete("Lenguaje", name);
-            // return res;
             return lenguajeEliminado
         }
-        console.log(`No se encontró una tecnología con el nombre especificado: ${name}`);
-        throw new DatabaseActionError("delete tech");
+        throw new DatabaseActionError("delete", TechFindDeleteRepo);
     } catch (error) {
-        console.error('Error eliminando la tecnología:', error);
-        throw new DatabaseActionError('Error desconoci eliminando la tecnología');
+        throw new DatabaseActionError('findAndDelete', TechFindDeleteRepo);
     }
 }
 }

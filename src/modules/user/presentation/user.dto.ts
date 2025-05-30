@@ -73,8 +73,8 @@ export class UserNodemailerUpdateDto implements UserNodemailerUpdateProps {
     img: string | null;
 }
 export class UserVerifyEmailDto {
-    @IsString()
-    id: string;
+    // @IsString()
+    // id: string;
     @IsString()
     verifyToken: string
 }

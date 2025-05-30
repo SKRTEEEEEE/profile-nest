@@ -1,6 +1,6 @@
 ```ts
 import { Injectable } from "@nestjs/common";
-import { AuthThirdwebRepo } from "src/shareds/thirdweb/auth-thirdweb.repo";
+import { AuthThirdWebRepo } from "src/shareds/thirdweb/auth-thirdweb.repo";
 import { UserDeleteByIdUseCase, UserReadByIdUseCase, UserReadOneUseCase, UserUpdateByIdUseCase, UserUpdateUseCase } from "./user.usecase";
 import { RoleCreateUseCase, RoleDeleteByIdUseCase } from "src/modules/role/application/role.usecase";
 import { LoginPayload } from "thirdweb/auth";
@@ -19,7 +19,7 @@ export type UserRoleThirdWebDeleteProps ={
 @Injectable()
 export class UserRoleThirdWebDeleteUseCase<TDB> {
     constructor(
-        private readonly authThirdWebRepository: AuthThirdwebRepo,
+        private readonly authThirdWebRepository: AuthThirdWebRepo,
         private readonly userDeleteByIdService: UserDeleteByIdUseCase<TDB>,
         private readonly userReadByIdService: UserReadByIdUseCase<TDB>,
         private readonly roleDeleteByIdService: RoleDeleteByIdUseCase<TDB>
@@ -49,7 +49,7 @@ export type UserRoleThirdWebGiveRoleProps<TDB> = {payload: {
 @Injectable()
 export class UserRoleThirdwebGiveRoleUseCase<TDB extends PersistedEntity = PersistedEntity > {
     constructor(
-        private readonly authThirdWebRepository: AuthThirdwebRepo,
+        private readonly authThirdWebRepository: AuthThirdWebRepo,
         private readonly userReadByIdService: UserReadByIdUseCase<TDB>,
         private readonly userUpdateByIdService: UserUpdateByIdUseCase<TDB>,
         private readonly userReadOneService:

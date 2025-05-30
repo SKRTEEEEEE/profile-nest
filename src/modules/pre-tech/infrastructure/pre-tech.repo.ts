@@ -75,9 +75,9 @@ MongoosePopulateI<PreTechBase>
 
       if (newTechs.length > 0) {
         await this.populate(newTechs as PreTechBase[]);
-        console.log(`Inserted ${newTechs.length} new technologies`);
+        console.info(`Inserted ${newTechs.length} new technologies`);
       } else {
-        console.log('No new technologies to insert');
+        console.info('No new technologies to insert');
       }
     } catch (error) {
       console.error('Error fetching or parsing PreTech data:', error);

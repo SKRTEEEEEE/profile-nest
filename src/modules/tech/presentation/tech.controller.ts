@@ -46,7 +46,7 @@ export class TechController {
     @ApiBearerAuth("access-token")
     @Post("/:type") // can be /all or /json or /md
     async actualizarGithub(@Param("type")type: string){
-        if(!Object.values(ActualizarGithubType).includes(type))throw new InputParseError("Invalid route")
+        if(!Object.values(ActualizarGithubType).includes(type))throw new InputParseError(TechController,"Invalid route")
         return await this.techOctokitActualizarGithubRepo.actualizar({type:ActualizarGithubType[type]})
     }
     

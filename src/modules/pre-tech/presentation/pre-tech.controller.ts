@@ -11,6 +11,7 @@ import { ApiResponse } from "src/shareds/presentation/api-response.decorator";
 import { ResCodes } from "src/domain/flows/res.codes";
 import { PreTechInterface } from "../application/pre-tech.interface";
 import { ApiBearerAuth, ApiExcludeEndpoint } from "@nestjs/swagger";
+import { NotImplementedError, UnauthorizedError } from "src/domain/flows/domain.error";
 
 
 

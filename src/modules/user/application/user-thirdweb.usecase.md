@@ -1,6 +1,6 @@
 ```ts
 import { VerifyLoginPayloadParams } from "thirdweb/auth";
-import { AuthThirdwebRepo } from "src/shareds/thirdweb/auth-thirdweb.repo";
+import { AuthThirdWebRepo } from "src/shareds/thirdweb/auth-thirdweb.repo";
 import { Injectable } from "@nestjs/common";
 import { UserCreateUseCase, UserReadOneUseCase } from "./user.usecase";
 import { UnauthorizedError } from "src/domain/flows/domain.error";
@@ -12,7 +12,7 @@ export class UserThirdWebLoginUseCase<TDB> {
     constructor(
         private readonly userCreateService: UserCreateUseCase<TDB>,
         private readonly userReadOneService: UserReadOneUseCase<TDB>,
-        private readonly authThirdWebRepository: AuthThirdwebRepo
+        private readonly authThirdWebRepository: AuthThirdWebRepo
     ) {}
 
     async login(payload: VerifyLoginPayloadParams): Promise<UserBase & TDB> {

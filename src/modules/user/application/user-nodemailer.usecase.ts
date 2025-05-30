@@ -22,14 +22,14 @@ export class UserNodemailerUpdateUseCase<TDB> {
     ){  
         let verifyToken, verifyTokenExpire;
         const user = await this.userReadByIdService.readById(userUpdateProps.id)
-        if(!user)throw new DatabaseFindError({entitie: "user", optionalMessage: "Not found at search existing for update"})
+        if(!user)throw new DatabaseFindError("readById",UserNodemailerUpdateUseCase,{entity: "user", optionalMessage: "Not found at search existing for update"})
         let isVerified = user.isVerified
         if(userUpdateProps.email !== null && userUpdateProps.email !== undefined && user.email !== userUpdateProps.email ){
                 const {hashedToken, expireDate} = this.nodemailerRepository.generateVerificationToken()
                 verifyToken = hashedToken
                 verifyTokenExpire = expireDate.toString()
                 const base = process.env.NEXT_PUBLIC_BASE_URL
-                if(!base)throw new SetEnvError("public base")
+                if(!base)throw new SetEnvError("public base url",UserNodemailerUpdateUseCase,{opt:{function:"update"}})
                 const verificationLink = `${process.env.NEXT_PUBLIC_BASE_URL}/verify-email?verifyToken=${verifyToken}&id=${userUpdateProps.id}`;
                 const html = this.nodemailerRepository.createVerificationEmail(verificationLink);
                 await this.nodemailerRepository.sendMail({to: userUpdateProps.email, subject: "Email Verification",html})

@@ -133,7 +133,7 @@ ${techsHeaderBanner}
             });
     
             await this.octokit.updateFileContent(path.md, baseOptions,{message:"Actualizar archivo .md", content:newMdContent});
-            console.log("Archivo Markdown actualizado");
+            console.info("Archivo Markdown actualizado");
         } catch (error) {
             console.error("Error actualizando el archivo .md:", error);
         }
@@ -142,10 +142,10 @@ ${techsHeaderBanner}
 private async  actualizarJson(flattenTechs: FullTechData[]) {
     // -> utiliza flattenTechs
     const t = {
-                        "max": "Màxima",
+                        "max": "Máxima",
                         "high": "Alta",
                         "neut": "Moderada",
-                        "low": "Baixa",
+                        "low": "Baja",
                         "min": "Mínima"
                     }
     // const jsonSha = await fetchFileSha(path.json);
@@ -178,7 +178,7 @@ private async  actualizarJson(flattenTechs: FullTechData[]) {
 
 
     await this.octokit.updateFileContent(path.json, baseOptions,{message:"Actualizar archivo .json",content: JSON.stringify(newJsonData, null, 2)});
-    console.log("Archivo Json actualizado");
+    console.info("Archivo Json actualizado");
 }
     
 private getContrastColor(hexColor: string): string {

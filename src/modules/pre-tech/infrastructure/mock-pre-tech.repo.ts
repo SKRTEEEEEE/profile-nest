@@ -18,8 +18,8 @@ export class MockPreTechRepo implements PreTechInterface<MongooseBase>{
     async readByQuery(query: {q:string}): Promise<(PreTechBase & MongooseBase)[]>{
          
         const tech = this.preTechs.find(tech => tech.nameId == query.q)
-        if(!tech) throw new DatabaseFindError({optionalMessage:"Not find in mock"})
-            return await [tech]
+        if(!tech) throw new DatabaseFindError("find",MockPreTechRepo,{optionalMessage:"Not find in mock"})
+            return [tech]
         }
         async updatePreTech(){
             

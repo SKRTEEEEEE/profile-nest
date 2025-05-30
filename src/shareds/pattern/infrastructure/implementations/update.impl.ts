@@ -23,6 +23,6 @@ TBase,
             return this.documentToPrimary(updatedDocument.value as TBase & MongooseDocument) as TBase & MongooseBase
         } catch (error) {
             console.error("Error al actualizar el documento:", error);
-            throw new DatabaseActionError("update", {optionalMessage:"Error en la operación de actualización"});
+            throw new DatabaseActionError("update", MongooseUpdateImpl,{optionalMessage:"Error en la operación de actualización"});
         }
     }}

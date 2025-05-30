@@ -34,7 +34,7 @@ export class JwtAuthThirdwebGuard extends AuthGuard('thirdweb') {
 
   handleRequest(err, user, info) {
     if (err || !user) {
-      throw err || new UnauthorizedError("Error at handle request in jwt");
+      throw err || new UnauthorizedError(JwtAuthThirdwebGuard,"Error at handle request in jwt");
     }
     return user;
   }

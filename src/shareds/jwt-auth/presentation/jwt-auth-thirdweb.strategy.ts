@@ -4,6 +4,7 @@ import { Strategy } from 'passport-custom';
 import { Request } from 'express';
 import { UserAuthJWTPayload } from 'src/shareds/jwt-auth/application/jwt-auth.interface';
 import { JwtAuthUseCase } from 'src/shareds/jwt-auth/application/jwt-auth.usecase';
+import { UnauthorizedError } from 'src/domain/flows/domain.error';
 
 @Injectable()
 export class JwtAuthThirdwebStrategy extends PassportStrategy(Strategy, 'thirdweb') {
@@ -15,7 +16,7 @@ export class JwtAuthThirdwebStrategy extends PassportStrategy(Strategy, 'thirdwe
     const token = authHeader?.split(' ')[1];
 
     if (!token) {
-      throw new UnauthorizedException('No token provided');
+      throw new UnauthorizedError(JwtAuthThirdwebStrategy,'No token provided');
     }
 
     try {
@@ -23,7 +24,7 @@ export class JwtAuthThirdwebStrategy extends PassportStrategy(Strategy, 'thirdwe
       return payload?.parsedJWT as UserAuthJWTPayload;
     } catch (err) {
       console.error('Thirdweb JWT verification failed', err);
-      throw new UnauthorizedException('Invalid token');
+      throw new UnauthorizedError(JwtAuthThirdwebStrategy,'Invalid token');
     }
   }
 }

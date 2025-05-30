@@ -1,4 +1,5 @@
 import { Injectable } from "@nestjs/common";
+import { SetEnvError } from "src/domain/flows/domain.error";
 
 @Injectable()
 export class OctokitConfig {
@@ -9,7 +10,7 @@ export class OctokitConfig {
   }
 
   private async initialize() {
-    if (!process.env.GITHUB_TOKEN) throw new Error("github token missing");
+    if (!process.env.GITHUB_TOKEN) throw new SetEnvError("github token", OctokitConfig);
     const { Octokit } = await import("@octokit/rest");
     return new Octokit({ auth: process.env.GITHUB_TOKEN });
   }
