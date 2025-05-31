@@ -5,7 +5,7 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { ResCodes, ResFlow } from 'src/domain/flows/res.codes';
 import { Reflector } from '@nestjs/core';
-import { API_RESPONSE_META } from './api-response.decorator';
+import { API_RESPONSE_META } from './api-success.decorator';
 
 @Injectable()
 export class ResponseInterceptor<T> implements NestInterceptor<T, ResFlow<T>> {
@@ -17,13 +17,23 @@ export class ResponseInterceptor<T> implements NestInterceptor<T, ResFlow<T>> {
       context.getHandler(),
     );
     return next.handle().pipe(
-      map(data => ({
+      // map(data => ({
+      //   success: true,
+      //   type: meta?.type ?? ResCodes.OPERATION_SUCCESS,
+      //   message: meta?.message,
+      //   data,
+      //   timestamp: Date.now(),
+      // })),
+      map((data: any) => {
+      const message = data?.message || meta?.message;
+      return {
         success: true,
         type: meta?.type ?? ResCodes.OPERATION_SUCCESS,
-        message: meta?.message,
-        data,
+        message,
+        data: data?.data ?? data,
         timestamp: Date.now(),
-      })),
+      };
+    }),
     );
   }
 }

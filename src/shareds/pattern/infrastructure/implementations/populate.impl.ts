@@ -3,8 +3,14 @@ import { MongooseBaseImpl } from './base';
 import { MongooseBase, MongooseDocument } from '../types';
 import { DatabaseActionError, InputParseError } from 'src/domain/flows/domain.error';
 
+//ToDo
+type OptionalMessage<TBase> = {
+  data: (TBase & MongooseBase)[],
+  message: string 
+}
+
 export type MongoosePopulateProps<TBase> = Array<TBase>;
-export type MongoosePopulateResponse<TBase> = Promise<(TBase & MongooseBase)[]>;
+export type MongoosePopulateResponse<TBase> = Promise<(TBase & MongooseBase)[] | OptionalMessage<TBase>>;
 
 export type MongoosePopulateI<TBase> = {
   populate(
@@ -26,8 +32,12 @@ export class MongoosePopulateImpl<
     
     try {
       const res = await this.model.insertMany(docs);
-      this.resArrCheck(res);
-      return res.map((doc) => this.documentToPrimary(doc as TBase & MongooseDocument));
+      const { customMessage } = this.resArrCheck(res);
+      return customMessage ? 
+      {
+        message: customMessage,
+        data: res.map((doc) => this.documentToPrimary(doc as TBase & MongooseDocument))
+      } : res.map((doc) => this.documentToPrimary(doc as TBase & MongooseDocument));
     } catch (error) {
       throw new DatabaseActionError("populate",MongoosePopulateImpl,{optionalMessage:'Error in the populate action'});
     }

@@ -57,8 +57,16 @@ export abstract class MongooseBaseImpl<
     return result as TBase & MongooseBase;
   }
 
-  protected resArrCheck(docs: TBase & MongooseBase[] | any[] | undefined | null): void {
-    if(!docs) throw new DatabaseFindError("resArrCheck",MongooseBaseImpl,{optionalMessage:"Failed to find the documents"});
-    // if(Array.isArray(docs) && docs.length === 0) console.warn(`La consulta fue exitosa pero no hay documentos que coincidan ${docs}`);
+  // protected resArrCheck(docs: TBase & MongooseBase[] | any[] | undefined | null): void {
+  //   if(!docs) throw new DatabaseFindError("resArrCheck",MongooseBaseImpl,{optionalMessage:"Failed to find the documents"});
+  //   // if(Array.isArray(docs) && docs.length === 0) console.warn(`La consulta fue exitosa pero no hay documentos que coincidan ${docs}`);
+  // }
+  protected resArrCheck(docs: TBase & MongooseBase[] | any[] | undefined | null): { customMessage?: string } {
+  if(!docs) throw new DatabaseFindError("resArrCheck",MongooseBaseImpl,{optionalMessage:"Failed to find the documents"});
+
+  if (Array.isArray(docs) && docs.length === 0) {
+    return { customMessage: "The query was successful but there are no matching documents." };
   }
+  return {}
+}
 }

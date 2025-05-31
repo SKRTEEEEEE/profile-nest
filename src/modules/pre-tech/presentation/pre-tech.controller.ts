@@ -7,11 +7,13 @@ import { PublicRoute } from "src/shareds/jwt-auth/presentation/public-route.deco
 import { Roles } from "src/shareds/role-auth/presentation/role.decorator";
 import { QueryDto } from "src/shareds/presentation/pipes/query.dto";
 import { MongooseBase } from "src/shareds/pattern/infrastructure/types";
-import { ApiResponse } from "src/shareds/presentation/api-response.decorator";
 import { ResCodes } from "src/domain/flows/res.codes";
 import { PreTechInterface } from "../application/pre-tech.interface";
 import { ApiBearerAuth, ApiExcludeEndpoint } from "@nestjs/swagger";
 import { NotImplementedError, UnauthorizedError } from "src/domain/flows/domain.error";
+import { ApiSuccessResponse } from "src/shareds/presentation/api-success.decorator";
+import { MongoosePreTechDto } from "./pre-tech.dto";
+import { ApiErrorResponse } from "src/shareds/presentation/api-error.decorator";
 
 
 
@@ -21,7 +23,8 @@ export class PreTechController implements PreTechInterface<MongooseBase> {
     // constructor(private readonly preTechEndpointService: MongoosePreTechRepo){} // Esto proviene de /infra
 
     @Post()
-    @ApiResponse(ResCodes.ENTITY_UPDATED)
+    @ApiErrorResponse("auto")
+    @ApiSuccessResponse(MongoosePreTechDto,ResCodes.ENTITY_UPDATED)
     @ApiBearerAuth("access-token")
     @UseGuards(RoleAuthTokenGuard)
     @Roles(RoleType.ADMIN)
@@ -30,11 +33,13 @@ export class PreTechController implements PreTechInterface<MongooseBase> {
     }
 
     
-    // @ApiResponse(
+    // @ApiOkResponse(
         //     ResCodes.ENTITIES_FOUND,
         //     "Hola mundo"
         // ) // Sobre-escribe la respuesta por defecto - recomendado siempre -> Decorator opcional para dar mas info del endpoint en la respuesta 
     @Get()
+    @ApiErrorResponse("auto")
+    @ApiSuccessResponse(MongoosePreTechDto,ResCodes.ENTITIES_FOUND, true)
     @PublicRoute() // No se usara
     // @UseGuards(RoleAuthTokenGuard)
     // @Roles(RoleType.STUDENT, RoleType.ADMIN) // Utiliza el de mayor rango -> admin

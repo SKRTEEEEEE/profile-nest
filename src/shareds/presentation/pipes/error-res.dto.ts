@@ -11,7 +11,7 @@ implements BaseFlow
   @ApiProperty({ example: false })
   success: false;
 
-  @ApiProperty({ example: 'DATABASE ACTION' }) // todo swagger enum
+  @ApiProperty({ example: 'DATABASE ACTION' }) //ToDo - swagger enum
   type: ErrorCodes;
 
   @ApiProperty({ example: 'Action: update in Database doesn\'t worked' })
