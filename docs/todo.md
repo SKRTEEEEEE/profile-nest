@@ -1,7 +1,7 @@
 # ToDo
 ## ThirdWeb
 - [x] Desvincular tipos de modules/[..]/app - no pueden aver tipos de thirdWeb -> para eso:
-  - [ ] ⁉️ Desvincular nodemailer
+  - [x] Desvincular nodemailer
   - [x] Crear capa aplicación 🤔 -> No es necesario, ya que probablemente en cada app (diferentes server - frontend-info, frontend-app, backend) queremos expones mas o menos métodos, aparte que no tiene mucho sentido ya que los inputs (props) siempre dependen del sdk (infra)
   - [x] Esta parte es la única que sera común con el frontend ->  Vale la pena tener la app como submodule, o todo el 'shared/modulo' ❌
 ## Tech
@@ -11,9 +11,9 @@
   - [ ] Crear enfoque ApiProperty (swagger/nest.js) para el tipo
 
 ## ERRORS
-- [ ] Mejorar errors para manejar mensaje para el dev - vs - mensaje que se devuelve al final
-- [ ] Ambos errores han de tener un formato bonito (emoji y formato reducido pero descriptivo) -> Incluir:
-  - [ ] (dev) Localización del archivo (donde se ha llamado al error dentro del código) + ?linea del archivo?🤔
+- [x] Mejorar errors para manejar mensaje para el dev - vs - mensaje que se devuelve al final
+- [x] Ambos errores han de tener un formato bonito (emoji y formato reducido pero descriptivo) -> Incluir:
+  - [x] (dev) Localización del archivo (donde se ha llamado al error dentro del código) + ?linea del archivo?🤔
 - [ ] Documentar-los muy bien el Swagger (solo es una vez :D)
 
 
@@ -23,12 +23,16 @@
 - [x] Mirar en que capas quiero DTOs: controllers - se pueden reutilizar si tiene sentido en infra
 - [x] Integrar buen funcionamiento
 ### Swagger
-- [ ] Terminar de entender como funciona la personalización del documento -> [`dto-metadata.decorator.ts`](../src/shareds/swagger/dto-metadata.decorator.ts) | [`main.ts`](../src/main.ts)
+- [x] Terminar de entender como funciona la personalización del documento -> [`dto-metadata.decorator.ts`](../src/shareds/swagger/dto-metadata.decorator.ts) | [`main.ts`](../src/main.ts)
 - [ ] Desvincular configuración del [`main.ts`](../src/main.ts) 
 #### ⚠️ Documentar ‼️🧠
 ## User
 - [ ] Integrar ThirdWeb y DTOs correctamente
-- [ ] Mejorar lógica backend - sobretodo funciones compartidas(user-role-thirdweb.usecase.ts, user-nodemailer.usecase)
+  - [x] ⚠️🧠 **Manejar payload** para otras estrategias jwt_strategy
+  - [ ] Probar enfoque SIN PAYLOAD en user
+  - [ ] Documentar uso de Signature-auth (payload)
+- [x] Mejorar lógica backend - sobretodo funciones compartidas(user-role-thirdweb.usecase.ts, user-nodemailer.usecase)
+  - [ ] Documentar
   - [ ] Comprobar que campos son necesarios y cuales no
   - [ ] Fijarse en que algunos datos se pueden obtener del JWT -> como id del usuario que hace la acción
 ## Chart/Dynamic Banners

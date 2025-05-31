@@ -1,6 +1,14 @@
 
 import { RoleType } from "src/domain/entities/role.type";
 
+export type JWTContext = {
+  role: RoleType | null;
+  nick?: string | undefined;
+  id: string; 
+  img?: string | undefined;
+
+}
+
 type JWTPayload<Tctx = unknown> = {
   iss: string;
   sub: string;
@@ -11,19 +19,13 @@ type JWTPayload<Tctx = unknown> = {
   jti: string;
   ctx?: Tctx;
 }
-export type JWTContext = {
-  role: RoleType | null;
-  nick?: string | undefined;
-  id: string; 
-  img?: string | undefined;
 
-}
 export type VerifyJWTRes = Promise<{
   valid: boolean
   parsedJWT: JWTPayload
 }|null| undefined>
 
-export type UserAuthJWTPayload = JWTPayload<JWTContext>
+export type JwtAuthPayload = JWTPayload<JWTContext>
 
 //Tiene sentido pasar esta parte de arriba a domain ⬆️⬆️ -- cuando tenga clara la estructura de domain, y este mas avanzada la app pasar
 

@@ -2,7 +2,7 @@ import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { Strategy } from 'passport-custom';
 import { Request } from 'express';
-import { UserAuthJWTPayload } from 'src/shareds/jwt-auth/application/jwt-auth.interface';
+import { JwtAuthPayload } from 'src/shareds/jwt-auth/application/jwt-auth.interface';
 import { JwtAuthUseCase } from 'src/shareds/jwt-auth/application/jwt-auth.usecase';
 import { UnauthorizedError } from 'src/domain/flows/domain.error';
 
@@ -11,7 +11,7 @@ export class JwtAuthThirdwebStrategy extends PassportStrategy(Strategy, 'thirdwe
   constructor(
     private readonly userAuthService: JwtAuthUseCase
   ){super()}
-  async validate(req: Request): Promise<UserAuthJWTPayload> {
+  async validate(req: Request): Promise<JwtAuthPayload> {
     const authHeader = req.headers['authorization'];
     const token = authHeader?.split(' ')[1];
 
@@ -21,7 +21,7 @@ export class JwtAuthThirdwebStrategy extends PassportStrategy(Strategy, 'thirdwe
 
     try {
       const payload = await this.userAuthService.verifyJWT(token)
-      return payload?.parsedJWT as UserAuthJWTPayload;
+      return payload?.parsedJWT as JwtAuthPayload;
     } catch (err) {
       console.error('Thirdweb JWT verification failed', err);
       throw new UnauthorizedError(JwtAuthThirdwebStrategy,'Invalid token');

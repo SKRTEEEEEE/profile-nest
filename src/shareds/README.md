@@ -30,6 +30,8 @@ shared/
 └── [otro-modulo]/         # Otros módulos compartidos según necesidad
 ```
 
+* 🧠 En el futuro, si es necesario, se pueden utilizar las familias de [`Módulos raíz shared`](#ejemplos-de-módulos-raíz-shared) para agrupar los `Módulos shared` -> `shared/extern/<módulos-shared>` - `shared/auth/<módulos-shared>` - `shared/utils/<módulos-shared>` - `shared/?shared?-?entity?/<módulos-shared>`
+
 ### Ejemplos de `Módulos raíz shared`
 
 #### 1. Módulos de Integración Externa
@@ -48,6 +50,26 @@ shared/
 - **Storage**: Gestión de archivos
 - **Logger**: Sistema de logging
 - **Cache**: Gestión de caché
+
+#### 4. Módulos de Presentación Compartida ⁉️ 
+- **Chart**: Gráficos dinámicos
+  
+#### 5. Módulos de Entidad Compartida ⚠️ ⁉️
+_Módulos de entidad no completos. Procesan los datos de estrategias especiales (como de `Módulos de Integración Externa` o `Módulos de Utilidad`) y pueden ser implementados en varias Entidades_
+
+    🧠 ⚠️ "Nota: Esta capa es excesiva (opcional) y debe utilizarse SOLO cuando realmente aporta valor. En la mayoría de los casos, bastará con módulos de utilidad (`shared/utils`) o integración(`shared/extern`). Utiliza módulos de entidad compartida únicamente cuando (especialmente si se cumplen varias condiciones):"
+
+        - Se necesita acceder a una misma entidad desde diferentes fuentes de datos.
+
+        - Se requiere lógica de fallback entre fuentes.
+
+        - Hay múltiples consumidores de la entidad en distintos contextos (por ejemplo, módulos de dominio y módulos de presentación compartida).
+
+    🧠 ✏️ Por ejemplo, en Topic (github). 
+    - Los datos se obtienen a traves de Octokit, aunque se pueden obtener de distintas formas (esto haría que el modulo tenga sentido), por ejemplo con fetch tradicional, con axios y con octokit. Por lo tanto 'Topic' necesitaría dos tipos de implementación. 
+    - Los datos se utilizan en 'modules/pre-tech' y 'shareds/chart'. Aunque shareds/chart, podría obtener los datos de modules/pre-tech (flujo tradicional), habrá casos en los que nos interese otro flujo (octokit-topic-chart + octokit-topic-pretech). También para casos mixtos de fallback (varios flujos, para caídas) es útil este enfoque. 
+- **Topic**: Gestión de topics de Github
+- **Info**: Gestión de información externa
 
 ## Estructura por Capas (Clean Architecture) para `Módulos raíz shared` 
 

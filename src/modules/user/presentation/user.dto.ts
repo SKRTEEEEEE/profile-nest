@@ -8,25 +8,25 @@ import { UserNodemailerUpdateProps } from "../application/user-nodemailer.usecas
 import { ApiProperty } from "@nestjs/swagger";
 
 //delete
-type UserRoleThirdWebDeleteProps = {
-    // payload: {
-    //     signature: `0x${string}` | string;
-    //     payload: LoginPayload;
-    // };
-    id: string;
-    address: string;
-};
-export class UserRoleThirdWebDeleteDto implements UserRoleThirdWebDeleteProps {
-    // @ValidateNested()
-    // @Type(() => AuthThirdWebVerifyPayloadDto)
-    // payload: AuthThirdWebVerifyPayloadDto;
+// type UserRoleThirdWebDeleteProps = {
+//     // payload: {
+//     //     signature: `0x${string}` | string;
+//     //     payload: LoginPayload;
+//     // };
+//     id: string;
+//     address: string;
+// };
+// export class UserRoleThirdWebDeleteDto implements UserRoleThirdWebDeleteProps {
+//     // @ValidateNested()
+//     // @Type(() => AuthThirdWebVerifyPayloadDto)
+//     // payload: AuthThirdWebVerifyPayloadDto;
 
-    @IsString()
-    id: string;
+//     @IsString()
+//     id: string;
 
-    @IsString()
-    address: string;
-}
+//     @IsString()
+//     address: string;
+// }
 //give role
 type UserRoleThirdWebGiveRoleProps = {
 //     payload: {
@@ -77,4 +77,9 @@ export class UserVerifyEmailDto {
     // id: string;
     @IsString()
     verifyToken: string
+}
+
+export class UserMockLoginDto {
+    @IsString()
+    address: string
 }

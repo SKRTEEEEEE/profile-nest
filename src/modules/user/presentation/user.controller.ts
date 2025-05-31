@@ -7,18 +7,19 @@ import { PublicRoute } from "src/shareds/jwt-auth/presentation/public-route.deco
 import { RoleType } from "src/domain/entities/role.type";
 // import { UserRoleThirdWebDeleteProps, UserRoleThirdWebDeleteUseCase, UserRoleThirdWebGiveRoleProps, UserRoleThirdwebGiveRoleUseCase } from "../application/user-role-thirdweb.usecase";
 import { AuthThirdWebRepo } from "src/shareds/thirdweb/auth-thirdweb.repo";
-import { DatabaseFindError, UnauthorizedError } from "src/domain/flows/domain.error";
+import { DatabaseFindError, InputParseError, UnauthorizedError } from "src/domain/flows/domain.error";
 import { RoleCreateUseCase, RoleDeleteByIdUseCase } from "src/modules/role/application/role.usecase";
-import { UserNodemailerUpdateDto, UserRoleThirdWebDeleteDto, UserRoleThirdWebGiveRoleDto, UserUpdateSolicitudDto, UserVerifyEmailDto } from "./user.dto";
+import { UserMockLoginDto, UserNodemailerUpdateDto,  UserRoleThirdWebGiveRoleDto, UserUpdateSolicitudDto, UserVerifyEmailDto } from "./user.dto";
 import { AuthThirdWebVerifyPayloadDto } from "src/shareds/thirdweb/auth-thirdweb.dto";
 import { UserNodemailerUpdateUseCase } from "../application/user-nodemailer.usecase";
 import { Request } from "express";
 import { SignatureAuthModule } from "src/shareds/signature-auth/presentation/signature-auth.module";
-import { SignatureAuthThirdwebGuard } from "src/shareds/signature-auth/presentation/signature-auth-thirdweb.guard";
+import { SignatureAuthThirdWebGuard } from "src/shareds/signature-auth/presentation/signature-auth-thirdweb.guard";
 import { ApiBearerAuth, ApiHeader } from "@nestjs/swagger";
 import { VerifyLoginPayloadParams } from "thirdweb/auth";
-import { UserAuthJWTPayload } from "src/shareds/jwt-auth/application/jwt-auth.interface";
+import { JwtAuthPayload } from "src/shareds/jwt-auth/application/jwt-auth.interface";
 import { ApiSignAuthHeader } from "src/shareds/signature-auth/presentation/api-sign-auth.decorator";
+import { ApiMockLoginBody } from "./user.decorator";
 
 
 @Controller("/user")
@@ -30,7 +31,7 @@ export class UserController {
         private readonly userVerifyEmailService: UserVerifyEmailUseCase<MongooseBase>,
         private readonly userNodemailerUpdateService: UserNodemailerUpdateUseCase<MongooseBase>, // 🧠 -> No es necesario 'crear' este tipo de UseCase (varios module -user, tech, etc..- con dif use cases) -> Podemos montar dicha endpoint aquí, evitando tener capa app 
         // use Repo here!!
-        private readonly authThirdWebRepository: AuthThirdWebRepo,
+        // private readonly authThirdWebRepository: AuthThirdWebRepo,
         private readonly userCreateService: UserCreateUseCase<MongooseBase>,
         private readonly userReadOneService: UserReadOneUseCase<MongooseBase>,
         // private readonly userThirdWebCreateService: UserThirdWebLoginUseCase<MongooseBase>,
@@ -43,14 +44,33 @@ export class UserController {
 
     @Post()
     @PublicRoute()
-    @UseGuards(SignatureAuthThirdwebGuard)
-    async login(@Req(){verifiedPayload}) // falta hacer este
+    @UseGuards(SignatureAuthThirdWebGuard)
+    @ApiMockLoginBody(UserMockLoginDto)
+    async login(@Req(){verifiedPayload},@Body() body: any) 
     {
-        if (!verifiedPayload.valid && process.env.JWT_STRATEGY !== "mock") throw new UnauthorizedError(UserController,"Payload not valid")
-        let user = await this.userReadOneService.readByAddress(verifiedPayload.payload.address);
-        if (!user) return await this.userCreateService.create({ address: verifiedPayload.payload.address as string, roleId: null, role: null, solicitud: null, img: null, email: null, isVerified: false, nick: null });
-        return user;
+        let address: string | undefined;
+
+    if (process.env.JWT_STRATEGY === "mock") {
+        // En mock, permite pasar el address por body
+        address = body.address;
+        if (!address) throw new UnauthorizedError(UserController, "Address is required in mock mode");
+    } else {
+        // En real, usa el address de la firma verificada
+   
+        if (!verifiedPayload?.valid) throw new UnauthorizedError(UserController, "Payload not valid");
+        address = verifiedPayload.payload.address;
     }
+    if(!address) throw new InputParseError(UserController)
+    let user = await this.userReadOneService.readByAddress(address);
+    if (!user) {
+        user = await this.userCreateService.create({
+            address,
+            roleId: null, role: null, solicitud: null, img: null, email: null, isVerified: false, nick: null
+        });
+    }
+    return user;
+    }
+
     @Put()
     async update(@Body() json: UserNodemailerUpdateDto) {
         return this.userNodemailerUpdateService.update(json)
@@ -65,22 +85,23 @@ export class UserController {
     //     schema: { type: 'string' }
     // })
     @ApiSignAuthHeader()
-    @UseGuards(SignatureAuthThirdwebGuard)
+    @UseGuards(SignatureAuthThirdWebGuard)
     @Delete("/:id")
-    async delete(@Param() id: string, @Body() json: UserRoleThirdWebDeleteDto, @Req() req) {
+    async delete(@Param() address: string, @Req() {jwtUser}: {jwtUser: JwtAuthPayload}) {
         // const v = await this.authThirdWebRepository.verifyPayload(json.payload)
         // if (!v.valid) throw new UnauthorizedError("Error with payload auth")
-        if (req.verifiedPayload.payload.address !== json.address) throw new UnauthorizedError(UserController,"User only can delete her address")
+        if (jwtUser.sub !== address) throw new UnauthorizedError(UserController,"User only can delete her address")
 
-        const userId = req.user.ctx.id;
-        console.log("userId in delete user: ", userId)
-        //deleteUser(id)
-        const user = await this.userReadByIdService.readById(json.id)
+        const userId = jwtUser.ctx?.id;
+        // console.log("userId in delete user: ", userId)
+        // deleteUser(id)
+        if(!userId)throw new UnauthorizedError(UserController,"Error with user jwt, id doesn't exist")
+        const user = await this.userReadByIdService.readById(userId)
         if (!user) throw new DatabaseFindError("readById",UserController,{ optionalMessage: "User not found" })
         if (user.roleId !== null) {
             await this.roleDeleteByIdService.deleteById(user.roleId as DeleteByIdProps<MongooseBase>);
         }
-        await this.userDeleteByIdService.deleteById(json.id)
+        await this.userDeleteByIdService.deleteById(userId)
     }
     @ApiHeader({
         name: 'x-signed-payload',
@@ -88,18 +109,18 @@ export class UserController {
         required: true,
         schema: { type: 'string' }
     })
-    @UseGuards(SignatureAuthThirdwebGuard)
+    @UseGuards(SignatureAuthThirdWebGuard)
     @Put("/role")
-    async giveRole(@Body() props: UserRoleThirdWebGiveRoleDto, @Req() req) {
-        //        const v = await this.authThirdWebRepository.verifyPayload(props.payload)
-        // if (!v.valid) throw new UnauthorizedError("payload auth")
-        const signUser = await this.userReadOneService.readByAddress(req.verifiedPayload.payload.payload.address)
+    async giveRole(@Body() props: UserRoleThirdWebGiveRoleDto, @Req() {jwtUser}: {jwtUser: JwtAuthPayload}) {
+        // const signUser = await this.userReadOneService.readByAddress(req.verifiedPayload.payload.payload.address)
+        const signUser = await this.userReadOneService.readByAddress(jwtUser.sub)
         if (!signUser) throw new DatabaseFindError("readByAddress",UserController,{ optionalMessage: "signer user not found" })
         if (signUser.role !== "ADMIN") throw new UnauthorizedError(UserController,"Only admins")
         const user = await this.userReadByIdService.readById(props.id)
-        if (!user) throw new DatabaseFindError("readById",UserController,{ entity: "user", optionalMessage: "User not found at give role action" })
-        const createdRole = await this.roleCreateService.create({ address: req.verifiedPayload.payload.payload.address, permissions: props.solicitud })
-        await this.userUpdateByIdService.updateById({
+        if (!user) throw new DatabaseFindError("readById",UserController,{ entity: "user", optionalMessage: "User not found for give role" })
+        const createdRole = await this.roleCreateService.create({address: user.address, permissions:props.solicitud})
+        // const createdRole = await this.roleCreateService.create({ address: req.verifiedPayload.payload.payload.address, permissions: props.solicitud })
+        return await this.userUpdateByIdService.updateById({
             id: props.id, updateData: {
                 address: user.address, roleId: createdRole.id,
                 role: props.solicitud, solicitud: null, img: user.img, email: user.email, isVerified: user.isVerified
@@ -107,7 +128,7 @@ export class UserController {
         })
     }
     @Post("/verify-email")
-    async verifyEmail(@Body() {verifyToken}: UserVerifyEmailDto, @Req() req: { user: UserAuthJWTPayload }) {
+    async verifyEmail(@Body() {verifyToken}: UserVerifyEmailDto, @Req() req: { user: JwtAuthPayload }) {
         const id = req.user?.ctx?.id!;
         return this.userVerifyEmailService.verifyEmail({ id, verifyToken });
     }

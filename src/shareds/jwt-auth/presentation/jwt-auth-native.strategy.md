@@ -4,7 +4,7 @@ import { ConfigService } from "@nestjs/config";
 import { PassportStrategy } from "@nestjs/passport";
 import { Request } from "express";
 import { ExtractJwt, Strategy, StrategyOptionsWithRequest } from "passport-jwt";
-import { UserAuthJWTPayload } from "src/shareds/jwt-auth/application/jwt-auth.interface";
+import { JwtAuthPayload } from "src/shareds/jwt-auth/application/jwt-auth.interface";
 // import { AuthUserService } from "src/application/usecases/shareds/auth-user.service";
 
 // --> NOT USED - para usar se ha de crear el guard correspondiente
@@ -33,7 +33,7 @@ export class JwtAuthNativeStrategy extends PassportStrategy(Strategy) {
             passReqToCallback: true,
         }as StrategyOptionsWithRequest)
     }
-    async validate(req:Request, payload: UserAuthJWTPayload){
+    async validate(req:Request, payload: JwtAuthPayload){
         console.log("validating..")
         // Acceder al token JWT crudo
         const rawJwt = req.headers.authorization?.replace('Bearer ', '');

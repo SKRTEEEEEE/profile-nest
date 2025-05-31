@@ -1,9 +1,9 @@
 import { Module } from '@nestjs/common';
-import { SignatureAuthThirdwebGuard } from './signature-auth-thirdweb.guard';
+import { SignatureAuthThirdWebGuard } from './signature-auth-thirdweb.guard';
 import { AuthThirdWebRepo } from 'src/shareds/thirdweb/auth-thirdweb.repo';
 
 @Module({
-  providers: [SignatureAuthThirdwebGuard, AuthThirdWebRepo],
-  exports: [SignatureAuthThirdwebGuard],
+  providers: [SignatureAuthThirdWebGuard, AuthThirdWebRepo],
+  exports: [SignatureAuthThirdWebGuard],
 })
 export class SignatureAuthModule {}
