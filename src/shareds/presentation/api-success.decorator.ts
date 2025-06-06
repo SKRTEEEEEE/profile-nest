@@ -2,7 +2,7 @@
 
 import { applyDecorators, SetMetadata, Type } from "@nestjs/common";
 import { ApiExtraModels, ApiOkResponse, getSchemaPath } from "@nestjs/swagger";
-import { ResCodes } from "src/domain/flows/res.codes";
+import { ResCodes } from "src/domain/flows/res.type";
 import { SuccessResponseDto } from "./pipes/success-res.dto";
 
 export const API_RESPONSE_META = 'API_RESPONSE_META';

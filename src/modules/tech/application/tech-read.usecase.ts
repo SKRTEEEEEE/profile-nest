@@ -1,6 +1,7 @@
 import { Injectable } from "@nestjs/common"
 import { CRRUUDRepository } from "src/shareds/pattern/application/usecases/crruud.interface"
 import { FullTechData, LengBase, ReadAllFlattenTechsRes } from "src/domain/entities/tech"
+import { MongooseBase } from "src/shareds/pattern/infrastructure/types";
 
 
 type BadgeAndValue = {
@@ -28,6 +29,24 @@ export class TechReadUseCase<TDB> {
         return [];
         });
         return {techs:proyectosDB,flattenTechs:this.flattenTechs(proyectosDB),dispoFw, dispoLeng}
+    }
+    async readAll(): Promise<(LengBase & TDB)[]> {
+        return await this.crruudRepository.read({})
+    }
+    async readAllFlatten(): Promise<FullTechData[]> {
+        const res = await this.crruudRepository.read({})
+        return this.flattenTechs(res)
+    }
+    async readAllCat(): Promise<Omit<ReadAllFlattenTechsRes<TDB>,"techs" | "flattenTechs">>{
+            const proyectosDB = await this.crruudRepository.read({})
+    const dispoLeng = proyectosDB?.map((lenguaje: {nameId:string}) => ({ name: lenguaje.nameId }));
+    const dispoFw = proyectosDB?.flatMap((lenguaje) => {
+        if (Array.isArray(lenguaje.frameworks) && lenguaje.frameworks.length > 0) {
+            return lenguaje.frameworks.map((fw: {nameId:string}) => ({ name: fw.nameId }));
+        }
+        return [];
+        });
+        return { dispoFw, dispoLeng} 
     }
     private flattenTechs = (proyectos: (LengBase & TDB)[]): FullTechData[] => {
     const flattenedArray: FullTechData[] = [];

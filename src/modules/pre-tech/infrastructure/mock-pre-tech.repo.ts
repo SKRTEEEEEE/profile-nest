@@ -2,7 +2,7 @@ import { Injectable } from "@nestjs/common";
 import { PreTechInterface } from "../application/pre-tech.interface";
 import { MongooseBase } from "src/shareds/pattern/infrastructure/types";
 import { DatabaseFindError } from "src/domain/flows/domain.error";
-import { ResCodes } from "src/domain/flows/res.codes";
+import { ResCodes } from "src/domain/flows/res.type";
 
 @Injectable()
 export class MockPreTechRepo implements PreTechInterface<MongooseBase>{

@@ -1,28 +1,53 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { DomainError } from 'src/domain/flows/domain.error';
-import { ErrorCodes } from 'src/domain/flows/error.codes';
+import { IsEnum } from 'class-validator';
 import { BaseFlow } from 'src/domain/flows/main.flow';
-import { ErrorAppCodes } from 'src/dynamic.types';
+import { apiErrorCodes, ErrorCodes } from 'src/domain/flows/error.type';
+import { ApiDtoMetadata } from 'src/shareds/swagger/dto-metadata.decorator';
 
-export class ErrorResponseDto 
-// implements Omit<DomainError> 
-implements BaseFlow
-{
-  @ApiProperty({ example: false })
+@ApiDtoMetadata({
+  title: "Error Response",
+  description: "Standard error response structure for all endpoints in the app",
+  group: "Shared"
+})
+export class ErrorResponseDto implements BaseFlow {
+  @ApiProperty({
+    title: "Success",
+    description: "Always false for error responses",
+    example: false,
+    default: false
+  })
   success: false;
 
-  @ApiProperty({ example: 'DATABASE ACTION' }) //ToDo - swagger enum
+  @ApiProperty(apiErrorCodes)
+  @IsEnum(ErrorCodes)
   type: ErrorCodes;
 
-  @ApiProperty({ example: 'Action: update in Database doesn\'t worked' })
+  @ApiProperty({
+    title: "Error Message",
+    description: "Human-readable description of the error",
+    example: "Action: update in Database didn't work"
+  })
   message: string;
 
-  @ApiProperty({ example: 1712345678901 })
+  @ApiProperty({
+    title: "Timestamp",
+    description: "Time when the error occurred (epoch ms)",
+    example: 1712345678901
+  })
   timestamp: number;
 
-  @ApiProperty({ example: { entitie: 'User' }, required: false })
+  @ApiProperty({
+    title: "Meta",
+    description: "Extra data about the error (optional)",
+    example: { "string": "any" },
+    required: false
+  })
   meta?: Record<string, any>;
 
-  @ApiProperty({ example: 500 })
+  @ApiProperty({
+    title: "HTTP Status Code",
+    description: "HTTP status code for the error",
+    example: 500
+  })
   statusCode: number;
 }

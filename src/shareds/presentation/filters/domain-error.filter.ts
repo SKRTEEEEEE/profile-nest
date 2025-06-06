@@ -1,7 +1,7 @@
 import { ArgumentsHost, Catch, ExceptionFilter, HttpException, HttpStatus } from "@nestjs/common";
 import { Response } from "express";
 import { DomainError } from "src/domain/flows/domain.error";
-import { errorCodeEmoji, ErrorCodes } from "src/domain/flows/error.codes";
+import { errorCodeEmoji, ErrorCodes } from "src/domain/flows/error.type";
 
 
 // Mapeo de ErrorCodes a HttpStatus

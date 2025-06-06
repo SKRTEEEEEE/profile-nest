@@ -1,58 +1,55 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { Type } from "class-transformer";
 import { IsEnum, IsNumber, IsOptional, IsString, ValidateNested } from "class-validator";
-import { TechForm } from "src/domain/entities/tech";
+import { FullTechData, FwBase, LengBase, TechBase, TechForm } from "src/domain/entities/tech";
 import { apiTechFormCategory, TechFormCategory } from "src/domain/entities/tech.type";
+import { PreTechBaseDto } from "src/modules/pre-tech/presentation/pre-tech.dto";
+import { MongooseBase } from "src/shareds/pattern/infrastructure/types";
 import { IntlDto } from "src/shareds/presentation/intl.dto";
 import { ApiDtoMetadata } from "src/shareds/swagger/dto-metadata.decorator";
 
-// 🖊️🚧 HAS DE TERMINAR LAS API PROPERTY
-@ApiDtoMetadata({
-    title: "Tech Form",
-    description: "Tech form data for update or create",
-    group: "Tech",
-})
-export class TechFormDto implements TechForm {
-    @ApiProperty({
-        title: "Name ID",
-        description: "Unique identifier for the technology.",
-        example: "react",
-        type: String,
-    })
-    @IsString()
-    nameId: string;
 
-    @ApiProperty({
-        title: "Name Badge",
-        description: "Display name or badge for the technology.",
-        example: "React.js",
-        type: String,
-    })
-    @IsString()
-    nameBadge: string;
+export class TechBaseDto extends PreTechBaseDto implements TechBase {
+    // @ApiProperty({
+    //     title: "Name ID",
+    //     description: "Unique identifier for the technology.",
+    //     example: "react",
+    //     type: String,
+    // })
+    // @IsString()
+    // nameId: string;
 
-    @ApiProperty({
-        title: "Color",
-        description: "Color associated with the technology, typically in hexadecimal format.",
-        example: "#61DAFB",
-        type: String,
-    })
-    @IsString()
-    color: string;
+    // @ApiProperty({
+    //     title: "Name Badge",
+    //     description: "Display name or badge for the technology.",
+    //     example: "React.js",
+    //     type: String,
+    // })
+    // @IsString()
+    // nameBadge: string;
 
-    @ApiProperty({
-        title: "Website",
-        description: "Official website URL for the technology.",
-        example: "https://reactjs.org",
-        type: String,
-    })
-    @IsString()
-    web: string;
+    // @ApiProperty({
+    //     title: "Color",
+    //     description: "Color associated with the technology, typically in hexadecimal format.",
+    //     example: "#61DAFB",
+    //     type: String,
+    // })
+    // @IsString()
+    // color: string;
+
+    // @ApiProperty({
+    //     title: "Website",
+    //     description: "Official website URL for the technology.",
+    //     example: "https://reactjs.org",
+    //     type: String,
+    // })
+    // @IsString()
+    // web: string;
 
     @ApiProperty({
         title: "Preference",
-        description: "Preference level for the technology (numeric value).",
-        example: 8,
+        description: "Preference level (order) for the technology (numeric value).",
+        example: 5,
         type: Number,
     })
     @IsNumber()
@@ -61,7 +58,7 @@ export class TechFormDto implements TechForm {
     @ApiProperty({
         title: "Experience",
         description: "Level of experience with the technology (numeric value).",
-        example: 5,
+        example: 59,
         type: Number,
     })
     @IsNumber()
@@ -70,7 +67,7 @@ export class TechFormDto implements TechForm {
     @ApiProperty({
         title: "Affinity",
         description: "Affinity or compatibility level with the technology (numeric value).",
-        example: 7,
+        example: 70,
         type: Number,
     })
     @IsNumber()
@@ -99,11 +96,19 @@ export class TechFormDto implements TechForm {
     @ApiProperty({
         title: "GitHub Usage",
         description: "Level of usage or activity on GitHub for the technology (numeric value).",
-        example: 1000,
+        example: 5.1,
         type: Number,
     })
     @IsNumber()
     usoGithub: number;
+
+}
+@ApiDtoMetadata({
+    title: "Tech Form",
+    description: "Form data for update or create tech (identify ever user used technology)",
+    group: "Tech",
+})
+export class TechFormDto extends TechBaseDto implements TechForm {
 
     @ApiProperty({
         title: "Related Language",
@@ -130,4 +135,115 @@ export class TechFormDto implements TechForm {
     @ApiProperty(apiTechFormCategory)
     @IsEnum(TechFormCategory)
     category: TechFormCategory;
+}
+@ApiDtoMetadata({
+    title: "Language",
+    description: "Represents a programming language with its associated frameworks, libs and metadata.",
+    group: "Tech"
+})
+export class LangDto extends TechBaseDto implements LengBase, MongooseBase{
+    @ApiProperty({
+        title: "Frameworks",
+        description: "List of frameworks associated with this language.",
+        type: () => [TechBaseDto], // Puedes crear un FwDto si quieres más detalle
+        required: false,
+        example: [
+            {
+                nameId: "nextjs",
+                nameBadge: "Next.js",
+                color: "000000",
+                web: "https://nextjs.org",
+                preferencia: 1,
+                experiencia: 40,
+                afinidad: 85,
+                img: "https://nextjs.org/static/favicon/favicon.ico",
+                desc: { en: "React framework for production.", es: "Framework de React para producción." },
+                usoGithub: 8.5,
+            }
+        ]
+    })
+    frameworks?: FwBase[] | undefined;
+    @ApiProperty({
+        title: "ID",
+        description: "Unique identifier assigned by the database (MongoDB ObjectId).",
+        example: "665b1c2f8f1b2a0012a34567"
+    })
+    id: string;
+    @ApiProperty({
+        title: "Created At",
+        description: "ISO date string indicating when the record was created.",
+        example: "2024-05-31T12:34:56.789Z"
+    })
+    createdAt: string;
+    @ApiProperty({
+        title: "Updated At",
+        description: "ISO date string indicating when the record was last updated.",
+        example: "2024-06-01T09:00:00.000Z"
+    })
+    updatedAt: string;
+}
+
+@ApiDtoMetadata({
+    title: "Full Tech Data",
+    description: "Represents a technology with all its metadata, including affinity, experience, usage, and database fields.",
+    group: "Tech"
+})
+export class FullTechDataDto extends TechBaseDto implements FullTechData, MongooseBase {
+    @ApiProperty({
+        title: "Affinity Value",
+        description: "Representation of the affinity value for the technology. Indicated by user.",
+        example: "82.5"
+    })
+    valueAfin: string;
+
+    @ApiProperty({
+        title: "Experience Value",
+        description: "Representation of the experience value for the technology. Indicated by user.",
+        example: "70"
+    })
+    valueExp: string;
+
+    @ApiProperty({
+        title: "Is Framework",
+        description: "Indicates if the technology is a framework and the language that he pertains.",
+        example: "TypeScript",
+        required: false
+    })
+    isFw?: string;
+
+    @ApiProperty({
+        title: "Is Library",
+        description: "Indicates if the technology is a library and the framework that he pertains.",
+        example: "false",
+        required: false
+    })
+    isLib?: string;
+
+    @ApiProperty({
+        title: "Usage Value",
+        description: "Representation of the usage value for the technology.",
+        example: "3.72"
+    })
+    valueUso: string;
+
+    @ApiProperty({
+        title: "ID",
+        description: "Unique identifier assigned by the database (MongoDB ObjectId).",
+        example: "665b1c2f8f1b2a0012a34567"
+    })
+    id: string;
+
+    @ApiProperty({
+        title: "Created At",
+        description: "ISO date string indicating when the record was created.",
+        example: "2024-05-31T12:34:56.789Z"
+    })
+    createdAt: string;
+
+    @ApiProperty({
+        title: "Updated At",
+        description: "ISO date string indicating when the record was last updated.",
+        example: "2024-06-01T09:00:00.000Z"
+    })
+    updatedAt: string;
 }

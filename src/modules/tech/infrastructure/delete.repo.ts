@@ -23,23 +23,25 @@ export class TechFindDeleteRepo {
 
         // Buscar en librerías
         let lenguaje = await this.techReadOneService.readOne({filter:{ "frameworks.librerias.nameId": name }});
-        if (lenguaje) {
+        if (lenguaje && Array.isArray(lenguaje.frameworks)) {
             const frameworkIndex = lenguaje.frameworks.findIndex((fw:FwBase & Document) => fw.librerias?.some((lib:LibDocument) => lib.nameId === name));
-            const libreriaIndex = lenguaje.frameworks[frameworkIndex].librerias.findIndex((lib:LibDocument) => lib.nameId === name);
-            const libreria = lenguaje.frameworks[frameworkIndex].librerias.find((lib:LibDocument) => lib.nameId === name);
+            if (frameworkIndex !== -1 && Array.isArray(lenguaje.frameworks[frameworkIndex]?.librerias)) {
+                const libreriaIndex = lenguaje.frameworks[frameworkIndex].librerias.findIndex((lib:LibDocument) => lib.nameId === name);
+                const libreria = lenguaje.frameworks[frameworkIndex].librerias.find((lib:LibDocument) => lib.nameId === name);
 
-            // Eliminar la librería
-            lenguaje.frameworks[frameworkIndex].librerias.splice(libreriaIndex, 1);
-            const lenAny: any = lenguaje
-            proyectoActualizado = await lenAny.save();
-            if (proyectoActualizado) {
-                return proyectoActualizado
+                // Eliminar la librería
+                lenguaje.frameworks[frameworkIndex].librerias.splice(libreriaIndex, 1);
+                const lenAny: any = lenguaje
+                proyectoActualizado = await lenAny.save();
+                if (proyectoActualizado) {
+                    return proyectoActualizado
+                }
             }
         }
 
         // Buscar en frameworks
         lenguaje = await this.techReadOneService.readOne({filter:{ "frameworks.nameId": name }});
-        if (lenguaje) {
+        if (lenguaje && Array.isArray(lenguaje.frameworks)) {
             const frameworkIndex = lenguaje.frameworks.findIndex((fw:FwDocument) => fw.nameId === name);
             const framework = lenguaje.frameworks.find((fw:FwDocument) => fw.nameId === name);
             if(!framework)throw new DatabaseFindError("findIndex-find",TechFindDeleteRepo)

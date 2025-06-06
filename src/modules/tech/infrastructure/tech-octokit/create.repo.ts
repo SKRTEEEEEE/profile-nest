@@ -62,7 +62,7 @@ export class TechOctokitCreateRepo  {
 
             if (!fwTo) {
                 // Caso 2: Agregar un framework a un lenguaje
-                lenguaje.frameworks.push(nuevoItem as FwBase);
+                lenguaje.frameworks?.push(nuevoItem as FwBase);
                 const res = await this.techUpdateService.update({filter:{nameId: lengTo}, update:lenguaje, options:{new: true}});
                 const frameworkAgregado = res?.frameworks?.some(fw => fw.nameId === nuevoItem.nameId);
                 
@@ -73,12 +73,12 @@ export class TechOctokitCreateRepo  {
 
             } else {
                 // Caso 3: Agregar una librería a un framework
-                const framework = lenguaje.frameworks.find((fw: any) => fw.nameId === fwTo);
+                const framework = lenguaje.frameworks?.find((fw: any) => fw.nameId === fwTo);
                 if (!framework) {
                     return { success: false, message: `Framework no encontrado: ${fwTo}` };
                 }
 
-                framework.librerias.push(nuevoItem);
+                framework.librerias?.push(nuevoItem);
                 // await lenguaje.save();
                 await this.techCreateService.create(lenguaje)
                 success = true;

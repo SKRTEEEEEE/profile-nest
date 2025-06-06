@@ -3,7 +3,7 @@
 import { Injectable, NestInterceptor, ExecutionContext, CallHandler } from '@nestjs/common';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { ResCodes, ResFlow } from 'src/domain/flows/res.codes';
+import { ResCodes, ResFlow } from 'src/domain/flows/res.type';
 import { Reflector } from '@nestjs/core';
 import { API_RESPONSE_META } from './api-success.decorator';
 

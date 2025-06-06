@@ -6,16 +6,23 @@
   - [x] Esta parte es la única que sera común con el frontend ->  Vale la pena tener la app como submodule, o todo el 'shared/modulo' ❌
 ## Tech
 ### Desvincular 'actualizarGithub' de [actualizar.repo.ts](../src/modules/tech/infrastructure/tech-octokit/actualizar.repo.ts)
-- [ ] Desvincular la lógica de octokit, creando una función genérica para actualizar.repo
-  - [ ] Desvincular el tipo -> export enum ActualizarGithubType {"md", "json", "all"}
-  - [ ] Crear enfoque ApiProperty (swagger/nest.js) para el tipo
+- [x] Desvincular la lógica de octokit, creando una función genérica para actualizar.repo
+  - [x] Desvincular el tipo -> export enum ActualizarGithubType {"md", "json", "all"}
+  - [x] Crear enfoque ApiProperty (swagger/nest.js) para el tipo
+
+
 
 ## ERRORS
 - [x] Mejorar errors para manejar mensaje para el dev - vs - mensaje que se devuelve al final
 - [x] Ambos errores han de tener un formato bonito (emoji y formato reducido pero descriptivo) -> Incluir:
   - [x] (dev) Localización del archivo (donde se ha llamado al error dentro del código) + ?linea del archivo?🤔
+### Swagger
 - [ ] Documentar-los muy bien el Swagger (solo es una vez :D)
+#### Mejor ejemplos errores
+- [ ] Crear script que cree Dto para cada error
+- [ ] Adaptar logica de errores [api-error.decorator.ts] para que maneje los ejemplos de los errores dinamicamente
 
+Para hacer todo esto, a traves de las distintas funciones errorCodesEmoji, etc..., podemos montar un dto especifico para cada errorCodes, y obtener asi un errorCodesDto y poder mejorar la info del api-error.decorator
 
 ## DTOs
 - [x] Hacer DTOs
@@ -24,6 +31,7 @@
 - [x] Integrar buen funcionamiento
 ### Swagger
 - [x] Terminar de entender como funciona la personalización del documento -> [`dto-metadata.decorator.ts`](../src/shareds/swagger/dto-metadata.decorator.ts) | [`main.ts`](../src/main.ts)
+  - [ ] ⚠️ **Recordar**: Mirar personalización de documento -> como afecta a Enum (swagger-strategy) -> **enumName: funciona bien⁉️** + data aportada con 'swagger-enum-strategy' vs 'personalización documento (dto) strategy '
 - [ ] Desvincular configuración del [`main.ts`](../src/main.ts) 
 #### ⚠️ Documentar ‼️🧠
 ## User
