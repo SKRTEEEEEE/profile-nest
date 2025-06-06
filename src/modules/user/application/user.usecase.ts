@@ -86,7 +86,7 @@ export class UserVerifyEmailUseCase<TDB extends PersistedEntity = PersistedEntit
     constructor(
         private readonly crruudRepository: CRRUUDIdRepository<UserBase, TDB>
     ) {}
-    async verifyEmail(props: {id:string, verifyToken:string}): Promise<boolean> {
+    async verifyEmail(props: {id:string, verifyToken:string}): Promise<UserBase & TDB> {
         const user = await this.crruudRepository.readById(props.id as ReadByIdProps<TDB>);
     if (!user) {
         throw new DatabaseFindError("readById",UserVerifyEmailUseCase,{opt:{function: "verifyEmail"}})
@@ -104,6 +104,6 @@ export class UserVerifyEmailUseCase<TDB extends PersistedEntity = PersistedEntit
 
     const sUser = await this.crruudRepository.updateById({id: user.id, updateData:user})
     if(!sUser) throw new DatabaseActionError("updateById",UserVerifyEmailUseCase)
-    return true;
+    return sUser;
     }
 }

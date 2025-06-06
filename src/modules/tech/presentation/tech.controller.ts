@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Post, Put } from "@nestjs/common";
+import { Body, Controller, Delete, Get, Param, Patch, Post, Put } from "@nestjs/common";
 
 import { TechForm } from "src/domain/entities/tech";
 import { TechReadUseCase } from "../application/tech-read.usecase";
@@ -94,7 +94,7 @@ Useful for listing, searching, or filtering technologies in the application.`
         
     }
 
-    @Post("/:type") // can be /all or /json or /md
+    @Patch("/:type") // can be /all or /json or /md
     @ApiBearerAuth("access-token")
     @ApiErrorResponse("auto")
     @ApiSuccessResponse(VoidDto, ResCodes.OPERATION_SUCCESS)
@@ -124,7 +124,7 @@ Useful for manage specials flow of the app.`
     @ApiSuccessResponse(TechDto, ResCodes.ENTITY_UPDATED)
     @ApiOperation({
         summary: `♻️ Update - Edit technologies with new info`,
-        description: `Update the actual info of a technology.
+        description: `Update the actual information of a technology.
 
 - 🛡️ **Protected endpoint**: Requires a valid access token.
 - ➕ **Operation**: Update a technology and update json github file.
@@ -142,8 +142,8 @@ Useful for update info of the techs.`
     @ApiErrorResponse(ErrorCodes.INPUT_PARSE , ErrorCodes.DATABASE_FIND)
     @ApiSuccessResponse(LangDto,ResCodes.ENTITY_CREATED)
     @ApiOperation({
-        summary: "🆕 Create - Add new technologies",
-        description: `Adds new technologies to the system.
+        summary: "🆕 Create - Add new technology",
+        description: `Add new technology to the system.
 
 - 🛡️ **Protected endpoint**: Requires a valid access token.
 - ➕ **Operation**: Generate required info, update json and md github files and add new technology.

@@ -1,6 +1,7 @@
 import { applyDecorators } from '@nestjs/common';
 import { ApiBody } from '@nestjs/swagger';
-// import { UserMockLoginDto } from './user.dto';
+import { ApiSignAuthHeader } from 'src/shareds/signature-auth/presentation/api-sign-auth.decorator';
+// import { UserLoginMockDto } from './user.dto';
 
 export function ApiMockLoginBody(dto: Function) {
   if (process.env.JWT_STRATEGY === 'mock') {
@@ -11,6 +12,8 @@ export function ApiMockLoginBody(dto: Function) {
         required: true,
       })
     );
+  } else {
+    return applyDecorators(ApiSignAuthHeader())
   }
-  return applyDecorators();
+  // return applyDecorators();
 }

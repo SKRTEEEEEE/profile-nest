@@ -267,7 +267,8 @@ export class FullTechDataDto extends TechBaseDto implements FullTechData, Mongoo
 }
 @ApiDtoMetadata({
     title: "Tech",
-    description: "Tech data base response"
+    description: "Tech data response",
+    group: "Tech"
 })
 export class TechDto extends TechBaseDto implements TechBase, MongooseBase{
     @ApiProperty({

@@ -20,12 +20,12 @@ import { ApiErrorResponse } from "src/shareds/presentation/api-error.decorator";
 @Controller("/pre-tech")
 export class PreTechController implements PreTechInterface<MongooseBase> {
     constructor(private readonly preTechEndpointService: PreTechEndpointUseCase<MongooseBase>){} // Esto proviene de /app y no depende de ninguna librería tan solo del domain(typescript puro)
-    // constructor(private readonly preTechEndpointService: MongoosePreTechRepo){} // Esto proviene de /infra
 
+    // Este endpoint, es Post, porque estas ejecutando una acción que provoca cambios en el estado del servidor, y no es una operación idempotente ni pura (por tanto no GET, no PUT, no PATCH).
     @Post()
     @ApiBearerAuth("access-token")
     @ApiErrorResponse("auto")
-    @ApiSuccessResponse(PreTechDto,ResCodes.ENTITY_UPDATED)
+    @ApiSuccessResponse(PreTechDto,ResCodes.OPERATION_SUCCESS)
     @ApiOperation({
         summary: "🆕 Update - Add new technologies if available",
         description: `Adds new technologies to the system if they are available and not already present.

@@ -25,15 +25,23 @@ export class ResponseInterceptor<T> implements NestInterceptor<T, ResFlow<T>> {
       //   timestamp: Date.now(),
       // })),
       map((data: any) => {
-      const message = data?.message || meta?.message;
-      return {
-        success: true,
-        type: meta?.type ?? ResCodes.OPERATION_SUCCESS,
-        message,
-        data: data?.data ?? data,
-        timestamp: Date.now(),
-      };
-    }),
+        const message = data?.message || meta?.message;
+        const response = {
+          success: true,
+          type: meta?.type ?? ResCodes.OPERATION_SUCCESS,
+          message,
+          data: data?.data ?? data,
+          timestamp: Date.now(),
+        };
+
+        // Establecer el código HTTP basado en el tipo de respuesta
+        const responseObj = context.switchToHttp().getResponse();
+        if (meta?.type === ResCodes.ENTITY_CREATED) {
+          responseObj.status(201);
+        }
+
+        return response;
+      }),
     );
   }
 }
