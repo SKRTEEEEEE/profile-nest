@@ -3,6 +3,7 @@ import { TechUpdateUseCase } from "../../application/tech.usecase";
 import { MongooseBase } from "src/shareds/pattern/infrastructure/types";
 import { ActualizarGithubType, TechOctokitActualizarGithubRepo } from "./actualizar.repo";
 import { TechForm } from "src/domain/entities/tech";
+import { DatabaseActionError, DatabaseFindError } from "src/domain/flows/domain.error";
 
 @Injectable()
 export class TechOctokitUpdateRepo {
@@ -61,14 +62,13 @@ export class TechOctokitUpdateRepo {
             );
         }
 
-        if (!proyectoActualizado) {
-            return `No se encontró un proyecto llamado ${updateData.nameId}.`;
-        }
+        if (!proyectoActualizado) throw new DatabaseFindError("update",TechOctokitUpdateRepo,{optionalMessage:`No se encontró un proyecto llamado ${updateData.nameId}.`});
+        
         await this.techOctokitActualizarGithubRepo.actualizar({type: ActualizarGithubType.json});
-        return `El proyecto ${updateData.nameId} ha sido actualizado correctamente.`
+        return proyectoActualizado
     } catch (error) {
-        console.error('Error actualizando el proyecto:', error);
-        return 'Ocurrió un problema al intentar actualizar el proyecto. Por favor, intente de nuevo más tarde.';
+        
+        throw new DatabaseActionError("update",TechOctokitUpdateRepo,{optionalMessage:'Ocurrió un problema al intentar actualizar el proyecto. Por favor, intente de nuevo más tarde.'});
     }
     }
 }

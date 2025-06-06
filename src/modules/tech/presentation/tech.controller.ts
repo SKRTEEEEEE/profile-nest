@@ -11,7 +11,7 @@ import { InputParseError } from "src/domain/flows/domain.error";
 import { TechOctokitUpdateRepo } from "../infrastructure/tech-octokit/update.repo";
 import { TechFindDeleteRepo } from "../infrastructure/delete.repo";
 import { ApiBearerAuth, ApiOperation, ApiParam, ApiTags } from "@nestjs/swagger";
-import { FullTechDataDto, LangDto, TechFormDto } from "./tech.dto";
+import { FullTechDataDto, LangDto, TechDto, TechFormDto, TechFormDtoOptional } from "./tech.dto";
 import { ApiErrorResponse } from "src/shareds/presentation/api-error.decorator";
 import { ErrorCodes } from "src/domain/flows/error.type";
 import { ApiSuccessResponse } from "src/shareds/presentation/api-success.decorator";
@@ -46,7 +46,7 @@ export class TechController {
     summary: "🗑️ Delete - Remove technology by nameId",
     description: `Deletes a technology and all its associated data by its unique nameId.
 
-- 🛡️ **Protected endpoint**: Requires and a valid access token.
+- 🛡️ **Protected endpoint**: Requires a valid access token.
 - 🗝️ **Parameter**: \`nameId\` (string) — Unique identifier for the technology to delete.
 - ✅ **Response**: Returns the deleted technology object, including its database metadata (id, createdAt, updatedAt).
 
@@ -100,10 +100,10 @@ Useful for listing, searching, or filtering technologies in the application.`
     @ApiSuccessResponse(VoidDto, ResCodes.OPERATION_SUCCESS)
     @ApiParam({name: "type", enum: ActualizarGithubParams})
     @ApiOperation({
-        summary: `♻️ Update - Github (all, json, md)`,
-        description: `Update the actual info in Github
+        summary: `♻️ Update - Github files (all, json, md)`,
+        description: `Update the actual info in Github.
 
-- 🛡️ **Protected endpoint**: Requires and a valid access token.
+- 🛡️ **Protected endpoint**: Requires a valid access token.
 - 🗝️ **Parameter**: \`type\` (string) 
     - All: Update info in json and markdown Github files 
     - Json: Update info in json Github file
@@ -121,23 +121,34 @@ Useful for manage specials flow of the app.`
     @Put()
     @ApiBearerAuth("access-token")
     @ApiErrorResponse("auto")
-    // @ApiSuccessResponse()//falta mejorar la Respuesta!
-    async update(@Body() tech: TechFormDto) {
+    @ApiSuccessResponse(TechDto, ResCodes.ENTITY_UPDATED)
+    @ApiOperation({
+        summary: `♻️ Update - Edit technologies with new info`,
+        description: `Update the actual info of a technology.
+
+- 🛡️ **Protected endpoint**: Requires a valid access token.
+- ➕ **Operation**: Update a technology and update json github file.
+- 📝 **Request body**: \`Tech Form Optional\`, **must have \`nameId\`**.
+- 📦 **Response**: Return the info of the updated tech 
+
+Useful for update info of the techs.`
+    })
+    async update(@Body() tech: TechFormDtoOptional) {
         return await this.techOctokitUpdateRepo.update(tech)
     }
 
     @Post()
     @ApiBearerAuth("access-token")
     @ApiErrorResponse(ErrorCodes.INPUT_PARSE , ErrorCodes.DATABASE_FIND)
-    //@ApiSuccessResponse()//falta mejorar la Respuesta!
+    @ApiSuccessResponse(LangDto,ResCodes.ENTITY_CREATED)
     @ApiOperation({
         summary: "🆕 Create - Add new technologies",
         description: `Adds new technologies to the system.
 
 - 🛡️ **Protected endpoint**: Requires a valid access token.
-- ➕ **Operation**: Add new technology.
-- 📝 **Request body**: Tech Form. Provide all the required info.
-- ✅ **Response**: Returns the list of newly added technologies, including their database metadata (id, createdAt, updatedAt).
+- ➕ **Operation**: Generate required info, update json and md github files and add new technology.
+- 📝 **Request body**: \`Tech Form\`. Provide all the required info.
+- ✅ **Response**: Returns the list of newly add technology, including their database metadata (id, createdAt, updatedAt).
 
 Use this endpoint to keep the technology catalog updated with the latest additions.`
     })

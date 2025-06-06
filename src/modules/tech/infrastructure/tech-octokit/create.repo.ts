@@ -8,6 +8,7 @@ import { TechCreateUseCase, TechReadOneUseCase, TechUpdateUseCase } from "src/mo
 import { MongooseBase } from "src/shareds/pattern/infrastructure/types";
 import { OctokitRepo } from "src/shareds/octokit/infrastructure/octokit.service";
 import { ActualizarGithubType, TechOctokitActualizarGithubRepo } from "./actualizar.repo";
+import { DatabaseActionError } from "src/domain/flows/domain.error";
 
 @Injectable()
 export class TechOctokitCreateRepo  {
@@ -43,17 +44,18 @@ export class TechOctokitCreateRepo  {
         };
 
         // 2. Guardar en la base de datos
-        let success = false;
-        let message = '';
+        // let success = false;
+        // let message = '';
+        let lastResponse;
 
         if (!lengTo) {
             // Caso 1: Publicar un nuevo lenguaje
             const nuevoLenguaje = await this.techCreateService.create(nuevoItem);
-            success = !!nuevoLenguaje;
-            message = success 
-                ? `Lenguaje ${nameId} guardado correctamente en la BDD.`
-                : `No se ha podido guardar ${nameId} en la BDD.`;
-
+            // success = !!nuevoLenguaje;
+            // message = success 
+            //     ? `Lenguaje ${nameId} guardado correctamente en la BDD.`
+            //     : `No se ha podido guardar ${nameId} en la BDD.`;
+            lastResponse = nuevoLenguaje
         } else {
             const lenguaje = await this.techReadOneService.readOne({filter:{ nameId: lengTo }});
             if (!lenguaje) {
@@ -65,12 +67,12 @@ export class TechOctokitCreateRepo  {
                 lenguaje.frameworks?.push(nuevoItem as FwBase);
                 const res = await this.techUpdateService.update({filter:{nameId: lengTo}, update:lenguaje, options:{new: true}});
                 const frameworkAgregado = res?.frameworks?.some(fw => fw.nameId === nuevoItem.nameId);
-                
-                success = !!frameworkAgregado;
-                message = success
-                    ? `Framework ${nameId} agregado correctamente al lenguaje ${lengTo}.`
-                    : `Error al agregar el framework ${nameId} al lenguaje ${lengTo}.`;
-
+                if(!frameworkAgregado)throw new DatabaseActionError("update", TechOctokitCreateRepo)
+                // success = !!frameworkAgregado;
+                // message = success
+                //     ? `Framework ${nameId} agregado correctamente al lenguaje ${lengTo}.`
+                //     : `Error al agregar el framework ${nameId} al lenguaje ${lengTo}.`;
+                return res
             } else {
                 // Caso 3: Agregar una librería a un framework
                 const framework = lenguaje.frameworks?.find((fw: any) => fw.nameId === fwTo);
@@ -80,9 +82,9 @@ export class TechOctokitCreateRepo  {
 
                 framework.librerias?.push(nuevoItem);
                 // await lenguaje.save();
-                await this.techCreateService.create(lenguaje)
-                success = true;
-                message = `Librería ${nameId} agregada correctamente al framework ${fwTo} del lenguaje ${lengTo}.`;
+                // await this.techCreateService.create(lenguaje)
+                lastResponse = await this.techUpdateService.update({filter:{nameId: lengTo}, update:lenguaje, options:{new: true}});
+         
             }
         }
 
@@ -98,12 +100,10 @@ export class TechOctokitCreateRepo  {
         // ]);
         // TODO -> 🚧⚠️‼️ HERE CONTINUES -- TODO ‼️⚠️🚧
         await this.techOctokitActualizarGithubRepo.actualizar({type: ActualizarGithubType.all, create:{base: {nameId, nameBadge, web, color}, oldTechs: proyectosDB} })
-
-        return  message ;
+        return lastResponse;
 
     } catch (error) {
-        console.error("Error al publicar la tecnología:", error);
-        return { success: false, message: "Error al publicar la tecnología" };
+        throw new DatabaseActionError("create", TechOctokitCreateRepo)
     }
     }
 

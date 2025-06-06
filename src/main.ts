@@ -46,7 +46,8 @@ async function bootstrap() {
     .setDescription(cfg.description)
     .setVersion(cfg.version)
     .addBearerAuth(getBearerAuthConfig(process.env.JWT_STRATEGY).options,getBearerAuthConfig(process.env.JWT_STRATEGY).name)
-    .addTag("Pre Tech", "Operations for handle available techs with full functionalities in the app - logo, badges, etc..")
+    .addTag("Pre Tech", "Handle available technologies with full functionalities in the app - logo, badges, etc..")
+    .addTag("Tech", "Handle user used technologies")
     .build();
 
   const documentFactory = SwaggerModule.createDocument(app, config);

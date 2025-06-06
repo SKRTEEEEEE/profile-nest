@@ -1,4 +1,4 @@
-import { ApiProperty } from "@nestjs/swagger";
+import { ApiProperty, PartialType } from "@nestjs/swagger";
 import { Type } from "class-transformer";
 import { IsEnum, IsNumber, IsOptional, IsString, ValidateNested } from "class-validator";
 import { FullTechData, FwBase, LengBase, TechBase, TechForm } from "src/domain/entities/tech";
@@ -8,8 +8,12 @@ import { MongooseBase } from "src/shareds/pattern/infrastructure/types";
 import { IntlDto } from "src/shareds/presentation/intl.dto";
 import { ApiDtoMetadata } from "src/shareds/swagger/dto-metadata.decorator";
 
-
-export class TechBaseDto extends PreTechBaseDto implements TechBase {
+@ApiDtoMetadata({
+    title: "Tech Base",
+    description: "Tech base body struct, used for extend",
+    group: "Tech"
+})
+class TechBaseDto extends PreTechBaseDto implements TechBase {
     // @ApiProperty({
     //     title: "Name ID",
     //     description: "Unique identifier for the technology.",
@@ -105,7 +109,7 @@ export class TechBaseDto extends PreTechBaseDto implements TechBase {
 }
 @ApiDtoMetadata({
     title: "Tech Form",
-    description: "Form data for update or create tech (identify ever user used technology)",
+    description: "Form data for create a tech (identify ever user used technology)",
     group: "Tech",
 })
 export class TechFormDto extends TechBaseDto implements TechForm {
@@ -135,6 +139,20 @@ export class TechFormDto extends TechBaseDto implements TechForm {
     @ApiProperty(apiTechFormCategory)
     @IsEnum(TechFormCategory)
     category: TechFormCategory;
+}
+@ApiDtoMetadata({
+    title: "Tech Form Optional",
+    description: "Form data for update a tech (identify ever user used technology)",
+    group: "Tech",
+})
+export class TechFormDtoOptional extends PartialType(TechFormDto) {
+    // @ApiProperty({
+    // title: "Name ID",
+    // description: "Unique identifier for the technology.",
+    // example: "react",
+    // })
+    // @IsString()
+    // nameId: string;
 }
 @ApiDtoMetadata({
     title: "Language",
@@ -240,6 +258,30 @@ export class FullTechDataDto extends TechBaseDto implements FullTechData, Mongoo
     })
     createdAt: string;
 
+    @ApiProperty({
+        title: "Updated At",
+        description: "ISO date string indicating when the record was last updated.",
+        example: "2024-06-01T09:00:00.000Z"
+    })
+    updatedAt: string;
+}
+@ApiDtoMetadata({
+    title: "Tech",
+    description: "Tech data base response"
+})
+export class TechDto extends TechBaseDto implements TechBase, MongooseBase{
+    @ApiProperty({
+        title: "ID",
+        description: "Unique identifier assigned by the database (MongoDB ObjectId).",
+        example: "665b1c2f8f1b2a0012a34567"
+    })
+    id: string;
+    @ApiProperty({
+        title: "Created At",
+        description: "ISO date string indicating when the record was created.",
+        example: "2024-05-31T12:34:56.789Z"
+    })
+    createdAt: string;
     @ApiProperty({
         title: "Updated At",
         description: "ISO date string indicating when the record was last updated.",
