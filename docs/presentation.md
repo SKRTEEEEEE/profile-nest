@@ -304,7 +304,7 @@ export class CacheInterceptor implements NestInterceptor {
 
 ### 🖊️ Decorator -> `<module>.decorator.ts`
 
-## ‼️ NOT USE ❌ ADAPTERS - **part of old infra/service (w. guard)**
+## ‼️ NOT THIS LAYER ❌ ADAPTERS - **part of old infra/service (w. guard)**
 ### Son parte de PROVIDERS
 -> Son los encargados de 'adaptar' la lógica de la infraestructura
 

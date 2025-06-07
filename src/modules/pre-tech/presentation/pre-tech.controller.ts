@@ -23,6 +23,8 @@ export class PreTechController implements PreTechInterface<MongooseBase> {
 
     // Este endpoint, es Post, porque estas ejecutando una acción que provoca cambios en el estado del servidor, y no es una operación idempotente ni pura (por tanto no GET, no PUT, no PATCH).
     @Post()
+    @UseGuards(RoleAuthTokenGuard)
+    @Roles(RoleType.ADMIN)
     @ApiBearerAuth("access-token")
     @ApiErrorResponse("auto")
     @ApiSuccessResponse(PreTechDto,ResCodes.OPERATION_SUCCESS)
@@ -37,8 +39,7 @@ export class PreTechController implements PreTechInterface<MongooseBase> {
 
 Use this endpoint to keep the technology catalog updated with the latest additions.`
     })
-    @UseGuards(RoleAuthTokenGuard)
-    @Roles(RoleType.ADMIN)
+
     async updatePreTech(): Promise<void> {
         return await this.preTechEndpointService.updatePreTech();
     }

@@ -1,0 +1,3 @@
+- Esta capa NUNCA SERA NECESARIA, porque signature-auth, es una implementación de third web
+- _Es muy extraño que la firma de wallet no provenga de una implementación - metamask, backpack, thirdweb, etc.._
+- SOLO tendrá sentido, si el backend es el que generara dicha firma, y ademas, deseara utilizar los métodos propios dentro de la aplicación ⚠️
