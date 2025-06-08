@@ -37,7 +37,7 @@ async function bootstrap() {
   app.useGlobalFilters(new DomainErrorFilter());
   app.useGlobalPipes(new GlobalValidationPipe());
   const cfg = SWAGGER_CONFIGS.ADMIN;
-  if (!process.env.JWT_STRATEGY) throw new SetEnvError("jwt_strategy","main.ts",{optionalMessage:'JWT_STRATEGY env variable is required'});
+  // if (!process.env.JWT_STRATEGY) throw new SetEnvError("jwt_strategy","main.ts",{optionalMessage:'JWT_STRATEGY env variable is required'});
   
   
 
@@ -45,7 +45,7 @@ async function bootstrap() {
     .setTitle(cfg.title)
     .setDescription(cfg.description)
     .setVersion(cfg.version)
-    .addBearerAuth(getBearerAuthConfig(process.env.JWT_STRATEGY).options,getBearerAuthConfig(process.env.JWT_STRATEGY).name)
+    .addBearerAuth(getBearerAuthConfig(process.env.JWT_STRATEGY!).options,getBearerAuthConfig(process.env.JWT_STRATEGY!).name)
     .addTag("Pre Tech", "Handle available technologies with full functionalities in the app - logo, badges, etc..")
     .addTag("Tech", "Handle user used technologies")
     .addTag("User", "Handle user information")
