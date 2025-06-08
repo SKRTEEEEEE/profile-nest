@@ -8,50 +8,41 @@ on:
 jobs:
   prepare_repo:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write # Permite que el GITHUB_TOKEN escriba en el repositorio
     steps:
       - name: Checkout Repository and Submodules
-        uses: actions/checkout@v4 # Usa la última versión para asegurar el soporte de submódulos
+        uses: actions/checkout@v4
         with:
-          submodules: true # ¡Esto es CLAVE! Clona e inicializa el submódulo.
-          # Esto asegura que el contenido de src/domain esté en su lugar
-          fetch-depth: 0 # Necesario para submódulos profundos o si tienes history
+          submodules: true
+          fetch-depth: 0
 
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20' # Ajusta a la versión de Node.js que uses
+          node-version: '22' # Asegúrate de que esta sea la versión de Node que usas
 
       - name: Install Dependencies
         run: npm install
 
       - name: Build NestJS Application
-        # Ahora, 'npm run build' (o 'nest build') debería encontrar el dominio,
-        # ya que los archivos del submódulo están presentes en el entorno de Actions.
         run: npm run build
 
-      - name: Configure Git for pushing artifacts
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-
       - name: Remove .git and .gitmodules to avoid issues with Railway
-        # Eliminamos la carpeta .git del repo principal y el .gitmodules
-        # para que Railway solo vea los archivos "planos" y no intente
-        # procesar el repositorio Git en sí, solo los archivos.
-        # También eliminamos la carpeta .git del submódulo si existiera (aunque actions/checkout la maneja bien)
         run: |
           rm -rf .git
           rm -f .gitmodules
-          # Si tu submódulo tiene su propia carpeta .git dentro (ej. src/domain/.git), bórrala también
-          # rm -rf src/domain/.git # Descomenta si es necesario
+          rm -rf src/domain/.git # Descomenta si es necesario, pero actions/checkout@v4 lo maneja bien
 
-# ... (pasos anteriores)
       - name: Push build artifacts to a dedicated deploy branch
         run: |
           git init # Inicializa un nuevo repo temporal
+          # --- ¡AÑADE ESTAS DOS LÍNEAS AQUÍ! ---
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          # ------------------------------------
           git add .
           git commit -m "Deployment artifacts for Railway"
           git branch -M railway-deploy # Renombra la rama localmente
-          # Añade el remoto 'origin' antes de empujar
           git remote add origin https://github.com/${{ github.repository }}.git
-          git push --set-upstream origin railway-deploy --force # Empuja a la rama 'railway-deploy' en GitHub
+          git push --set-upstream origin railway-deploy --force
