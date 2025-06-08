@@ -111,7 +111,7 @@ Useful for update info of the users.`
     } 
     
     //🧠⁉️
-    @Delete("/:id")
+    @Delete()
     // @UseGuards(SignatureAuthThirdWebGuard)
     // @ApiSignAuthHeader()// En el futuro se puede hacer incluso un hibrido, mock-addressBody and next-verifiedPayload --> Como en login() - Actualmente sin verifyPayload en backend(solo next)
     @ApiBearerAuth("access-token")
@@ -122,7 +122,7 @@ Useful for update info of the users.`
     description: `Deletes a user and all its associated data.
 
 - 🛡️ **Protected endpoint**: Requires a valid access token.
-- ➕ **Operation**: Delete user and associated data, only can be called by the owner, by Jwt.
+- ➕ **Operation**: Delete user and associated data, only can be called by the owner provided by Jwt.
 - ✅ **Response**: Returns the deleted user object, including its database metadata (id, createdAt, updatedAt).
 
 Use this endpoint to permanently remove your user and her data from the system.`
