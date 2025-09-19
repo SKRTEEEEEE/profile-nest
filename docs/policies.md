@@ -139,3 +139,11 @@ Posibilidad de iniciar la aplicación como mock, en la cual el Jwt no va encript
 - 🔑 para required -> representa algo que se debe utilizar si o si
 - 🚦 para solo si es necesario, pero de uso imprescindible
 - ⚙️ para solo si es necesario, pero de uso prescindible -> prescindible pero útil para un uso perfecto
+
+## ⚙️ 'Build' Strategies
+### 🧠 Ideas
+- Mock-mixto -> 'actual' - Contraseña jwt que nos permite entrar en bdd atlas con un usuario mock(no existe en la bdd, pero 'tiene' jwt permisos)
+
+- Mock-db -> Copia de la base de datos en local, se entra con jwt-mock falso (address)
+- Next -> 'actual' - Conexión a la bdd real con jwt real
+- ?? Next-db -> Copia de la base de datos local, se entra con jwt-next real
