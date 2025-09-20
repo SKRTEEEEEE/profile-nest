@@ -12,6 +12,8 @@ import { ResponseInterceptor } from './shareds/presentation/response.interceptor
 import { UserModule } from './modules/user/presentation/user.module';
 import { RoleModule } from './modules/role/presentation/role.module';
 import { JwtAuthMockGuard } from './shareds/jwt-auth/presentation/jwt-auth-mock.guard';
+import { CacheInterceptor, CacheModule } from '@nestjs/cache-manager';
+import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 
 
 
@@ -27,6 +29,25 @@ import { JwtAuthMockGuard } from './shareds/jwt-auth/presentation/jwt-auth-mock.
     RoleModule,
     // OctokitModule
     // MockAuthUserModule,
+    // CacheModule.register({max:100}),
+    ThrottlerModule.forRoot([
+      {
+        name: 'short',
+        ttl: 1000,
+        limit: 3,
+      },
+      {
+        name: 'medium',
+        ttl: 10000,
+        limit: 20
+      },
+      {
+        name: 'long',
+        ttl: 60000,
+        limit: 100
+      }
+    ]),
+  
   ],
   controllers: [],
   providers: [
@@ -35,10 +56,18 @@ import { JwtAuthMockGuard } from './shareds/jwt-auth/presentation/jwt-auth-mock.
       provide: APP_GUARD,
       useClass: process.env.JWT_STRATEGY === "mock" ? JwtAuthMockGuard: JwtAuthThirdwebGuard,
     },
+    // {
+    //   provide: APP_GUARD,
+    //   useClass: ThrottlerGuard
+    // },
     {
       provide: APP_INTERCEPTOR,
       useClass: ResponseInterceptor,
     },
+    // {
+    //   provide: APP_INTERCEPTOR,
+    //   useClass: CacheInterceptor
+    // },
     RoleAuthUseCase
   ]
 })
