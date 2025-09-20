@@ -12,13 +12,16 @@ import { TechCreateUseCase, TechDeleteUseCase, TechReadOneUseCase, TechUpdateUse
 import { TechOctokitActualizarGithubRepo } from "../infrastructure/tech-octokit/actualizar.repo";
 import { TechOctokitUpdateRepo } from "../infrastructure/tech-octokit/update.repo";
 import { TechFindDeleteRepo } from "../infrastructure/delete.repo";
+import { CacheModule } from "@nestjs/cache-manager";
 
 @Module({
     imports: [
         MongooseModule.forFeature([
             { name: "Lenguaje", schema: LengSchemaFactory },
         ]),
-        OctokitModule
+        OctokitModule,
+        CacheModule.register({ max: 100 }), // cache disponible solo en este módulo
+
     ],
     controllers: [TechController],
     providers: [

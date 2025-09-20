@@ -1,9 +1,9 @@
 ---
-name: 📋 Backend Task
-about: Create a new development task for the backend
-title: '[TASK] '
+name: 📋 Version Task --v1
+about: Create a new development task for a version control
+title: '[v0.0.0] '
 labels: ['priority-medium']
-assignees: ''
+assignees: ['SKRTEEEEEE']
 ---
 
 # [TASK NAME]
@@ -13,10 +13,17 @@ assignees: ''
 
 ## 🔑 Key Points  
 <!-- Key point what needs to be accomplished, representing the idea of this Task -->
+
 - [ ] <!-- Main task/requirement 1 -->
 - [ ] <!-- Main task/requirement 2 -->
 - [ ] <!-- Main task/requirement 3 -->
 - [ ] <!-- Testing/validation requirements -->
+  
+### <!-- 🖲️/💻/⛓️ Section Name -->
+#### 🔧 <!-- Subsection -->
+- [ ] <!-- Main task/requirement 1 -->
+- [ ] <!-- Main task/requirement 2 -->
+
 
 ## 📋 Notes from ToDo
 <!-- Notes imported from ToDo markdown file (only till v0.1.0) -->
@@ -25,20 +32,16 @@ assignees: ''
 - [ ] <!-- Specific task 1 -->
 - [ ] <!-- Specific task 2 -->
 
-<!-- Additional context or technical details -->
 
-## ⏱️ Estimated Time
-2-4 hours
+## ⏱️Time
+### 🤔 Estimated
+ 2-4 hours
+### 😎 Real
+🧠 _Tick this part just before you're going to close this issue - RECHECK_
 
-## 🏷️ Priority
-<!-- Select one -->
-- [ ] priority-critical 🚨 (Blocking release)
-- [ ] priority-high 🔴 (Important for milestone) 
-- [x] priority-medium 🟡 (Valuable improvement)
-- [ ] priority-low 🟢 (Minor improvement)
-- [ ] priority-ideas 💡 (Future consideration)
 
 ## ✅ Definition of Done
+🧠 _Tick this part just before you're going to close this issue - RECHECK_
 <!-- Key point what needs to be accomplished, representing the must of this Task based on the Key Points -->
 - [ ] <!-- Criterion 1 -->
 - [ ] <!-- Criterion 2 -->

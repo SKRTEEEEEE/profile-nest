@@ -14,6 +14,7 @@ import { NotImplementedError, UnauthorizedError } from "src/domain/flows/domain.
 import { ApiSuccessResponse } from "src/shareds/presentation/api-success.decorator";
 import { PreTechDto } from "./pre-tech.dto";
 import { ApiErrorResponse } from "src/shareds/presentation/api-error.decorator";
+import { ThrottlerGuard } from "@nestjs/throttler";
 
 
 @ApiTags("Pre Tech")
@@ -44,6 +45,8 @@ Use this endpoint to keep the technology catalog updated with the latest additio
         return await this.preTechEndpointService.updatePreTech();
     }
     @Get()
+    @UseGuards(ThrottlerGuard) // Con esto se aplicara nuestro Throttle por defecto
+    // @Throttle({short: {limit: 1, ttl: 60000}}) // Con esto podemos modificar partes de nuestro throttle
     @ApiErrorResponse("auto")
     @ApiSuccessResponse(PreTechDto,ResCodes.ENTITIES_FOUND, true)
     @ApiOperation({

@@ -23,6 +23,8 @@ import { ApiMockLoginBody } from "./user.decorator";
 import { ApiErrorResponse } from "src/shareds/presentation/api-error.decorator";
 import { ApiSuccessResponse } from "src/shareds/presentation/api-success.decorator";
 import { ResCodes } from "src/domain/flows/res.type";
+import { RoleAuthTokenGuard } from "src/shareds/role-auth/presentation/role-auth-token.guard";
+import { Roles } from "src/shareds/role-auth/presentation/role.decorator";
 
 enum ManageRoleParam {
     Give="give",
@@ -197,14 +199,14 @@ Useful for manage specials flow of the app.`
 
 
     @Get("/:id")
-    @PublicRoute()
+    @ApiBearerAuth("access-token")
     @ApiErrorResponse("auto")
     @ApiSuccessResponse(UserDto,ResCodes.ENTITY_FOUND)
     @ApiOperation({
         summary: `📖 Read - By ID`,
         description: `Returns a user data if available.
 
-- 🌐 **Public endpoint**: No authentication required.
+- 🛡️ **Protected endpoint**: Requires a valid access token.
 - 🗝️ **Parameter**: \`ID\` (string) — Unique identifier for the user.
 - 📦 **Response**: Returns the searched user if exist.
 
@@ -213,21 +215,21 @@ Useful for read data or searching existence of user in the application.`
     async readById(@Param() json: { id: string }) {
         return this.userReadByIdService.readById(json.id)
     }
-    // @ApiBearerAuth("access-token")
     @Get()
-    @PublicRoute()
+    @UseGuards(RoleAuthTokenGuard)
+    @Roles(RoleType.ADMIN)
+    @ApiBearerAuth("access-token")
     @ApiErrorResponse("auto")
     @ApiSuccessResponse(UserDto, ResCodes.ENTITIES_FOUND, true) //Hay que mostrar lo que devuelve
     @ApiOperation({
         summary: `📖 Read - All`,
         description: `Returns a list of the users registered to the application.
 
-- 🌐 **Public endpoint**: No authentication required.
+- 🛡️ **Protected endpoint**: Requires ADMIN role and a valid access token.
 - 📦 **Response**: A group (array) of all user registered, included her database metadata.
 
 Useful for listing all users in the application.`
         })
-    // @PublicRoute()
     async readAll() {
         return this.userReadService.read({})
     }

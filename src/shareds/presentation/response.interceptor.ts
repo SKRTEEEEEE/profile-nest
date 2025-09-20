@@ -7,6 +7,9 @@ import { ResCodes, ResFlow } from 'src/domain/flows/res.type';
 import { Reflector } from '@nestjs/core';
 import { API_RESPONSE_META } from './api-success.decorator';
 
+/**
+ * Encargado de modificar la respuesta al formato
+ */
 @Injectable()
 export class ResponseInterceptor<T> implements NestInterceptor<T, ResFlow<T>> {
   constructor(private readonly reflector: Reflector) {}

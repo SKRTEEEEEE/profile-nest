@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post, Put } from "@nestjs/common";
+import { Body, Controller, Delete, Get, Param, Patch, Post, Put, UseGuards, UseInterceptors } from "@nestjs/common";
 
 import { TechForm } from "src/domain/entities/tech";
 import { TechReadUseCase } from "../application/tech-read.usecase";
@@ -18,6 +18,8 @@ import { ApiSuccessResponse } from "src/shareds/presentation/api-success.decorat
 import { ResCodes } from "src/domain/flows/res.type";
 import { ActualizarGithubParams, ReadAllParams } from "src/domain/entities/tech.type";
 import { VoidDto } from "src/shareds/presentation/pipes/void.dto";
+import { CacheInterceptor, CacheTTL } from "@nestjs/cache-manager";
+import { SkipThrottle, Throttle, ThrottlerGuard } from "@nestjs/throttler";
 
 
 
@@ -56,8 +58,12 @@ Use this endpoint to permanently remove a technology from the system.`
         return await this.techFindAndDeleteRepo.findAndDelete(nameId)
     }
 
-    @Get("/:type") //can be: /db, /flatten, /cat
+    @Get("/:type") //can be: /db, /flatten, /cat, /full
     @PublicRoute()
+    @UseGuards(ThrottlerGuard)
+    @Throttle({short: {limit: 1, ttl: 60000}})
+    // @UseInterceptors(CacheInterceptor)
+    // @CacheTTL(1 * 60 * 60)
     @ApiErrorResponse("auto")
     @ApiSuccessResponse(FullTechDataDto, ResCodes.ENTITIES_FOUND, true) //Hay que mostrar lo que devuelve
     @ApiParam({name: "type", enum: ReadAllParams})
