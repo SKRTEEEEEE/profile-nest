@@ -84,7 +84,7 @@ export function ApiErrorResponse(...codes: (ErrorCodes | "full" | "get" | "--pro
               message: `${metadata.emoji} ${metadata.desc}.`,
               timestamp: Date.now(),
               meta: {
-                friendlyTip: `${metadata.friendlyTip || ''}`,
+                friendlyDesc: `${metadata.friendlyDesc || ''}`,
               },
               statusCode: status
             }

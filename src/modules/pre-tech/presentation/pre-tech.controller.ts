@@ -14,7 +14,6 @@ import { ApiSuccessResponse } from "src/shareds/presentation/api-success.decorat
 import { PreTechDto } from "./pre-tech.dto";
 import { ApiErrorResponse } from "src/shareds/presentation/api-error.decorator";
 import { ThrottlerGuard } from "@nestjs/throttler";
-import { ErrorCodes } from "src/domain/flows/error.type";
 
 
 @ApiTags("Pre Tech")

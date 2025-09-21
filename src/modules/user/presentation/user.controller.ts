@@ -63,7 +63,10 @@ export class UserController {
 
 - 🌐 **Public endpoint**: No authentication required.
 - ➕ **Operation**: Generate required info with your unique address and create a new user if required or return the existing user.
-- 📝 **Request body**: \`User Mock Login\`. **Only if you are in [JWT_STRATEGY -> mock]**. Other case, managed auto with the signed user payload (web3-wallet).
+- 📝 **Request body**: \`User Mock Login\`. 
+- 📄 **Extra head**: 
+    - **[JWT_STRATEGY -> mock]**: {address:string, password: string}. 
+    - [JWT_STRATEGY -> (default)]: The payload of the user address signature.
 - ✅ **Response**: Returns the user in the database.
 
 Use this endpoint to initialize the app user.`
@@ -95,13 +98,14 @@ Use this endpoint to initialize the app user.`
 
     @Put()
     @ApiBearerAuth("access-token")
+    // @ApiSignAuthHeader() //🏗️ - 📄 **Extra head**: The payload of the user address signature.
     @ApiErrorResponse("full")
     @ApiSuccessResponse(UserDto,ResCodes.ENTITY_UPDATED)
     @ApiOperation({
         summary: `♻️ Update - Edit user info`,
         description: `Update the actual information of a user.
 
-- 🛡️ **Protected endpoint**: Requires a valid access token.
+- 🛡️ **Protected endpoint**: Requires a valid access token and signature limiting this action only to admin or own user.
 - ➕ **Operation**: Update a user and if set a new email send a message.
 - 📝 **Request body**: \`User Update\`, send the required data.
 - 📦 **Response**: Return the info of the updated user 
@@ -109,6 +113,7 @@ Use this endpoint to initialize the app user.`
 Useful for update info of the users.`
     })
     async update(@Body() json: UserUpdateDto) {
+        //se ha de comprobar la autoría(head signature)
         return this.userNodemailerUpdateService.update(json)
     } 
     
@@ -197,7 +202,7 @@ Useful for manage specials flow of the app.`
 
     @Get("/:id")
     @ApiBearerAuth("access-token")
-    @ApiErrorResponse("full")
+    @ApiErrorResponse("get", "--protected")
     @ApiSuccessResponse(UserDto,ResCodes.ENTITY_FOUND)
     @ApiOperation({
         summary: `📖 Read - By ID`,
@@ -216,13 +221,13 @@ Useful for read data or searching existence of user in the application.`
     @UseGuards(RoleAuthTokenGuard)
     @Roles(RoleType.ADMIN)
     @ApiBearerAuth("access-token")
-    @ApiErrorResponse("full")
+    @ApiErrorResponse("get", "--protected")
     @ApiSuccessResponse(UserDto, ResCodes.ENTITIES_FOUND, true) //Hay que mostrar lo que devuelve
     @ApiOperation({
         summary: `📖 Read - All`,
         description: `Returns a list of the users registered to the application.
 
-- 🛡️ **Protected endpoint**: Requires ADMIN role and a valid access token.
+- 🛡️ **Protected endpoint**: Requires a valid access token.
 - 📦 **Response**: A group (array) of all user registered, included her database metadata.
 
 Useful for listing all users in the application.`

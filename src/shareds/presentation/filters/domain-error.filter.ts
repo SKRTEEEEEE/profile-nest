@@ -1,7 +1,7 @@
 import { ArgumentsHost, Catch, ExceptionFilter, HttpException, HttpStatus } from "@nestjs/common";
 import { Response } from "express";
 import { DomainError } from "src/domain/flows/domain.error";
-import { ERROR_CODES_METADATA, ErrorCodes } from "src/domain/flows/error.type";
+import { ERROR_CODES_METADATA, ErrorCodes, ErrorCodesMetadata } from "src/domain/flows/error.type";
 
 
 // Mapeo de ErrorCodes a HttpStatus
@@ -33,14 +33,15 @@ export class DomainErrorFilter  implements ExceptionFilter {
       `[${emojiStatus} ${exception.type} -> ${exception.location}${functionSuffix}] ${exception.message}
       `
     )
-    const errorCodeDesc =  ERROR_CODES_METADATA[exception.type]
+    const errorCodeMeta: ErrorCodesMetadata  =  ERROR_CODES_METADATA[exception.type]
+    console.log("errorCodeMeta: ", errorCodeMeta)
     // Construye la respuesta unificada según el formato BaseFlow
     response.status(status).json({
       success: false,
       type: exception.type,
-      message: `${emojiStatus} ${exception.opt?.shortDesc ? exception.opt.shortDesc : errorCodeDesc.shortDes}. ${exception.opt?.friendlyDesc ? exception.opt.friendlyDesc:errorCodeDesc.friendlyTip}`,
+      message: `${emojiStatus} ${exception.opt?.shortDesc ? exception.opt.shortDesc : errorCodeMeta.desc}.`,
       timestamp: exception.timestamp || Date.now(),
-      meta: exception.meta || undefined,
+      meta: exception.meta ? {...exception.meta, friendlyDesc: errorCodeMeta.friendlyDesc} : errorCodeMeta.friendlyDesc ? {friendlyTip: errorCodeMeta.friendlyDesc} : undefined,
       // Mantenemos statusCode para compatibilidad con tu código actual
       statusCode: status
     });

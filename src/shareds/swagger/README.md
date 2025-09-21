@@ -9,11 +9,15 @@ Utilizar `@ApiDtoMetadata()`
 **Utilizar `@ApiBearerAuth("access-token")`**
 ### Signature-auth.guard
 Utilizar `@ApiSignAuthHeader()`
-#### ⚠️🧠 Que hacer para el enfoque dinámico con signature.auth
-- ⚠️ También con el guard
-- 🤔 Ideal -> (1.) Cuando se pone el guard, se configura el ApiHeader automáticamente. (2.) Cuando se utiliza mock, se anula (1) 
-## Errors
-Utilizar `@ApiErrorResponse()` -> "auto" - puts all errors configured
+## Other
+### Errors
+Utilizar `@ApiErrorResponse()` -> 
+    - ["auto"] - puts all errors configured
+    - ["get"] -> database_find
+    - ["get"], "--protected" -> database_find + unauthorized_action
+    - ["d"] (default) -> database_action + unauthorized_action
+### Success
+Utilizar `@ApiSuccessResponse()` -> 🚧📄
 ## -> 🧠 REMEMBER
 ### El tipo (en Dto) se infiere automáticamente
 ### ⁉️🤔 Mejor utilizar JSDocs ⁉️ -> para que infiera auto

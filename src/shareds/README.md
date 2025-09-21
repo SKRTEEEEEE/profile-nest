@@ -14,23 +14,24 @@ Cada funcionalidad compartida se organiza como un módulo independiente que cont
 
 ```
 shared/
-├── octokit/                 # Módulo para integración con GitHub
+├── octokit/                # Módulo raíz, para integración con GitHub
 │   ├── application/        # Casos de uso y lógica de negocio
 │   ├── infrastructure/     # Implementaciones concretas
 │   └── presentation/       # Adaptadores y controladores
 │
-├── thirdweb/               # Módulo para integración con ThirdWeb
+├── thirdweb/               # Módulo raíz, para integración con ThirdWeb
 │   ├── infrastructure/
 │   └── presentation/
 │
-├── role-auth/             # Módulo para gestión de roles y autenticación
+├── role-auth/             # Módulo raíz, para gestión de roles y autenticación
 │   ├── application/
 │   └── presentation/
 │
-└── [otro-modulo]/         # Otros módulos compartidos según necesidad
+├── [mas-modulos]/         # Otros módulos raíz compartidos
+└── presentation/          # Módulos específicos que solo contienen lógica propia del fw
 ```
 
-* 🧠 En el futuro, si es necesario, se pueden utilizar las familias de [`Módulos raíz shared`](#ejemplos-de-módulos-raíz-shared) para agrupar los `Módulos shared` -> `shared/extern/<módulos-shared>` - `shared/auth/<módulos-shared>` - `shared/utils/<módulos-shared>` - `shared/?shared?-?entity?/<módulos-shared>`
+* 🧠 En el futuro, si es necesario, se pueden utilizar las familias de [`Módulos raíz shared`](#ejemplos-de-módulos-raíz-shared) para agrupar los `Módulos shared` -> `shared/extern/<módulos-shared>` - `shared/auth/<módulos-shared>` - `shared/utils/<módulos-shared>` - `shared/?shared?-?entity?/<módulos-shared>` -> [09/2025] 🧠 me gusta la configuración actual:)
 
 ### Ejemplos de `Módulos raíz shared`
 
@@ -105,12 +106,12 @@ _Módulos de entidad no completos. Procesan los datos de estrategias especiales 
 - DTO: Limita/controla las entradas. *_Puede configurar-se en otras capas_ 
 - [OTROS](../../docs/presentation.md): Muchos mas patrones de clase con la implementación del Framework utilizado, NestJs
 
-## Convenciones de Nomenclatura Base
+## Nomenclatura
 
 ### Módulo raíz
 - Nombre descriptivo de la funcionalidad: `octokit`, `thirdweb`, `role-auth`
 
-### Estructura interna - Capas Clean Architecture
+### Patrón - Capas Clean Architecture
 
 - Evitar nombres genéricos para patrones, como `utils` o **`repository`**
 

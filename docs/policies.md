@@ -78,57 +78,11 @@ Deberá contener los siguientes decoradores:
 >
 > ⚙️🧠 _Para el Enum, en este caso, no es necesario hacer 'apiEnum' ya que este no se mostrara en schemas de swagger_
 
-> Base Swagger
+> [Base Swagger](../src/shareds/swagger/README.md)
 > - ⚙️ **ApiErrorResponse**:
 > - ⚙️ **ApiSuccessResponse**:
 > - ⚙️ **ApiOperation**:
-
-### 🛠️ Techniques / Recipes / Strategies
-#### NestJs Features
-##### ✅ [Open api](https://docs.nestjs.com/openapi/introduction)
-##### ❎ [Microservices](https://docs.nestjs.com/microservices/basics)
-##### ❎ [Websockets](https://docs.nestjs.com/websockets/gateways)
-##### ❎ [GraphQL](https://docs.nestjs.com/graphql/quick-start)
-##### ✅ Recipes
-- [x] [Mongoose](https://docs.nestjs.com/recipes/mongodb)
-- [x] [Swagger](https://docs.nestjs.com/openapi/introduction)
-- [ ] [...]
-##### ✅ Techniques 
-- [x] [Configuration](https://docs.nestjs.com/techniques/configuration)
-- [x] [Mongo](https://docs.nestjs.com/techniques/mongodb)
-- [x] [Validation](https://docs.nestjs.com/techniques/validation)
-
-<details>
-<summary>[...]</summary>
-
-- [ ] [Database](https://docs.nestjs.com/techniques/database)
-- [ ] [Caching](https://docs.nestjs.com/techniques/caching)
-- [ ] [Serialization](https://docs.nestjs.com/techniques/serialization)
-- [ ] [Versioning](https://docs.nestjs.com/techniques/versioning)
-- [ ] [Task Scheduling](https://docs.nestjs.com/techniques/task-scheduling)
-- [ ] [Queues](https://docs.nestjs.com/techniques/queues)
-- [ ] [Logging](https://docs.nestjs.com/techniques/logger)
-- [ ] [Cookies](https://docs.nestjs.com/techniques/cookies)
-- [ ] [Events](https://docs.nestjs.com/techniques/events)
-- [ ] [Compression](https://docs.nestjs.com/techniques/compression)
-- [ ] [File Upload](https://docs.nestjs.com/techniques/file-upload)
-- [ ] [Streaming Files](https://docs.nestjs.com/techniques/streaming-files)
-- [ ] [HTTP Module](https://docs.nestjs.com/techniques/http-module)
-- [ ] [Session](https://docs.nestjs.com/techniques/session)
-- [ ] [MVC](https://docs.nestjs.com/techniques/mvc)
-- [ ] [Performance (Fastify)](https://docs.nestjs.com/techniques/performance)
-- [ ] [Server-Sent Events](https://docs.nestjs.com/techniques/server-sent-events)
-</details>
-
-#### Other Features
-##### 🌠 Onion Architecture
-Arquitectura hexagonal version Onion, fuertemente desacoplada.
-- [x] **Domain responsibility**: responsable de todas las implementaciones de la aplicación (diferentes clientes y servidor)
-- [x] **Domain submodule**: implementado como sub módulo de Git
-##### 🔏 Encrypted Jwt
-##### 🔐 Signed Encrypted Payload
-##### 🧪 Dynamic Dev Deployment
-Posibilidad de iniciar la aplicación como mock, en la cual el Jwt no va encriptado, facilitando el test.
+> - ⚙️ Other
 
 
 ## 📄 Docs
