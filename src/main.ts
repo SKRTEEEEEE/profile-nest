@@ -6,7 +6,6 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { SWAGGER_CONFIGS } from './shareds/swagger/swagger.config';
 import { dtoRegistry } from './shareds/swagger/dto.register';
 import { SecuritySchemeObject } from '@nestjs/swagger/dist/interfaces/open-api-spec.interface';
-import { SetEnvError } from './domain/flows/domain.error';
 
 const getBearerAuthConfig = (jwtType: string) => {
   if(jwtType == "mock")return{
@@ -36,9 +35,7 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.useGlobalFilters(new DomainErrorFilter());
   app.useGlobalPipes(new GlobalValidationPipe());
-  const cfg = SWAGGER_CONFIGS.ADMIN;
-  // if (!process.env.JWT_STRATEGY) throw new SetEnvError("jwt_strategy","main.ts",{optionalMessage:'JWT_STRATEGY env variable is required'});
-  
+  const cfg = SWAGGER_CONFIGS.ADMIN;  
   
 
   const config = new DocumentBuilder()
@@ -65,7 +62,7 @@ async function bootstrap() {
       if (title) schema.title = title;
       if (group) schema['x-group'] = group;
     } else {
-      console.warn(`No constructor found in registry for schema: ${schemaName}`);
+      console.warn(`No constructor found in registry for schema: ${schemaName}`); //⚠️//🏗️ -> mirar que hacia esta parte
     }
     return schema;
   };

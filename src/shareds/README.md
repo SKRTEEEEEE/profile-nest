@@ -110,7 +110,7 @@ _Módulos de entidad no completos. Procesan los datos de estrategias especiales 
 ### Módulo raíz
 - Nombre descriptivo de la funcionalidad: `octokit`, `thirdweb`, `role-auth`
 
-### Estructura interna Capas Clean Architecture
+### Estructura interna - Capas Clean Architecture
 
 - Evitar nombres genéricos para patrones, como `utils` o **`repository`**
 

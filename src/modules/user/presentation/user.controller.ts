@@ -55,7 +55,7 @@ export class UserController {
     @PublicRoute()
     @UseGuards(SignatureAuthThirdWebGuard)
     @ApiMockLoginBody(UserLoginMockDto)
-    @ApiErrorResponse("auto")
+    @ApiErrorResponse("full")
     @ApiSuccessResponse(UserDto,ResCodes.ENTITY_CREATED)
     @ApiOperation({
         summary: "🆕 Create - Login user",
@@ -95,7 +95,7 @@ Use this endpoint to initialize the app user.`
 
     @Put()
     @ApiBearerAuth("access-token")
-    @ApiErrorResponse("auto")
+    @ApiErrorResponse("full")
     @ApiSuccessResponse(UserDto,ResCodes.ENTITY_UPDATED)
     @ApiOperation({
         summary: `♻️ Update - Edit user info`,
@@ -117,7 +117,7 @@ Useful for update info of the users.`
     // @UseGuards(SignatureAuthThirdWebGuard)
     // @ApiSignAuthHeader()// En el futuro se puede hacer incluso un hibrido, mock-addressBody and next-verifiedPayload --> Como en login() - Actualmente sin verifyPayload en backend(solo next)
     @ApiBearerAuth("access-token")
-    @ApiErrorResponse("auto")
+    @ApiErrorResponse("full")
     @ApiSuccessResponse(UserDto,ResCodes.ENTITY_DELETED)
     @ApiOperation({
     summary: "🗑️ Delete - Remove user from the system",
@@ -130,9 +130,6 @@ Useful for update info of the users.`
 Use this endpoint to permanently remove your user and her data from the system.`
 })
     async delete(@Req() {jwtUser}: {jwtUser: JwtAuthPayload}) {
-        // const v = await this.authThirdWebRepository.verifyPayload(json.payload)
-        // if (!v.valid) throw new UnauthorizedError("Error with payload auth")
-        // if (jwtUser.sub !== address) throw new UnauthorizedError(UserController,"User only can delete her address")
 
         const userId = jwtUser.ctx?.id;
         // console.log("userId in delete user: ", userId)
@@ -154,7 +151,7 @@ Use this endpoint to permanently remove your user and her data from the system.`
     //     schema: { type: 'string' }
     // })
     @ApiBearerAuth("access-token")
-    @ApiErrorResponse("auto")
+    @ApiErrorResponse("full")
     @ApiSuccessResponse(UserDto,ResCodes.ENTITY_UPDATED)
     @ApiParam({name:"type", enum: ManageRoleParam})
     @ApiOperation({
@@ -200,7 +197,7 @@ Useful for manage specials flow of the app.`
 
     @Get("/:id")
     @ApiBearerAuth("access-token")
-    @ApiErrorResponse("auto")
+    @ApiErrorResponse("full")
     @ApiSuccessResponse(UserDto,ResCodes.ENTITY_FOUND)
     @ApiOperation({
         summary: `📖 Read - By ID`,
@@ -219,7 +216,7 @@ Useful for read data or searching existence of user in the application.`
     @UseGuards(RoleAuthTokenGuard)
     @Roles(RoleType.ADMIN)
     @ApiBearerAuth("access-token")
-    @ApiErrorResponse("auto")
+    @ApiErrorResponse("full")
     @ApiSuccessResponse(UserDto, ResCodes.ENTITIES_FOUND, true) //Hay que mostrar lo que devuelve
     @ApiOperation({
         summary: `📖 Read - All`,
@@ -235,7 +232,7 @@ Useful for listing all users in the application.`
     }
     @Patch("/verify-email")
     @ApiBearerAuth("access-token")
-    @ApiErrorResponse("auto")
+    @ApiErrorResponse("full")
     @ApiSuccessResponse(UserDto,ResCodes.ENTITIES_FOUND)
     @ApiOperation({
         summary: `♻️ Update - Verify Email (by Query)`,

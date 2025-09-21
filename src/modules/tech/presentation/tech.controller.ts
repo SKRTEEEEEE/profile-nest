@@ -42,7 +42,7 @@ export class TechController {
 
     @Delete("/:nameId")
     @ApiBearerAuth("access-token")
-    @ApiErrorResponse("auto")
+    @ApiErrorResponse("d")
     @ApiSuccessResponse(LangDto, ResCodes.ENTITY_DELETED)
     @ApiOperation({
     summary: "🗑️ Delete - Remove technology by nameId",
@@ -61,10 +61,10 @@ Use this endpoint to permanently remove a technology from the system.`
     @Get("/:type") //can be: /db, /flatten, /cat, /full
     @PublicRoute()
     @UseGuards(ThrottlerGuard)
-    @Throttle({short: {limit: 1, ttl: 60000}})
+    @Throttle({short: {limit: 1, ttl: 60}})
     // @UseInterceptors(CacheInterceptor)
     // @CacheTTL(1 * 60 * 60)
-    @ApiErrorResponse("auto")
+    @ApiErrorResponse("get","--protected")
     @ApiSuccessResponse(FullTechDataDto, ResCodes.ENTITIES_FOUND, true) //Hay que mostrar lo que devuelve
     @ApiParam({name: "type", enum: ReadAllParams})
     @ApiOperation({
@@ -102,7 +102,7 @@ Useful for listing, searching, or filtering technologies in the application.`
 
     @Patch("/:type") // can be /all or /json or /md
     @ApiBearerAuth("access-token")
-    @ApiErrorResponse("auto")
+    @ApiErrorResponse("d")
     @ApiSuccessResponse(VoidDto, ResCodes.OPERATION_SUCCESS)
     @ApiParam({name: "type", enum: ActualizarGithubParams})
     @ApiOperation({
@@ -126,7 +126,7 @@ Useful for manage specials flow of the app.`
     
     @Put()
     @ApiBearerAuth("access-token")
-    @ApiErrorResponse("auto")
+    @ApiErrorResponse("d")
     @ApiSuccessResponse(TechDto, ResCodes.ENTITY_UPDATED)
     @ApiOperation({
         summary: `♻️ Update - Edit technologies with new info`,
@@ -145,7 +145,7 @@ Useful for update info of the techs.`
 
     @Post()
     @ApiBearerAuth("access-token")
-    @ApiErrorResponse(ErrorCodes.INPUT_PARSE , ErrorCodes.DATABASE_FIND)
+    @ApiErrorResponse("d")
     @ApiSuccessResponse(LangDto,ResCodes.ENTITY_CREATED)
     @ApiOperation({
         summary: "🆕 Create - Add new technology",
