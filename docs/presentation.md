@@ -250,7 +250,7 @@ Los Interceptors son una característica poderosa de NestJS que permite:
 - Agregar lógica extra antes/después de la ejecución de un método
 - Completamente anular la ejecución de una función
 
-#### Casos de Uso Comunes:
+### Casos de Uso Comunes:
 
 1. **Logging**:
 ```typescript
@@ -304,7 +304,9 @@ export class CacheInterceptor implements NestInterceptor {
 
 ### 🖊️ Decorator -> `<module>.decorator.ts`
 
-## ‼️ NOT THIS LAYER ❌ ADAPTERS - **part of old infra/service (w. guard)**
+
+
+## ‼️ NOT USED RN ➡️ ADAPTERS - **part of old infra/service (w. guard)**
 ### Son parte de PROVIDERS
 -> Son los encargados de 'adaptar' la lógica de la infraestructura
 

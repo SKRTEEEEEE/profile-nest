@@ -9,12 +9,12 @@ import { QueryDto } from "src/shareds/presentation/pipes/query.dto";
 import { MongooseBase } from "src/shareds/pattern/infrastructure/types";
 import { ResCodes } from "src/domain/flows/res.type";
 import { PreTechInterface } from "../application/pre-tech.interface";
-import { ApiBearerAuth, ApiExcludeEndpoint, ApiOperation, ApiTags } from "@nestjs/swagger";
-import { NotImplementedError, UnauthorizedError } from "src/domain/flows/domain.error";
+import { ApiBearerAuth, ApiOperation, ApiTags } from "@nestjs/swagger";
 import { ApiSuccessResponse } from "src/shareds/presentation/api-success.decorator";
 import { PreTechDto } from "./pre-tech.dto";
 import { ApiErrorResponse } from "src/shareds/presentation/api-error.decorator";
 import { ThrottlerGuard } from "@nestjs/throttler";
+import { ErrorCodes } from "src/domain/flows/error.type";
 
 
 @ApiTags("Pre Tech")
@@ -27,7 +27,7 @@ export class PreTechController implements PreTechInterface<MongooseBase> {
     @UseGuards(RoleAuthTokenGuard)
     @Roles(RoleType.ADMIN)
     @ApiBearerAuth("access-token")
-    @ApiErrorResponse("auto")
+    @ApiErrorResponse("d")
     @ApiSuccessResponse(PreTechDto,ResCodes.OPERATION_SUCCESS)
     @ApiOperation({
         summary: "🆕 Update - Add new technologies if available",
@@ -45,9 +45,10 @@ Use this endpoint to keep the technology catalog updated with the latest additio
         return await this.preTechEndpointService.updatePreTech();
     }
     @Get()
+    @PublicRoute() // No se usara
     @UseGuards(ThrottlerGuard) // Con esto se aplicara nuestro Throttle por defecto
     // @Throttle({short: {limit: 1, ttl: 60000}}) // Con esto podemos modificar partes de nuestro throttle
-    @ApiErrorResponse("auto")
+    @ApiErrorResponse("get")
     @ApiSuccessResponse(PreTechDto,ResCodes.ENTITIES_FOUND, true)
     @ApiOperation({
         summary: `📖 Read - By query (nameId and nameBadge)`,
@@ -59,7 +60,6 @@ Use this endpoint to keep the technology catalog updated with the latest additio
 
 Useful for listing, searching, or filtering technologies in the application.`
     })
-    @PublicRoute() // No se usara
     // @UseGuards(RoleAuthTokenGuard)
     // @Roles(RoleType.STUDENT, RoleType.ADMIN) // Utiliza el de mayor rango -> admin
     // // @Roles() // Actuara como una ruta protegida normal (token validado - sin rol -> pasara ok)

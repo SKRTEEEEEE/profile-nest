@@ -3,31 +3,6 @@ import { Injectable, ForbiddenException } from '@nestjs/common';
 import { RoleAuthInterface } from 'src/shareds/role-auth/application/role-auth.interface';
 import { RoleHierarchy, RoleType } from 'src/domain/entities/role.type';
 
-// export const checkHaveRoles=(requiredRoles: RoleType[]) => {
-//   if (!requiredRoles || requiredRoles.length === 0) {      
-//       console.warn("No roles defined in Role decorator")
-//       return true
-//     }
-//     else false
-// }
-
-// @Injectable()
-// export class RoleAuthUseCase {
-//   checkAccess(userRole: RoleType | null, requiredRoles: RoleType[]): boolean {
-//     if (!requiredRoles || requiredRoles.length === 0) return true;
-//     if (!userRole) throw new ForbiddenException('No role found');
-
-//     const userLevel = RoleHierarchy[userRole];
-//     const allowedLevels = requiredRoles.map(role => RoleHierarchy[role]);
-
-//     const isAuthorized = allowedLevels.some(level => userLevel <= level);
-//     if (!isAuthorized) throw new ForbiddenException('Insufficient role privileges');
-
-//     return true;
-//   }
-// }
-
-
 @Injectable()
 export class RoleAuthUseCase implements RoleAuthInterface {
   // 🧠✅ Ahora no tiene sentido tener roleAuthRepository como constructor, porque no se va a crear realmente 
