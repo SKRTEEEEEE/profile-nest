@@ -89,7 +89,6 @@ Useful for listing, searching, or filtering technologies in the application.`
                     return await this.techReadService.readAllCat()
                 case ReadAllParams.Full:
                     const res = await this.techReadService.readAllC();
-                    console.log(res)
                     return res
                 case ReadAllParams.Db:
                     return await this.techReadService.readAll()

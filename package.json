@@ -10,7 +10,7 @@
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "nest start",
     "start:dev": "nest start --watch",
-    "start:dev-next": "cross-env JWT_STRATEGY=thirdweb nest start --watch",
+    "start:dev-next": "cross-env JWT_STRATEGY=d nest start --watch",
     "start:dev-mock": "cross-env JWT_STRATEGY=mock nest start --watch",
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/main",
