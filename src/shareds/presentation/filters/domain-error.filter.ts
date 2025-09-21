@@ -34,14 +34,13 @@ export class DomainErrorFilter  implements ExceptionFilter {
       `
     )
     const errorCodeMeta: ErrorCodesMetadata  =  ERROR_CODES_METADATA[exception.type]
-    console.log("errorCodeMeta: ", errorCodeMeta)
     // Construye la respuesta unificada según el formato BaseFlow
     response.status(status).json({
       success: false,
       type: exception.type,
       message: `${emojiStatus} ${exception.opt?.shortDesc ? exception.opt.shortDesc : errorCodeMeta.desc}.`,
       timestamp: exception.timestamp || Date.now(),
-      meta: exception.meta ? {...exception.meta, friendlyDesc: errorCodeMeta.friendlyDesc} : errorCodeMeta.friendlyDesc ? {friendlyTip: errorCodeMeta.friendlyDesc} : undefined,
+      meta: exception.meta ? {...exception.meta, friendlyDesc: exception.opt?.friendlyDesc ? exception.opt?.friendlyDesc : errorCodeMeta.friendlyDesc } : errorCodeMeta.friendlyDesc ? {friendlyTip: errorCodeMeta.friendlyDesc} : {opt: exception.opt},
       // Mantenemos statusCode para compatibilidad con tu código actual
       statusCode: status
     });

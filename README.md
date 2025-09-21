@@ -14,15 +14,15 @@ Construido con **NestJS** como framework principal.
 
 
 ### Utilidades nativas de NestJS
-Este backend busca **usar la menor cantidad de librerías externas posibles**, 
+> Este backend busca **usar la menor cantidad de librerías externas posibles**, 
 apoyándose en las utilidades nativas que ofrece **NestJS**.  
-- ✔️ Mantiene el **código ligero y sostenible**.  
-- ✔️ Aprovecha al máximo la **filosofía modular de NestJS** (Programación Orientada a Objetos).  
-- ✔️ Evita la sobrecarga innecesaria de dependencias.  
-- ✔️ Minimiza la dependencia de librerías externas.
+> ✔️ Mantiene el **código ligero y sostenible**.  
+> ✔️ Aprovecha al máximo la **filosofía modular de NestJS** (Programación Orientada a Objetos).  
+> ✔️ Evita la sobrecarga innecesaria de dependencias.  
+> ✔️ Minimiza la dependencia de librerías externas.
 
 <details>
-<summary><h4><pre>    Utilidades nativas de NestJS **implementadas** 🖊️✅</pre></h4></summary>
+<summary><h4><pre>   👆 Utilidades nativas de NestJS **implementadas** 🖊️✅   </pre></h4></summary>
 <b>📖 Overview</b>
 
 - ✅ [Controllers](https://docs.nestjs.com/controllers)  
@@ -85,17 +85,21 @@ Posibilidad de iniciar la aplicación como mock, en la cual el Jwt no va encript
 ## Estructura de carpetas
 La estructura sigue los principios de **Clean Architecture**, organizada por capas y responsabilidades:
 
-```md
-src
-├── [shareds](./src/shareds/README.md)/ # Funcionalidades compartidas o capa de presentación (frameworks)
-│ └── [...lot of carpets]
-├── [modules](./src/modules/README.md)/ # Cada entidad del dominio
-│ └── <entidad>/
-| │ ├── [presentation](./docs/presentation.md)/ # Controladores, DTOs, validaciones
-| │ ├── [application](./docs/application.md)/ # Casos de uso, lógica de aplicación
-| │ └── [infrastructure](./docs/infrastructure.md)/ # Repositorios, servicios externos, persistencia
-└── [domain](https://github.com/SKRTEEEEEE/profile-domain)/ # Entidades de dominio puras
-```
+- [src/`shareds`](./src/shareds/README.md)  
+  - _Funcionalidades compartidas o capa de presentación (frameworks)_
+  - `presentation` -> Necesario para el fw
+  - `...otras carpetas` -> Representa cada funcionalidad compartida  
+
+- [src/`modules`](./src/modules/README.md)  
+  - _Funcionalidades de la entidad_
+  - `<entidad>`  
+    - `presentation`(./docs/presentation.md) → Controladores, DTOs, validaciones  
+    - `application`(./docs/application.md) → Casos de uso, lógica de aplicación  
+    - `infrastructure`(./docs/infrastructure.md) → Repositorios, servicios externos, persistencia  
+
+- [src/`domain`](https://github.com/SKRTEEEEEE/profile-domain)  
+  - _Entidades de dominio puras_
+
 
 
 

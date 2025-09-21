@@ -5,6 +5,7 @@ import { UnauthorizedError } from 'src/domain/flows/domain.error';
 
 @Injectable()
 export class SignatureAuthThirdWebGuard implements CanActivate {
+  private meta = {opt: {friendlyDesc: "Invalid credentials. Try again or recuperate your account"}}
   constructor(
     private readonly authThirdWebRepository: AuthThirdWebRepo,
     private readonly reflector: Reflector
@@ -18,19 +19,19 @@ export class SignatureAuthThirdWebGuard implements CanActivate {
     // Leer el payload firmado desde el header
     const signedPayload = request.headers['x-signed-payload'];
     if (!signedPayload) {
-      throw new UnauthorizedError(SignatureAuthThirdWebGuard,'Missing signed payload header');
+      throw new UnauthorizedError(SignatureAuthThirdWebGuard,'Missing signed payload header', this.meta);
     }
 
     let parsedPayload;
     try {
       parsedPayload = JSON.parse(signedPayload);
     } catch {
-      throw new UnauthorizedError(SignatureAuthThirdWebGuard,'Invalid signed payload format');
+      throw new UnauthorizedError(SignatureAuthThirdWebGuard,'Invalid signed payload format', this.meta);
     }
 
     const verified = await this.authThirdWebRepository.verifyPayload(parsedPayload);
     if (!verified.valid) {
-      throw new UnauthorizedError(SignatureAuthThirdWebGuard,'Invalid signature payload');
+      throw new UnauthorizedError(SignatureAuthThirdWebGuard,'Invalid signature payload', this.meta);
     }
 
     request.verifiedPayload = verified;

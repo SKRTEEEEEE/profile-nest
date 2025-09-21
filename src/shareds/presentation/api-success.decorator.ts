@@ -5,6 +5,8 @@ import { SuccessResponseDto } from "./pipes/success-res.dto";
 
 export const API_RESPONSE_META = 'API_RESPONSE_META';
 
+//Vale aqui hay que ir con cuidado con los endpoints que pueden hacer varios tipo de operaciones, (vease login) -- hay que manejar esos casos en el futuro
+
 export function ApiSuccessResponse<TModel extends Type<any>>(
   model: TModel,
   type: ResCodes,

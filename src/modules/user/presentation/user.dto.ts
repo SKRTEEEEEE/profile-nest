@@ -129,6 +129,14 @@ export class UserLoginMockDto {
     })
     @IsString()
     address: string
+
+    @ApiProperty({
+        title: "Wallet password",
+        description: "Blockchain wallet password of the user to be logged",
+        example: "Im3l0nmu7k"
+    })
+    @IsString()
+    password: string
 }
 @ApiDtoMetadata({
     description: "All info about User included the Database metadata",

@@ -14,6 +14,7 @@ import { RoleModule } from './modules/role/presentation/role.module';
 import { JwtAuthMockGuard } from './shareds/jwt-auth/presentation/jwt-auth-mock.guard';
 import { CacheInterceptor, CacheModule } from '@nestjs/cache-manager';
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
+import { SignatureAuthModule } from './shareds/signature-auth/presentation/signature-auth.module';
 
 
 
@@ -27,6 +28,7 @@ import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
     process.env.JWT_STRATEGY === "mock" ?JwtAuthMockModule:JwtAuthThirdWebModule,
     RoleAuthModule,
     RoleModule,
+    SignatureAuthModule,
     // OctokitModule
     // MockAuthUserModule,
     // CacheModule.register({max:100}),

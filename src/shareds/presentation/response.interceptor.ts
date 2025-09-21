@@ -29,6 +29,7 @@ export class ResponseInterceptor<T> implements NestInterceptor<T, ResFlow<T>> {
       // })),
       map((data: any) => {
         const message = data?.message || meta?.message;
+        console.log(meta?.type)
         const response = {
           success: true,
           type: meta?.type ?? ResCodes.OPERATION_SUCCESS,
