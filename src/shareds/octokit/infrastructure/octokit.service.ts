@@ -6,6 +6,8 @@ import { OctokitConfig } from "./octokit.conn";
 import { AllTopicSizePercentagesRes } from "src/shareds/topic/application/topic-calculator.interface";
 import { TopicCalculatorUseCase } from "src/shareds/topic/application/topic-calculator.usecase";
 import { SharedActionError } from "src/domain/flows/domain.error";
+import { createDomainError } from "src/domain/flows/error.registry";
+import { ErrorCodes } from "src/domain/flows/error.type";
 export type LengPercentage = {
     name: string;
     percentage: number;
@@ -45,7 +47,7 @@ export class OctokitRepo extends OctokitConfig implements OctokitInterface {
                 if (error.status === 409) {
                     try {
                         const newSha = await this.fetchFileSha(filePath, baseOptions);
-                        if (!newSha) throw new SharedActionError("fetchFileSha",OctokitRepo,{optionalMessage:"No se pudo obtener el nuevo SHA"});
+                        if (!newSha) throw createDomainError(ErrorCodes.SHARED_ACTION,OctokitRepo,"fetchFileSha",undefined,{optionalMessage:"No se pudo obtener el nuevo SHA"});
                         sha = newSha;
                     } catch (shaError) {
                         throw shaError;
@@ -59,7 +61,7 @@ export class OctokitRepo extends OctokitConfig implements OctokitInterface {
                 await new Promise(resolve => setTimeout(resolve, 1000));
             }
         }
-        throw lastError || new SharedActionError("fetchFileSha",OctokitRepo,{optionalMessage:"No se pudo actualizar el archivo después de múltiples intentos"});
+        throw lastError ||  createDomainError(ErrorCodes.SHARED_ACTION,OctokitRepo,"fetchFileSha",undefined,{optionalMessage:"No se pudo actualizar el archivo después de múltiples intentos"});
     }
     //Original
     async getReposDetails(owner: string): Promise<RepoDetailsRes> {

@@ -3,7 +3,8 @@ import { TechDeleteUseCase, TechReadOneUseCase } from "../application/tech.useca
 import { MongooseBase } from "src/shareds/pattern/infrastructure/types";
 import { FwBase } from "src/domain/entities/tech";
 import { Document } from "mongoose";
-import { DatabaseActionError, DatabaseFindError } from "src/domain/flows/domain.error";
+import { createDomainError } from "src/domain/flows/error.registry";
+import { ErrorCodes } from "src/domain/flows/error.type";
 import { FwDocument, LibDocument } from "./tech.schema";
 // type LibDocument = LibBase & Document
 // type FwDocument = FwBase & Document
@@ -44,7 +45,7 @@ export class TechFindDeleteRepo {
         if (lenguaje && Array.isArray(lenguaje.frameworks)) {
             const frameworkIndex = lenguaje.frameworks.findIndex((fw:FwDocument) => fw.nameId === name);
             const framework = lenguaje.frameworks.find((fw:FwDocument) => fw.nameId === name);
-            if(!framework)throw new DatabaseFindError("findIndex-find",TechFindDeleteRepo)
+            if(!framework)throw createDomainError(ErrorCodes.DATABASE_FIND, TechFindDeleteRepo, 'findIndex-find')
 
             // Eliminar el framework
             lenguaje.frameworks.splice(frameworkIndex, 1);
@@ -61,9 +62,9 @@ export class TechFindDeleteRepo {
         if (lenguajeEliminado) {
             return lenguajeEliminado
         }
-        throw new DatabaseActionError("delete", TechFindDeleteRepo);
+        throw createDomainError(ErrorCodes.DATABASE_ACTION, TechFindDeleteRepo, 'delete');
     } catch (error) {
-        throw new DatabaseActionError('findAndDelete', TechFindDeleteRepo);
+        throw createDomainError(ErrorCodes.DATABASE_ACTION, TechFindDeleteRepo, 'findAndDelete');
     }
 }
 }

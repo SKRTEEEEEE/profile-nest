@@ -51,8 +51,8 @@ export function ApiErrorResponse(...codes: (ErrorCodes | "full" | "get" | "--pro
         } else {
           console.warn("[WRONG USE]: Don't use 'd' option (default) with other flags/params in @ApiErrorResponse")
         }
-        
       } 
+      usedCodes = [...usedCodes, ErrorCodes.THROTTLE]
     } 
 
 

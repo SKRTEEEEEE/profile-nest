@@ -1,6 +1,7 @@
 import { Model } from "mongoose";
 import { MongooseBase, MongooseDocument } from "../types";
-import { DatabaseFindError } from "src/domain/flows/domain.error";
+import { createDomainError } from "src/domain/flows/error.registry";
+import { ErrorCodes } from "src/domain/flows/error.type";
 
 
 export abstract class MongooseBaseImpl<
@@ -59,7 +60,7 @@ export abstract class MongooseBaseImpl<
 
 
   protected resArrCheck(docs: TBase & MongooseBase[] | any[] | undefined | null): { customMessage?: string } {
-  if(!docs) throw new DatabaseFindError("resArrCheck",MongooseBaseImpl,{optionalMessage:"Failed to find the documents"});
+  if(!docs) throw createDomainError(ErrorCodes.DATABASE_FIND, MongooseBaseImpl, 'resArrCheck', undefined, { optionalMessage: 'Failed to find the documents' });
 
   if (Array.isArray(docs) && docs.length === 0) {
     return { customMessage: "The query was successful but there are no matching documents." };

@@ -2,7 +2,8 @@ import { Injectable } from "@nestjs/common";
 import { RenderAlphaSimpleProps, renderTopicAlphaTripleProps, TopicChartInterface } from "./topic-chart.interface";
 import { TopicCalculatorUseCase } from "src/shareds/topic/application/topic-calculator.usecase";
 import { RepoDetailsRes } from "src/shareds/octokit/application/octokit.interface";
-import { InputParseError, NotImplementedError } from "src/domain/flows/domain.error";
+import { createDomainError } from "src/domain/flows/error.registry";
+import { ErrorCodes } from "src/domain/flows/error.type";
 
 
 @Injectable()
@@ -49,9 +50,9 @@ export class TopicChartUseCase implements TopicChartInterface {
 
         } else if(type === "alpha-simple"){
 
-            throw new NotImplementedError(TopicChartUseCase);
+            throw createDomainError(ErrorCodes.NOT_IMPLEMENTED, TopicChartUseCase, 'renderTopicAlphaBarChart');
         }
-        throw new InputParseError(TopicChartUseCase)
+        throw createDomainError(ErrorCodes.INPUT_PARSE, TopicChartUseCase, 'renderTopicAlphaBarChart');
     }
     async renderTopicAlphaTriple(props: renderTopicAlphaTripleProps): Promise<Buffer>{
         return this.topicChartRepository.renderTopicAlphaTriple(props)

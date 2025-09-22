@@ -1,5 +1,6 @@
 import { Injectable } from "@nestjs/common";
-import { DatabaseActionError, DatabaseFindError, UnauthorizedError } from "src/domain/flows/domain.error";
+import { createDomainError } from "src/domain/flows/error.registry";
+import { ErrorCodes } from "src/domain/flows/error.type";
 import { PersistedEntity } from "src/shareds/pattern/application/interfaces/adapter.type";
 import { CRRUUDIdRepository } from "src/shareds/pattern/application/usecases/crruud-id.interface";
 import { ReadOneRepository } from "src/shareds/pattern/application/usecases/read-one.interface";
@@ -89,13 +90,23 @@ export class UserVerifyEmailUseCase<TDB extends PersistedEntity = PersistedEntit
     async verifyEmail(props: {id:string, verifyToken:string}): Promise<UserBase & TDB> {
         const user = await this.crruudRepository.readById(props.id as ReadByIdProps<TDB>);
     if (!user) {
-        throw new DatabaseFindError("readById",UserVerifyEmailUseCase,{opt:{function: "verifyEmail"}})
+        throw createDomainError(ErrorCodes.DATABASE_FIND, UserVerifyEmailUseCase, 'readById', undefined, { shortDesc: 'verifyEmail' })
     } 
     if (user.verifyToken !== props.verifyToken) {
-        throw new UnauthorizedError(UserVerifyEmailUseCase,"Error at validate token");
+        throw createDomainError(ErrorCodes.UNAUTHORIZED_ACTION, UserVerifyEmailUseCase, 'verifyEmail', "tryAgainOrContact", {desc:{
+            es: 'Error al validar el token de correo electrónico',
+            en: 'Error at validate email token',
+            ca: "Error en validar el token de correu electrònic",
+            de: 'Fehler beim Überprüfen des E-Mail-Tokens'
+          }});
     }
     if (user.verifyTokenExpire && new Date(user.verifyTokenExpire) <= new Date()) {
-        throw new UnauthorizedError(UserVerifyEmailUseCase,"Error with token time");
+        throw createDomainError(ErrorCodes.UNAUTHORIZED_ACTION, UserVerifyEmailUseCase, 'verifyEmail', "tryAgainOrContact",{shortDesc:'Error with token time',desc: {
+            es: 'El tiempo de verificación ha trascurrido',
+            en: 'Verification time has elapsed',
+            ca: 'El temps de verificació ha transcorregut',
+            de: 'Die Überprüfungszeit ist abgelaufen'
+          }});
     }
     user.isVerified = true;
     user.verifyToken = undefined;
@@ -103,7 +114,7 @@ export class UserVerifyEmailUseCase<TDB extends PersistedEntity = PersistedEntit
     // ⚠️‼️ Esta parte en el futuro sera un botón de "subscripción"
 
     const sUser = await this.crruudRepository.updateById({id: user.id, updateData:user})
-    if(!sUser) throw new DatabaseActionError("updateById",UserVerifyEmailUseCase)
+    if(!sUser) throw createDomainError(ErrorCodes.DATABASE_ACTION, UserVerifyEmailUseCase, 'updateById')
     return sUser;
     }
 }

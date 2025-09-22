@@ -7,7 +7,7 @@ import { PublicRoute } from "src/shareds/jwt-auth/presentation/public-route.deco
 import { MongooseBase } from "src/shareds/pattern/infrastructure/types";
 import { TechOctokitCreateRepo } from "src/modules/tech/infrastructure/tech-octokit/create.repo";
 import { ActualizarGithubType, TechOctokitActualizarGithubRepo } from "../infrastructure/tech-octokit/actualizar.repo";
-import { InputParseError } from "src/domain/flows/domain.error";
+import { createDomainError } from "src/domain/flows/error.registry";
 import { TechOctokitUpdateRepo } from "../infrastructure/tech-octokit/update.repo";
 import { TechFindDeleteRepo } from "../infrastructure/delete.repo";
 import { ApiBearerAuth, ApiOperation, ApiParam, ApiTags } from "@nestjs/swagger";
@@ -42,7 +42,7 @@ export class TechController {
 
     @Delete("/:nameId")
     @ApiBearerAuth("access-token")
-    @ApiErrorResponse("d")
+    @ApiErrorResponse("d",ErrorCodes.SHARED_ACTION)
     @ApiSuccessResponse(LangDto, ResCodes.ENTITY_DELETED)
     @ApiOperation({
     summary: "🗑️ Delete - Remove technology by nameId",
@@ -101,7 +101,7 @@ Useful for listing, searching, or filtering technologies in the application.`
 
     @Patch("/:type") // can be /all or /json or /md
     @ApiBearerAuth("access-token")
-    @ApiErrorResponse("d")
+    @ApiErrorResponse("d", ErrorCodes.SHARED_ACTION)
     @ApiSuccessResponse(VoidDto, ResCodes.OPERATION_SUCCESS)
     @ApiParam({name: "type", enum: ActualizarGithubParams})
     @ApiOperation({
@@ -119,13 +119,19 @@ Useful for listing, searching, or filtering technologies in the application.`
 Useful for manage specials flow of the app.`
     })
     async actualizarGithub(@Param("type") type: ActualizarGithubParams){
-        if(!Object.values(ActualizarGithubType).includes(type))throw new InputParseError(TechController,"Invalid route")
+        if(!Object.values(ActualizarGithubType).includes(type))throw createDomainError(ErrorCodes.INPUT_PARSE, TechController, 'actualizarGithub', {
+            en: 'Invalid route',
+            es: 'Ruta inválida',
+            ca: 'Ruta invàlida',
+            de: 'Ungültiger Pfad'
+          }
+          )
         return await this.techOctokitActualizarGithubRepo.actualizar({type:ActualizarGithubType[type]})
     }
     
     @Put()
     @ApiBearerAuth("access-token")
-    @ApiErrorResponse("d")
+    @ApiErrorResponse("d",ErrorCodes.SHARED_ACTION)
     @ApiSuccessResponse(TechDto, ResCodes.ENTITY_UPDATED)
     @ApiOperation({
         summary: `♻️ Update - Edit technologies with new info`,
@@ -144,7 +150,7 @@ Useful for update info of the techs.`
 
     @Post()
     @ApiBearerAuth("access-token")
-    @ApiErrorResponse("d")
+    @ApiErrorResponse("d",ErrorCodes.SHARED_ACTION)
     @ApiSuccessResponse(LangDto,ResCodes.ENTITY_CREATED)
     @ApiOperation({
         summary: "🆕 Create - Add new technology",

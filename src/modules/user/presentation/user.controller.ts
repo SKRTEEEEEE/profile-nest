@@ -3,7 +3,8 @@ import { UserCreateUseCase, UserDeleteByIdUseCase, UserReadByIdUseCase, UserRead
 import { MongooseBase } from "src/shareds/pattern/infrastructure/types";
 import { PublicRoute } from "src/shareds/jwt-auth/presentation/public-route.decorator";
 import { RoleType } from "src/domain/entities/role.type";
-import { DatabaseFindError, InputParseError, UnauthorizedError } from "src/domain/flows/domain.error";
+import { createDomainError } from "src/domain/flows/error.registry";
+import { ErrorCodes } from "src/domain/flows/error.type";
 import { RoleCreateUseCase, RoleDeleteByIdUseCase } from "src/modules/role/application/role.usecase";
 import { UserDto, UserLoginMockDto, UserUpdateDto, UserManageRoleDto, UserVerifyEmailDto } from "./user.dto";
 import { UserNodemailerUpdateUseCase } from "../application/user-nodemailer.usecase";
@@ -14,8 +15,7 @@ import { ApiMockLoginBody } from "./user.decorator";
 import { ApiErrorResponse } from "src/shareds/presentation/api-error.decorator";
 import { ApiSuccessResponse } from "src/shareds/presentation/api-success.decorator";
 import { ResCodes } from "src/domain/flows/res.type";
-import { RoleAuthTokenGuard } from "src/shareds/role-auth/presentation/role-auth-token.guard";
-import { Roles } from "src/shareds/role-auth/presentation/role.decorator";
+
 
 enum ManageRoleParam {
     Give = "give",
@@ -69,20 +69,20 @@ Use this endpoint to initialize the app user.`
 
             address = body.address;
             const password = body.password
-            if (!address) throw new UnauthorizedError(UserController, "Address is required in mock mode");
-            if (!password) throw new UnauthorizedError(UserController, "Password is required in mock mode");
+            if (!address) throw createDomainError(ErrorCodes.INPUT_PARSE, UserController, 'login');
+            if (!password) throw createDomainError(ErrorCodes.INPUT_PARSE, UserController, 'login');
             const rp = process.env[address]
-            if (rp !== password) throw new UnauthorizedError(UserController, "Password or user incorrect");
+            if (rp !== password) throw createDomainError(ErrorCodes.UNAUTHORIZED_ACTION, UserController, 'login', "credentials");
         } else {
             // En real, usa el address de la firma verificada
 
-            if (!verifiedPayload?.valid) throw new UnauthorizedError(UserController, "Payload not valid");
+            if (!verifiedPayload?.valid) throw createDomainError(ErrorCodes.UNAUTHORIZED_ACTION, UserController, 'login', "d",{shortDesc:'Payload not valid'});
             address = verifiedPayload.payload.address;
         }
-        if (!address) throw new InputParseError(UserController)
+        if (!address) throw createDomainError(ErrorCodes.INPUT_PARSE, UserController, 'login');
         let user = await this.userReadOneService.readByAddress(address);
         if (!user) {
-            if (process.env.JWT_STRATEGY === 'd') {
+            if (process.env.JWT_STRATEGY !== 'mock') {
                 user = await this.userCreateService.create({
                     address,
                     roleId: null, role: null, solicitud: null, img: null, email: null, isVerified: false, nick: null
@@ -137,9 +137,9 @@ Use this endpoint to permanently remove your user and her data from the system.`
 
         const userId = jwtUser.ctx?.id;
         // deleteUser(id)
-        if (!userId) throw new UnauthorizedError(UserController, "Error with user jwt, id doesn't exist")
+        if (!userId) throw createDomainError(ErrorCodes.UNAUTHORIZED_ACTION, UserController, 'delete', undefined,{shortDesc:'Error with user jwt, id doesn\'t exist'})
         const user = await this.userReadByIdService.readById(userId)
-        if (!user) throw new DatabaseFindError("readById", UserController, { optionalMessage: "User not found" })
+        if (!user) throw createDomainError(ErrorCodes.DATABASE_FIND, UserController, 'readById', undefined, { optionalMessage: 'User not found' })
         if (user.roleId !== null) {
             await this.roleDeleteByIdService.deleteById(user.roleId as DeleteByIdProps<MongooseBase>);
         }
@@ -175,10 +175,10 @@ Useful for manage specials flow of the app.`
         if (type === "give") {
             // const signUser = await this.userReadOneService.readByAddress(req.verifiedPayload.payload.payload.address)
             const signUser = await this.userReadOneService.readByAddress(jwtUser.sub)
-            if (!signUser) throw new DatabaseFindError("readByAddress", UserController, { optionalMessage: "signer user not found" })
-            if (signUser.role !== "ADMIN") throw new UnauthorizedError(UserController, "Only admins")
+            if (!signUser) throw createDomainError(ErrorCodes.DATABASE_FIND, UserController, 'readByAddress', undefined, { optionalMessage: 'signer user not found' })
+            if (signUser.role !== "ADMIN") throw createDomainError(ErrorCodes.UNAUTHORIZED_ACTION, UserController, 'manageRole')
             const user = await this.userReadByIdService.readById(props.id)
-            if (!user) throw new DatabaseFindError("readById", UserController, { entity: "user", optionalMessage: "User not found for give role" })
+            if (!user) throw createDomainError(ErrorCodes.DATABASE_FIND, UserController, 'readById', undefined, { entity: 'user', optionalMessage: 'User not found for give role' })
             const createdRole = await this.roleCreateService.create({ address: user.address, permissions: props.solicitud })
             // const createdRole = await this.roleCreateService.create({ address: req.verifiedPayload.payload.payload.address, permissions: props.solicitud })
             return await this.userUpdateByIdService.updateById({

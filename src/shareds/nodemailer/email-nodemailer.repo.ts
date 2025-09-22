@@ -1,7 +1,8 @@
 import { Injectable } from "@nestjs/common";
 import { EmailInterface, SendMailParams } from "./email.interface";
 import SMTPTransport from "nodemailer/lib/smtp-transport";
-import { SetEnvError } from "src/domain/flows/domain.error";
+import { createDomainError } from "src/domain/flows/error.registry";
+import { ErrorCodes } from "src/domain/flows/error.type";
 import { verificationEmailTemplate } from "./verification-email-template";
 import * as crypto from "crypto"
 import * as nodemailer from "nodemailer"
@@ -36,7 +37,7 @@ export class EmailNodemailerRepo implements EmailInterface{
     }
 
     async sendMail(params: SendMailParams): Promise<SMTPTransport.SentMessageInfo>{
-        if(!this.mFrom)throw new SetEnvError("mail sender",EmailNodemailerRepo)
+        if(!this.mFrom)throw createDomainError(ErrorCodes.SET_ENV, EmailNodemailerRepo, 'sendMail', undefined, { variable: 'SMTP_FROM_EMAIL' })
         const mailOpt = {...params, from: this.mFrom}
         return await this.transporter.sendMail(mailOpt)
     }

@@ -5,7 +5,8 @@ import { PUBLIC_ROUTE_KEY } from "./public-route.decorator";
 import { Observable } from "rxjs";
 import { RoleType } from "src/domain/entities/role.type";
 import { ROLES_KEY } from "../../role-auth/presentation/role.decorator";
-import { UnauthorizedError } from "src/domain/flows/domain.error";
+import { createDomainError } from "src/domain/flows/error.registry";
+import { ErrorCodes } from "src/domain/flows/error.type";
 
 // TODO - hacer que cuando se le pase isPublic y tambien requiredRoles, se anule el public!
 
@@ -34,7 +35,7 @@ export class JwtAuthThirdwebGuard extends AuthGuard('thirdweb') {
 
   handleRequest(err, user, info) {
     if (err || !user) {
-      throw err || new UnauthorizedError(JwtAuthThirdwebGuard,"Error at handle request in jwt");
+      throw err || createDomainError(ErrorCodes.UNAUTHORIZED_ACTION, JwtAuthThirdwebGuard, 'handleRequest', undefined,{shortDesc:'Error at handle request in jwt'});
     }
     return user;
   }

@@ -6,6 +6,7 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { SWAGGER_CONFIGS } from './shareds/swagger/swagger.config';
 import { dtoRegistry } from './shareds/swagger/dto.register';
 import { SecuritySchemeObject } from '@nestjs/swagger/dist/interfaces/open-api-spec.interface';
+import { Logger } from 'nestjs-pino';
 
 const getBearerAuthConfig = (jwtType: string) => {
   if(jwtType == "mock")return{
@@ -33,8 +34,10 @@ const getBearerAuthConfig = (jwtType: string) => {
 }
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  app.useGlobalFilters(new DomainErrorFilter());
+  // const logger = app.get(Logger);
+  // app.useGlobalFilters(new DomainErrorFilter(logger)); -> ver en app.modules, esta configurado ahi 😎
   app.useGlobalPipes(new GlobalValidationPipe());
+  app.useLogger(app.get(Logger))
   const cfg = SWAGGER_CONFIGS.ADMIN;  
   
 

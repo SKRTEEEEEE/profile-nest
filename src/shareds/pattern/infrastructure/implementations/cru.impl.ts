@@ -1,7 +1,8 @@
 import { QueryOptions, UpdateQuery } from "mongoose";
 import { MongooseBase, MongooseDocument } from "../types";
 import { MongooseBaseImpl } from "./base";
-import { DatabaseActionError, DatabaseFindError } from "src/domain/flows/domain.error";
+import { createDomainError } from "src/domain/flows/error.registry";
+import { ErrorCodes } from "src/domain/flows/error.type";
 export type MongooseUpdateByIdProps<TBase> = {
   id: string,
   updateData: UpdateQuery<TBase> | undefined,
@@ -31,11 +32,11 @@ TBase,
           const newDocument: TBase & MongooseDocument = new this.Model(data);
           const savedDocument = await newDocument.save();
           if (!savedDocument) {
-            throw new DatabaseActionError("Document.save",MongooseCRUImpl,{optionalMessage:"Failed to save the document"});
+            throw createDomainError(ErrorCodes.DATABASE_ACTION, MongooseCRUImpl, 'Document.save', undefined, { optionalMessage: 'Failed to save the document' });
           }
           return this.documentToPrimary(savedDocument);
         } catch (error) {
-          throw new DatabaseActionError("create",MongooseCRUImpl,{optionalMessage:"Failed to create the document"});
+          throw createDomainError(ErrorCodes.DATABASE_ACTION, MongooseCRUImpl, 'create', undefined, { optionalMessage: 'Failed to create the document' });
         }
       }
     
@@ -43,11 +44,11 @@ TBase,
         try {
           const document = await this.Model.findById(id);
           if (!document) {
-            throw new DatabaseFindError("Model.findById",MongooseCRUImpl,{optionalMessage:"Failed to find the document"});
+            throw createDomainError(ErrorCodes.DATABASE_FIND, MongooseCRUImpl, 'Model.findById', undefined, { optionalMessage: 'Failed to find the document' });
           }
           return this.documentToPrimary(document);
         } catch (error) {
-          throw new DatabaseFindError("readById",MongooseCRUImpl, {optionalMessage:"Failed to read the document"});
+          throw createDomainError(ErrorCodes.DATABASE_FIND, MongooseCRUImpl, 'readById', undefined, { optionalMessage: 'Failed to read the document' });
         }
       }
     
@@ -58,10 +59,10 @@ TBase,
           const updatedDocument = await this.Model.findByIdAndUpdate(id, updateData, (options ? options: {
           new: true,
         }));
-        if(!updatedDocument) throw new DatabaseActionError("Model.findByIdAndUpdate",MongooseCRUImpl, {optionalMessage:"Failed to update the document"});
+        if(!updatedDocument) throw createDomainError(ErrorCodes.DATABASE_ACTION, MongooseCRUImpl, 'Model.findByIdAndUpdate', undefined, { optionalMessage: 'Failed to update the document' });
         return  this.documentToPrimary(updatedDocument) 
         } catch (error) {
-          throw new DatabaseActionError("updateById",MongooseCRUImpl, {optionalMessage:"Failed to update the document"});
+          throw createDomainError(ErrorCodes.DATABASE_ACTION, MongooseCRUImpl, 'updateById', undefined, { optionalMessage: 'Failed to update the document' });
           
         }
       }

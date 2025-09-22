@@ -1,7 +1,8 @@
 import { Injectable } from "@nestjs/common";
 import { PreTechInterface } from "../application/pre-tech.interface";
 import { MongooseBase } from "src/shareds/pattern/infrastructure/types";
-import { DatabaseFindError } from "src/domain/flows/domain.error";
+import { createDomainError } from "src/domain/flows/error.registry";
+import { ErrorCodes } from "src/domain/flows/error.type";
 import { ResCodes } from "src/domain/flows/res.type";
 
 @Injectable()
@@ -18,7 +19,7 @@ export class MockPreTechRepo implements PreTechInterface<MongooseBase>{
     async readByQuery(query: {q:string}): Promise<(PreTechBase & MongooseBase)[]>{
          
         const tech = this.preTechs.find(tech => tech.nameId == query.q)
-        if(!tech) throw new DatabaseFindError("find",MockPreTechRepo,{optionalMessage:"Not find in mock"})
+        if(!tech) throw createDomainError(ErrorCodes.DATABASE_FIND, MockPreTechRepo, 'readByQuery', undefined, { optionalMessage: 'Not find in mock' })
             return [tech]
         }
         async updatePreTech(){

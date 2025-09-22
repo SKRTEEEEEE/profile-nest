@@ -1,7 +1,8 @@
 import { ModifyResult, QueryOptions, RootFilterQuery, UpdateQuery } from "mongoose";
 import { MongooseBase, MongooseDocument } from "../types";
 import { MongooseBaseImpl } from "./base";
-import { DatabaseActionError } from "src/domain/flows/domain.error";
+import { createDomainError } from "src/domain/flows/error.registry";
+import { ErrorCodes } from "src/domain/flows/error.type";
 
 export type MongooseUpdateProps<TBase> = {
     filter: RootFilterQuery<TBase & MongooseBase>, 
@@ -23,6 +24,6 @@ TBase,
             return this.documentToPrimary(updatedDocument.value as TBase & MongooseDocument) as TBase & MongooseBase
         } catch (error) {
             console.error("Error al actualizar el documento:", error);
-            throw new DatabaseActionError("update", MongooseUpdateImpl,{optionalMessage:"Error en la operación de actualización"});
+            throw createDomainError(ErrorCodes.DATABASE_ACTION, MongooseUpdateImpl, 'update', undefined, { optionalMessage: 'Error en la operación de actualización' });
         }
     }}

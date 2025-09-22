@@ -8,7 +8,8 @@ import { TechCreateUseCase, TechReadOneUseCase, TechUpdateUseCase } from "src/mo
 import { MongooseBase } from "src/shareds/pattern/infrastructure/types";
 import { OctokitRepo } from "src/shareds/octokit/infrastructure/octokit.service";
 import { ActualizarGithubType, TechOctokitActualizarGithubRepo } from "./actualizar.repo";
-import { DatabaseActionError } from "src/domain/flows/domain.error";
+import { createDomainError } from "src/domain/flows/error.registry";
+import { ErrorCodes } from "src/domain/flows/error.type";
 
 @Injectable()
 export class TechOctokitCreateRepo  {
@@ -67,7 +68,7 @@ export class TechOctokitCreateRepo  {
                 lenguaje.frameworks?.push(nuevoItem as FwBase);
                 const res = await this.techUpdateService.update({filter:{nameId: lengTo}, update:lenguaje, options:{new: true}});
                 const frameworkAgregado = res?.frameworks?.some(fw => fw.nameId === nuevoItem.nameId);
-                if(!frameworkAgregado)throw new DatabaseActionError("update", TechOctokitCreateRepo)
+                if(!frameworkAgregado)throw createDomainError(ErrorCodes.DATABASE_ACTION, TechOctokitCreateRepo, 'update')
                 // success = !!frameworkAgregado;
                 // message = success
                 //     ? `Framework ${nameId} agregado correctamente al lenguaje ${lengTo}.`
@@ -103,7 +104,7 @@ export class TechOctokitCreateRepo  {
         return lastResponse;
 
     } catch (error) {
-        throw new DatabaseActionError("create", TechOctokitCreateRepo)
+        throw createDomainError(ErrorCodes.DATABASE_ACTION, TechOctokitCreateRepo, 'create')
     }
     }
 

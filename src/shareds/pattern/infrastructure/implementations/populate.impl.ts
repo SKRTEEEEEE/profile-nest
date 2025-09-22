@@ -1,7 +1,8 @@
 import { Model } from 'mongoose';
 import { MongooseBaseImpl } from './base';
 import { MongooseBase, MongooseDocument } from '../types';
-import { DatabaseActionError, InputParseError } from 'src/domain/flows/domain.error';
+import { createDomainError } from 'src/domain/flows/error.registry';
+import { ErrorCodes } from 'src/domain/flows/error.type';
 
 //ToDo
 type OptionalMessage<TBase> = {
@@ -28,7 +29,12 @@ export class MongoosePopulateImpl<
   }
 
   async populate(docs: MongoosePopulateProps<TBase>): MongoosePopulateResponse<TBase> {
-    if (docs.length === 0) throw new InputParseError(MongoosePopulateImpl,'No documents to populate');
+    if (docs.length === 0) throw createDomainError(ErrorCodes.DATABASE_ACTION, MongoosePopulateImpl, 'populate', {
+      es: 'No hay documentos nuevos para actualizar la lista',
+      en: 'There are no new documents to update the list',
+      ca: 'No hi ha documents nous per actualitzar la llista',
+      de: 'Es gibt keine neuen Dokumente, um die Liste zu aktualisieren'
+    },{shortDesc:'No documents to populate'});
     
     try {
       const res = await this.model.insertMany(docs);
@@ -39,7 +45,7 @@ export class MongoosePopulateImpl<
         data: res.map((doc) => this.documentToPrimary(doc as TBase & MongooseDocument))
       } : res.map((doc) => this.documentToPrimary(doc as TBase & MongooseDocument));
     } catch (error) {
-      throw new DatabaseActionError("populate",MongoosePopulateImpl,{optionalMessage:'Error in the populate action'});
+      throw createDomainError(ErrorCodes.DATABASE_ACTION, MongoosePopulateImpl, 'populate', undefined, { optionalMessage: 'Error in the populate action' });
     }
   }
 }

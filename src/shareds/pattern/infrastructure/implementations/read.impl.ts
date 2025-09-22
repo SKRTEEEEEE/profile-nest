@@ -2,7 +2,8 @@
 import { MongooseBaseImpl } from './base';
 import { MongooseBase } from '../types';
 import { FilterQuery, Model, ProjectionType, QueryOptions } from 'mongoose';
-import { DatabaseFindError } from 'src/domain/flows/domain.error';
+import { createDomainError } from 'src/domain/flows/error.registry';
+import { ErrorCodes } from 'src/domain/flows/error.type';
  
 export type MongooseReadProps<TBase> = {
   filter?: FilterQuery<TBase & MongooseBase> | undefined,
@@ -35,7 +36,7 @@ TOptions extends Partial<Record<keyof TBase & MongooseBase, (value: any) => any>
         this.resArrCheck(docs)
         return docs.map(doc=>this.documentToPrimary(doc))
       } catch (error) {
-        throw new DatabaseFindError("find",MongooseReadImpl,{optionalMessage:"Error en la operación de lectura"});
+        throw createDomainError(ErrorCodes.DATABASE_FIND, MongooseReadImpl, 'read', undefined, { optionalMessage: 'Error en la operación de lectura' });
       }
     }
 }

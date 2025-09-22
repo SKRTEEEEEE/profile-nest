@@ -1,7 +1,8 @@
 import { QueryOptions, RootFilterQuery } from "mongoose";
 import { MongooseBase } from "../types";
 import { MongooseBaseImpl } from "./base";
-import { DatabaseActionError, DatabaseFindError } from "src/domain/flows/domain.error";
+import { createDomainError } from "src/domain/flows/error.registry";
+import { ErrorCodes } from "src/domain/flows/error.type";
 export type MongooseDeleteByIdI<TBase> = {
   deleteById(
     id: MongooseBase["id"]
@@ -14,10 +15,10 @@ TBase,
   async deleteById(id: MongooseBase["id"]): DeleteByIdRes<TBase, MongooseBase> {
     try {
       const result: TBase & MongooseBase | null = await this.Model.findByIdAndDelete(id);
-      if(!result)throw new DatabaseActionError("findByIdAndDelete",MongooseDeleteByIdImpl, {entity: 'user',optionalMessage:"User id not found"})
+      if(!result)throw createDomainError(ErrorCodes.DATABASE_ACTION, MongooseDeleteByIdImpl, 'findByIdAndDelete', undefined, { entity: 'user', optionalMessage: 'User id not found' })
       return result;
     } catch (error) {
-      throw new DatabaseActionError("deleteById",MongooseDeleteByIdImpl,{optionalMessage:"Failed to delete the document"});
+      throw createDomainError(ErrorCodes.DATABASE_ACTION, MongooseDeleteByIdImpl, 'deleteById', undefined, { optionalMessage: 'Failed to delete the document' });
     }
   }
 }
@@ -40,7 +41,7 @@ TBase,
     try {
       return await this.Model.findOneAndDelete(filter, options)
     } catch (error) {
-      throw new DatabaseActionError("delete",MongooseDeleteImpl,{optionalMessage:"Failed to delete the document"});
+      throw createDomainError(ErrorCodes.DATABASE_ACTION, MongooseDeleteImpl, 'delete', undefined, { optionalMessage: 'Failed to delete the document' });
     }
   }
 }
