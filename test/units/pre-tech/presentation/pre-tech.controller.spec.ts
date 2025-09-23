@@ -16,9 +16,7 @@ describe('PreTechController', () => {
 
     const module: TestingModule = await Test.createTestingModule({
       controllers: [PreTechController],
-      providers: [
-        { provide: PreTechEndpointUseCase, useValue: service },
-      ],
+      providers: [{ provide: PreTechEndpointUseCase, useValue: service }],
     })
       .overrideGuard(RoleAuthTokenGuard)
       .useValue({ canActivate: jest.fn(() => true) })

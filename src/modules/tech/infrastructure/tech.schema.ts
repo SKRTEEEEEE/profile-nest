@@ -32,7 +32,6 @@ export class LibDocument extends Document implements LibBase {
       /:\/\/(?:utfs\.io|[a-z0-9]+\.ufs\.sh)\/f\/([a-f0-9-]+)-([a-z0-9]+)\.(jpg|webp|png)/,
   })
   img: string;
-  
 
   @Prop({ type: Intl, required: true })
   desc: IntlSchema;

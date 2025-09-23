@@ -9,8 +9,7 @@ import { Document } from 'mongoose';
 import { createDomainError } from 'src/domain/flows/error.registry';
 import { ErrorCodes } from 'src/domain/flows/error.type';
 import { FwDocument, LibDocument } from './tech.schema';
-// type LibDocument = LibBase & Document
-// type FwDocument = FwBase & Document
+
 
 // Lo suyo seria tener este archivo en el mismo delete de tech.repo.ts
 

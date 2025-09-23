@@ -4,10 +4,10 @@ import { createDomainError } from 'src/domain/flows/error.registry';
 import { ErrorCodes } from 'src/domain/flows/error.type';
 
 export abstract class MongooseBaseImpl<TBase> {
-  protected parseOpt?: TOptions;
+  protected parseOpt?: any;
   constructor(
-    protected Model: Model,
-    parseOpt?: TOptions,
+    protected Model: Model<any, any, any, any, any, any>,
+    parseOpt?: any,
   ) {
     this.parseOpt = parseOpt;
   }

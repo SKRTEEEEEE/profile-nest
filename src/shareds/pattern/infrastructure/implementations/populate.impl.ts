@@ -19,10 +19,7 @@ export type MongoosePopulateI<TBase> = {
   populate(docs: MongoosePopulateProps<TBase>): MongoosePopulateResponse<TBase>;
 };
 
-export class MongoosePopulateImpl<TBase>
-  extends MongooseBaseImpl<TBase, TOptions>
-  implements MongoosePopulateI<TBase>
-{
+export class MongoosePopulateImpl<TBase> extends MongooseBaseImpl<TBase> {
   constructor(
     protected readonly model: Model<any>,
     parseOpt?: Function,

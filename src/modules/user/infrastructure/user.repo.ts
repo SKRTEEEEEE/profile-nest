@@ -107,9 +107,7 @@ export class MongooseUserRepo
       );
     }
   }
-  async readByAddress(
-    address: string,
-  ): Promise<
+  async readByAddress(address: string): Promise<
     UserFormS & {
       address: string;
       roleId: string | null;

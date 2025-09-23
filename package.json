@@ -5,6 +5,7 @@
   "author": "",
   "private": true,
   "license": "UNLICENSED",
+  "type": "module",
   "scripts": {
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
@@ -14,7 +15,8 @@
     "start:dev-mock": "cross-env JWT_STRATEGY=mock nest start --watch",
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/main",
-    "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
+    "lint": "eslint \"{src,apps,libs,test}/**/*.ts\"",
+    "lint:fix": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
     "test": "jest --config jest.unit.config.js",
     "test:watch": "jest --watch --config jest.unit.config.js",
     "test:cov": "jest --coverage --config jest.unit.config.js",
@@ -54,6 +56,8 @@
     "rxjs": "^7.8.1"
   },
   "devDependencies": {
+    "@commitlint/cli": "^19.8.1",
+    "@commitlint/config-conventional": "^19.8.1",
     "@eslint/eslintrc": "^3.2.0",
     "@eslint/js": "^9.36.0",
     "@nestjs/cli": "^11.0.0",
@@ -89,24 +93,23 @@
     "typescript-eslint": "^8.44.1"
   },
   "lint-staged": {
-    "*.{js,ts}": "npx eslint --fix"
-    
+    "*.{js,ts}": "npx eslint"
   },
   "jest": {
-      "moduleFileExtensions": [
-        "js",
-        "json",
-        "ts"
-      ],
-      "rootDir": "test",
-      "testRegex": ".*\\.spec\\.ts$",
-      "transform": {
-        "^.+\\.(t|j)s$": "ts-jest"
-      },
-      "collectCoverageFrom": [
-        "**/*.(t|j)s"
-      ],
-      "coverageDirectory": "../coverage",
-      "testEnvironment": "node"
-    }
+    "moduleFileExtensions": [
+      "js",
+      "json",
+      "ts"
+    ],
+    "rootDir": "test",
+    "testRegex": ".*\\.spec\\.ts$",
+    "transform": {
+      "^.+\\.(t|j)s$": "ts-jest"
+    },
+    "collectCoverageFrom": [
+      "**/*.(t|j)s"
+    ],
+    "coverageDirectory": "../coverage",
+    "testEnvironment": "node"
+  }
 }
