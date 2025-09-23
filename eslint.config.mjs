@@ -1,3 +1,4 @@
+// eslint.config.js
 import js from '@eslint/js';
 import tseslint from 'typescript-eslint';
 
@@ -7,8 +8,6 @@ export default tseslint.config(
     ignores: [
       'dist/**',
       'node_modules/**',
-      '*.js',
-      '*.mjs',
       'build/**',
       '**/*.d.ts',
     ],
@@ -18,14 +17,19 @@ export default tseslint.config(
   js.configs.recommended,
   ...tseslint.configs.recommended,
 
-  // Configuración personalizada
+  // Configuración personalizada para TS
   {
-    files: ['**/*.ts', '**/*.tsx'],
+    files: ['**/*.ts'],
     rules: {
       '@typescript-eslint/no-unused-vars': 'off',
       '@typescript-eslint/no-unsafe-function-type': 'off',
       '@typescript-eslint/no-explicit-any': 'off',
       '@typescript-eslint/prefer-as-const': 'off',
+
+      // reglas globales
+      'no-useless-escape': 'off',
+      'no-console': 'off',
+      'prefer-const': 'error',
     },
   },
 );

@@ -26,13 +26,13 @@ export class LibDocument extends Document implements LibBase {
   @Prop({ required: true, min: 0, max: 100 })
   afinidad: number;
 
-  // eslint-disable-next-line no-useless-escape
   @Prop({
     default: null,
     match:
-      /:\/\/(?:utfs\.io|[a-z0-9]+\.ufs\.sh)\/f\/([a-f0-9\-]+)-([a-z0-9]+)\.(jpg|webp|png)/,
+      /:\/\/(?:utfs\.io|[a-z0-9]+\.ufs\.sh)\/f\/([a-f0-9-]+)-([a-z0-9]+)\.(jpg|webp|png)/,
   })
   img: string;
+  
 
   @Prop({ type: Intl, required: true })
   desc: IntlSchema;
