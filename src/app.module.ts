@@ -3,7 +3,10 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigModule } from '@nestjs/config';
 import { APP_FILTER, APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
 import { JwtAuthThirdwebGuard } from './shareds/jwt-auth/presentation/jwt-auth-thirdweb.guard';
-import { JwtAuthMockModule, JwtAuthThirdWebModule } from './shareds/jwt-auth/presentation/jwt-auth.module';
+import {
+  JwtAuthMockModule,
+  JwtAuthThirdWebModule,
+} from './shareds/jwt-auth/presentation/jwt-auth.module';
 import { RoleAuthModule } from './shareds/role-auth/presentation/role-auth.module';
 import { RoleAuthUseCase } from './shareds/role-auth/application/role-auth.usecase';
 import { TechModule } from './modules/tech/presentation/tech.module';
@@ -13,14 +16,12 @@ import { UserModule } from './modules/user/presentation/user.module';
 import { RoleModule } from './modules/role/presentation/role.module';
 import { JwtAuthMockGuard } from './shareds/jwt-auth/presentation/jwt-auth-mock.guard';
 import { CacheInterceptor, CacheModule } from '@nestjs/cache-manager';
-import {  ThrottlerModule } from '@nestjs/throttler';
+import { ThrottlerModule } from '@nestjs/throttler';
 import { LoggerModule } from 'nestjs-pino';
-import {  CorrelationIdMiddleware } from './shareds/presentation/correlation-id.middleware';
+import { CorrelationIdMiddleware } from './shareds/presentation/correlation-id.middleware';
 import { Request } from 'express';
 import { DomainErrorFilter } from './shareds/presentation/filters/domain-error.filter';
 import { LoggerModuleCustom } from './shareds/presentation/logger.module';
-
-
 
 @Module({
   imports: [
@@ -30,7 +31,9 @@ import { LoggerModuleCustom } from './shareds/presentation/logger.module';
     PreTechModule,
     TechModule,
     UserModule,
-    process.env.JWT_STRATEGY === "mock" ?JwtAuthMockModule:JwtAuthThirdWebModule,
+    process.env.JWT_STRATEGY === 'mock'
+      ? JwtAuthMockModule
+      : JwtAuthThirdWebModule,
     RoleAuthModule,
     RoleModule,
     // OctokitModule
@@ -45,22 +48,24 @@ import { LoggerModuleCustom } from './shareds/presentation/logger.module';
       {
         name: 'medium',
         ttl: 10000,
-        limit: 20
+        limit: 20,
       },
       {
         name: 'long',
         ttl: 60000,
-        limit: 100
-      }
+        limit: 100,
+      },
     ]),
-  
   ],
   controllers: [],
   providers: [
-     // Aplicar el JwtAuthGuard globalmente (todas las rutas requieren autenticación por defecto) - se utiliza aquí porque requiere de reflector y no necesita new ...
-     {
+    // Aplicar el JwtAuthGuard globalmente (todas las rutas requieren autenticación por defecto) - se utiliza aquí porque requiere de reflector y no necesita new ...
+    {
       provide: APP_GUARD,
-      useClass: process.env.JWT_STRATEGY === 'mock' ? JwtAuthMockGuard: JwtAuthThirdwebGuard,
+      useClass:
+        process.env.JWT_STRATEGY === 'mock'
+          ? JwtAuthMockGuard
+          : JwtAuthThirdwebGuard,
     },
     // {
     //   provide: APP_GUARD,
@@ -78,11 +83,11 @@ import { LoggerModuleCustom } from './shareds/presentation/logger.module';
       provide: APP_FILTER,
       useClass: DomainErrorFilter,
     },
-    RoleAuthUseCase
-  ]
+    RoleAuthUseCase,
+  ],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer.apply(CorrelationIdMiddleware).forRoutes("*")
+    consumer.apply(CorrelationIdMiddleware).forRoutes('*');
   }
 }

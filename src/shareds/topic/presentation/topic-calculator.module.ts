@@ -1,12 +1,8 @@
-import { Module } from "@nestjs/common";
-import { TopicCalculatorUseCase } from "../application/topic-calculator.usecase";
+import { Module } from '@nestjs/common';
+import { TopicCalculatorUseCase } from '../application/topic-calculator.usecase';
 
 @Module({
-    providers:[
-        TopicCalculatorUseCase
-    ],
-    exports:[
-        TopicCalculatorUseCase
-    ]
+  providers: [TopicCalculatorUseCase],
+  exports: [TopicCalculatorUseCase],
 })
-export class TopicCalculatorModule{}
+export class TopicCalculatorModule {}

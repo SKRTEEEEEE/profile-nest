@@ -9,8 +9,9 @@ import { SecuritySchemeObject } from '@nestjs/swagger/dist/interfaces/open-api-s
 import { Logger } from 'nestjs-pino';
 
 const getBearerAuthConfig = (jwtType: string) => {
-  if(jwtType == "mock")return{
-    options: {
+  if (jwtType == 'mock')
+    return {
+      options: {
         type: 'http',
         scheme: 'bearer',
         bearerFormat: 'JWT',
@@ -18,10 +19,11 @@ const getBearerAuthConfig = (jwtType: string) => {
         name: 'Authorization',
         description: 'Ingrese el token mock en el campo',
       } as SecuritySchemeObject,
-      name: 'access-token'
-  }
-   else return {
-    options: {
+      name: 'access-token',
+    };
+  else
+    return {
+      options: {
         type: 'http',
         scheme: 'bearer',
         bearerFormat: 'JWT',
@@ -29,26 +31,31 @@ const getBearerAuthConfig = (jwtType: string) => {
         name: 'Authorization',
         description: 'Ingrese el token JWT en el campo',
       } as SecuritySchemeObject,
-      name: 'access-token'
-  }
-}
+      name: 'access-token',
+    };
+};
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   // const logger = app.get(Logger);
   // app.useGlobalFilters(new DomainErrorFilter(logger)); -> ver en app.modules, esta configurado ahi 😎
   app.useGlobalPipes(new GlobalValidationPipe());
-  app.useLogger(app.get(Logger))
-  const cfg = SWAGGER_CONFIGS.ADMIN;  
-  
+  app.useLogger(app.get(Logger));
+  const cfg = SWAGGER_CONFIGS.ADMIN;
 
   const config = new DocumentBuilder()
     .setTitle(cfg.title)
     .setDescription(cfg.description)
     .setVersion(cfg.version)
-    .addBearerAuth(getBearerAuthConfig(process.env.JWT_STRATEGY!).options,getBearerAuthConfig(process.env.JWT_STRATEGY!).name)
-    .addTag("Pre Tech", "Handle available technologies with full functionalities in the app - logo, badges, etc..")
-    .addTag("Tech", "Handle user used technologies")
-    .addTag("User", "Handle user information")
+    .addBearerAuth(
+      getBearerAuthConfig(process.env.JWT_STRATEGY!).options,
+      getBearerAuthConfig(process.env.JWT_STRATEGY!).name,
+    )
+    .addTag(
+      'Pre Tech',
+      'Handle available technologies with full functionalities in the app - logo, badges, etc..',
+    )
+    .addTag('Tech', 'Handle user used technologies')
+    .addTag('User', 'Handle user information')
     .build();
 
   const documentFactory = SwaggerModule.createDocument(app, config);
@@ -57,7 +64,10 @@ async function bootstrap() {
   const transformSchema = (schema: any, schemaName: string) => {
     const constructor = dtoRegistry[schemaName];
     if (constructor) {
-      const description = Reflect.getMetadata('swagger/apiDtoDescription', constructor);
+      const description = Reflect.getMetadata(
+        'swagger/apiDtoDescription',
+        constructor,
+      );
       const title = Reflect.getMetadata('swagger/apiDtoTitle', constructor);
       const group = Reflect.getMetadata('swagger/apiDtoGroup', constructor);
 
@@ -65,7 +75,9 @@ async function bootstrap() {
       if (title) schema.title = title;
       if (group) schema['x-group'] = group;
     } else {
-      console.warn(`No constructor found in registry for schema: ${schemaName}`); //⚠️//🏗️ -> mirar que hacia esta parte
+      console.warn(
+        `No constructor found in registry for schema: ${schemaName}`,
+      ); //⚠️//🏗️ -> mirar que hacia esta parte
     }
     return schema;
   };
@@ -87,7 +99,6 @@ async function bootstrap() {
     }
     // console.debug(components.schemas?.TechFormDto)
     // console.debug(components.schemas?.TechFormCategory)
-
   } else {
     console.warn('No components found in Swagger document.');
   }

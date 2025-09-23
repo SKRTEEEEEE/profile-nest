@@ -1,14 +1,10 @@
-import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
-import { Document } from "mongoose";
-import { FwBase, LengBase, LibBase } from "src/domain/entities/tech";
-import { IntlSchema } from "src/shareds/pattern/infrastructure/schemas/intl.schema";
+import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import { Document } from 'mongoose';
+import { FwBase, LengBase, LibBase } from 'src/domain/entities/tech';
+import { IntlSchema } from 'src/shareds/pattern/infrastructure/schemas/intl.schema';
 
-
-
-@Schema({ timestamps: true, collection: "Lenguajes" })
-export class LibDocument extends Document 
-implements LibBase
-{
+@Schema({ timestamps: true, collection: 'Lenguajes' })
+export class LibDocument extends Document implements LibBase {
   @Prop({ required: true, minlength: 2 })
   nameId: string;
 
@@ -30,7 +26,12 @@ implements LibBase
   @Prop({ required: true, min: 0, max: 100 })
   afinidad: number;
 
-  @Prop({ default: null, match: /:\/\/(?:utfs\.io|[a-z0-9]+\.ufs\.sh)\/f\/([a-f0-9\-]+)-([a-z0-9]+)\.(jpg|webp|png)/ })
+  // eslint-disable-next-line no-useless-escape
+  @Prop({
+    default: null,
+    match:
+      /:\/\/(?:utfs\.io|[a-z0-9]+\.ufs\.sh)\/f\/([a-f0-9\-]+)-([a-z0-9]+)\.(jpg|webp|png)/,
+  })
   img: string;
 
   @Prop({ type: Intl, required: true })
@@ -41,17 +42,13 @@ implements LibBase
 }
 
 @Schema({ timestamps: true })
-export class FwDocument extends LibDocument 
-implements FwBase
-{
+export class FwDocument extends LibDocument implements FwBase {
   @Prop({ type: [SchemaFactory.createForClass(LibDocument)] })
   librerias: LibDocument[];
 }
 
 @Schema({ timestamps: true })
-export class LengDocument extends LibDocument
-implements LengBase
-{
+export class LengDocument extends LibDocument implements LengBase {
   @Prop({ type: [SchemaFactory.createForClass(FwDocument)] })
   frameworks: FwDocument[];
 }

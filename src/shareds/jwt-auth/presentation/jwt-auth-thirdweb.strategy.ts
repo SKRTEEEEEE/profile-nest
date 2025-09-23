@@ -8,24 +8,39 @@ import { createDomainError } from 'src/domain/flows/error.registry';
 import { ErrorCodes } from 'src/domain/flows/error.type';
 
 @Injectable()
-export class JwtAuthThirdwebStrategy extends PassportStrategy(Strategy, 'thirdweb') {
-  constructor(
-    private readonly userAuthService: JwtAuthUseCase
-  ){super()}
+export class JwtAuthThirdwebStrategy extends PassportStrategy(
+  Strategy,
+  'thirdweb',
+) {
+  constructor(private readonly userAuthService: JwtAuthUseCase) {
+    super();
+  }
   async validate(req: Request): Promise<JwtAuthPayload> {
     const authHeader = req.headers['authorization'];
     const token = authHeader?.split(' ')[1];
 
     if (!token) {
-      throw createDomainError(ErrorCodes.UNAUTHORIZED_ACTION, JwtAuthThirdwebStrategy, 'validate', undefined,{shortDesc:'No token provided'});
+      throw createDomainError(
+        ErrorCodes.UNAUTHORIZED_ACTION,
+        JwtAuthThirdwebStrategy,
+        'validate',
+        undefined,
+        { shortDesc: 'No token provided' },
+      );
     }
 
     try {
-      const payload = await this.userAuthService.verifyJWT(token)
+      const payload = await this.userAuthService.verifyJWT(token);
       return payload?.parsedJWT as JwtAuthPayload;
     } catch (err) {
       console.error('Thirdweb JWT verification failed', err);
-      throw createDomainError(ErrorCodes.UNAUTHORIZED_ACTION, JwtAuthThirdwebStrategy, 'validate', "credentials",{shortDesc:'Invalid token'});
+      throw createDomainError(
+        ErrorCodes.UNAUTHORIZED_ACTION,
+        JwtAuthThirdwebStrategy,
+        'validate',
+        'credentials',
+        { shortDesc: 'Invalid token' },
+      );
     }
   }
 }

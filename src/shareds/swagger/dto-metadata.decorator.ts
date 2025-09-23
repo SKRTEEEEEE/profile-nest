@@ -16,7 +16,11 @@ export function ApiDtoMetadata({
     DtoRegister, // Register the DTO automatically
     (target: any) => {
       Reflect.defineMetadata('swagger/apiDtoDescription', description, target);
-      Reflect.defineMetadata('swagger/apiDtoTitle', title || target.name, target);
+      Reflect.defineMetadata(
+        'swagger/apiDtoTitle',
+        title || target.name,
+        target,
+      );
       Reflect.defineMetadata('swagger/apiDtoGroup', group, target);
     },
   );

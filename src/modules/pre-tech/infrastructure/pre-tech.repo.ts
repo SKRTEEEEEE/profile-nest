@@ -8,22 +8,24 @@ import { MongooseBase } from 'src/shareds/pattern/infrastructure/types/mongoose'
 import { MongoosePopulateImpl } from 'src/shareds/pattern/infrastructure/implementations/populate.impl';
 import { QueryDto } from 'src/shareds/presentation/pipes/query.dto';
 
-
 @Injectable()
-export class MongoosePreTechRepo 
-// extends MongooseRpPattern<PreTechBase> 
-extends MongoosePopulateImpl<PreTechBase>
-implements PreTechInterface<MongooseBase> 
+// extends MongooseRpPattern<PreTechBase>
 // MongooseReadI<PreTechBase>,
 // MongoosePopulateI<PreTechBase>
+export class MongoosePreTechRepo
+  extends MongoosePopulateImpl<PreTechBase>
+  implements PreTechInterface<MongooseBase>
 {
-  private mdUrl = 'https://raw.githubusercontent.com/simple-icons/simple-icons/master/slugs.md';
-  private jsonUrl = 'https://raw.githubusercontent.com/simple-icons/simple-icons/master/_data/simple-icons.json';
+  private mdUrl =
+    'https://raw.githubusercontent.com/simple-icons/simple-icons/master/slugs.md';
+  private jsonUrl =
+    'https://raw.githubusercontent.com/simple-icons/simple-icons/master/_data/simple-icons.json';
 
   constructor(
-    @InjectModel('PreTech') private readonly preTechModel: Model<PreTechBase & Document>,
+    @InjectModel('PreTech')
+    private readonly preTechModel: Model<PreTechBase & Document>,
   ) {
-    super(preTechModel)
+    super(preTechModel);
   }
 
   async readByQuery(query: QueryDto): Promise<(PreTechBase & MongooseBase)[]> {
@@ -32,15 +34,13 @@ implements PreTechInterface<MongooseBase>
         $or: [
           { nameId: { $regex: query.q, $options: 'i' } },
           { nameBadge: { $regex: query.q, $options: 'i' } },
-        ]
+        ],
       },
       projections: {},
       options: { limit: 50 },
     };
-  return this.preTechModel.find(opt.filter,opt.projections,opt.options);
-}
-
-
+    return this.preTechModel.find(opt.filter, opt.projections, opt.options);
+  }
 
   async updatePreTech(): Promise<void> {
     try {
@@ -53,7 +53,9 @@ implements PreTechInterface<MongooseBase>
 
       const combinedData = preTechData
         .map((mdItem) => {
-          const jsonItem = jsonData.find((item: any) => item.title === mdItem.nameId);
+          const jsonItem = jsonData.find(
+            (item: any) => item.title === mdItem.nameId,
+          );
           if (jsonItem) {
             return {
               nameId: mdItem.nameId,
@@ -66,8 +68,12 @@ implements PreTechInterface<MongooseBase>
         })
         .filter((item) => item !== null);
 
-      const existingNameIds = new Set(await this.preTechModel.distinct('nameId'));
-      const newTechs = combinedData.filter((item) => !existingNameIds.has(item.nameId));
+      const existingNameIds = new Set(
+        await this.preTechModel.distinct('nameId'),
+      );
+      const newTechs = combinedData.filter(
+        (item) => !existingNameIds.has(item.nameId),
+      );
 
       if (newTechs.length > 0) {
         await this.populate(newTechs as PreTechBase[]);
@@ -81,7 +87,9 @@ implements PreTechInterface<MongooseBase>
     }
   }
 
-  private parseMdContent(content: string): Array<{ nameId: string; nameBadge: string }> {
+  private parseMdContent(
+    content: string,
+  ): Array<{ nameId: string; nameBadge: string }> {
     const lines = content.split('\n');
     const data: { nameId: string; nameBadge: string }[] = [];
     let tableStarted = false;
@@ -95,7 +103,9 @@ implements PreTechInterface<MongooseBase>
         continue;
       }
       if (tableStarted && line.startsWith('|') && line.includes('|')) {
-        const [, brandName, brandSlug] = line.split('|').map((item) => item.trim());
+        const [, brandName, brandSlug] = line
+          .split('|')
+          .map((item) => item.trim());
         if (brandName && brandSlug) {
           data.push({
             nameId: brandName.replace(/`/g, ''),

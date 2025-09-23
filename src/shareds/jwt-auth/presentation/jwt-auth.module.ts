@@ -11,7 +11,6 @@ import { JwtAuthMockStrategy } from './jwt-auth-mock.strategy';
 import { JwtAuthThirdwebStrategy } from './jwt-auth-thirdweb.strategy';
 import { ThirdWebModule } from 'src/shareds/thirdweb/thirdweb.module';
 
-
 @Module({
   imports: [PassportModule],
   providers: [JwtAuthMockGuard, JwtAuthMockStrategy],
@@ -25,10 +24,10 @@ export class JwtAuthMockModule {}
     JwtAuthThirdwebRepo,
     {
       provide: JwtAuthInterface,
-      useExisting: JwtAuthThirdwebRepo
+      useExisting: JwtAuthThirdwebRepo,
     },
     JwtAuthUseCase,
-    Reflector
+    Reflector,
   ],
 })
 export class JwtAuthThirdWebModule {}

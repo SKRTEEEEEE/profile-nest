@@ -1,7 +1,9 @@
-import { Injectable, UnauthorizedException } from "@nestjs/common";
-import { JwtAuthInterface, VerifyJWTRes } from "src/shareds/jwt-auth/application/jwt-auth.interface";
-import { AuthThirdWebRepo } from "src/shareds/thirdweb/auth-thirdweb.repo";
-
+import { Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+  JwtAuthInterface,
+  VerifyJWTRes,
+} from 'src/shareds/jwt-auth/application/jwt-auth.interface';
+import { AuthThirdWebRepo } from 'src/shareds/thirdweb/auth-thirdweb.repo';
 
 @Injectable()
 // TESTING
@@ -12,10 +14,8 @@ import { AuthThirdWebRepo } from "src/shareds/thirdweb/auth-thirdweb.repo";
 
 */
 export class JwtAuthThirdwebRepo implements JwtAuthInterface {
-  constructor (
-    private readonly authThirdwebRepo: AuthThirdWebRepo
-  ){}
- async verifyJWT(token: string){
-  return this.authThirdwebRepo.verifyJWT(token)
-}
+  constructor(private readonly authThirdwebRepo: AuthThirdWebRepo) {}
+  async verifyJWT(token: string) {
+    return this.authThirdwebRepo.verifyJWT(token);
+  }
 }

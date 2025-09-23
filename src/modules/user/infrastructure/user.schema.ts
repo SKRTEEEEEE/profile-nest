@@ -3,9 +3,7 @@ import { Document, Schema as MongooseSchema } from 'mongoose';
 import { RoleType } from 'src/domain/entities/role.type';
 import { RoleSchemaDocument } from 'src/modules/role/infrastructure/role.schema';
 
-
-
-@Schema({ timestamps: true, collection: "users" })
+@Schema({ timestamps: true, collection: 'users' })
 export class UserDocument extends Document {
   @Prop({ required: true })
   address: string;
@@ -25,7 +23,7 @@ export class UserDocument extends Document {
   @Prop({ type: String, default: null })
   email: string | null;
 
-  @Prop({type: String, default: null})
+  @Prop({ type: String, default: null })
   nick: string | null;
 
   @Prop({ type: Boolean, default: false })

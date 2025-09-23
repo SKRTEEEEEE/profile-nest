@@ -4,7 +4,8 @@ import { LoggerModule as PinoLoggerModule } from 'nestjs-pino';
 
 import { CORRELATION_ID_HEADER } from './correlation-id.middleware';
 
-const isDev = process.env.NODE_ENV === 'development' || process.env.JWT_STRATEGY === 'mock';
+const isDev =
+  process.env.NODE_ENV === 'development' || process.env.JWT_STRATEGY === 'mock';
 
 @Module({
   imports: [
@@ -19,16 +20,18 @@ const isDev = process.env.NODE_ENV === 'development' || process.env.JWT_STRATEGY
           req: () => undefined,
           res: () => undefined,
         },
-        
-        transport: isDev ? {
-          target: 'pino-pretty',
-          options: {
-            colorize: true,
-            translateTime: 'HH:MM:ss',
-            ignore: 'pid,hostname',
-            messageKey: "message"
-          },
-        } : undefined,
+
+        transport: isDev
+          ? {
+              target: 'pino-pretty',
+              options: {
+                colorize: true,
+                translateTime: 'HH:MM:ss',
+                ignore: 'pid,hostname',
+                messageKey: 'message',
+              },
+            }
+          : undefined,
       },
     }),
   ],

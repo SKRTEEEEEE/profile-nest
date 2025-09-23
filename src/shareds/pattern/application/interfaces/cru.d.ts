@@ -1,12 +1,12 @@
 // type UpdateByIdMeta<
-// TB, 
-// TDB = TDBMockup, 
-// TUpdateQuery = Partial<TB & TDB>, 
+// TB,
+// TDB = TDBMockup,
+// TUpdateQuery = Partial<TB & TDB>,
 // TOptions = any
 // > = {
 //     id: TDB["id"],
 //     updateData: TUpdateQuery,
-//     options: TOptions 
+//     options: TOptions
 // }
 
 // type UpdateByIdProps<TB, TUpdateByIdMeta extends UpdateByIdMeta<TB>
@@ -19,17 +19,15 @@
 //     readById: (id: TDB["id"]) => Promise<TB & TDB>,
 //     updateById: (props: UpdateByIdProps<TB, TReadMeta>) => Promise<TB & TDB>
 // }
-type CreateRes<TB, TDB> = EntitieRes<TB, TDB>
+type CreateRes<TB, TDB> = EntitieRes<TB, TDB>;
 type ReadByIdRes<TB, TDB> = EntitieRes<TB, TDB>;
 type UpdateByIdRes<TB, TDB> = EntitieRes<TB, TDB>;
 
-type CreateProps<T> = Partial<T>
-type UpdateByIdProps<T> = {id: string, updateData: Partial<T>}
+type CreateProps<T> = Partial<T>;
+type UpdateByIdProps<T> = { id: string; updateData: Partial<T> };
 
-type CRUI
-<TB, TDB>
-= {
-    create: (data:CreateProps) => CreateRes<TB, TDB>,
-    readById: (id: string) => ReadByIdRes<TB, TDB>,
-    updateById: (props: UpdateByIdProps<TB, TDB>) => UpdateByIdRes<TB, TDB>
-}
+type CRUI<TB, TDB> = {
+  create: (data: CreateProps) => CreateRes<TB, TDB>;
+  readById: (id: string) => ReadByIdRes<TB, TDB>;
+  updateById: (props: UpdateByIdProps<TB, TDB>) => UpdateByIdRes<TB, TDB>;
+};

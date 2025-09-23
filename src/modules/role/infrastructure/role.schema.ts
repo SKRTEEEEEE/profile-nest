@@ -1,17 +1,17 @@
-import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
-import { Document } from "mongoose";
-import { RoleBase } from "src/domain/entities/role";
-import { RoleType } from "src/domain/entities/role.type";
+import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import { Document } from 'mongoose';
+import { RoleBase } from 'src/domain/entities/role';
+import { RoleType } from 'src/domain/entities/role.type';
 
-@Schema({timestamps:true, collection: 'Role'})
+@Schema({ timestamps: true, collection: 'Role' })
 export class RoleSchemaDocument extends Document implements RoleBase {
-    @Prop({required:true})
-    address: string;
+  @Prop({ required: true })
+  address: string;
 
-    @Prop({required:true, enum: RoleType})
-    permissions: RoleType;
+  @Prop({ required: true, enum: RoleType })
+  permissions: RoleType;
 
-    @Prop()
+  @Prop()
   stripeCustomerId?: string;
 
   @Prop()
@@ -20,4 +20,5 @@ export class RoleSchemaDocument extends Document implements RoleBase {
   @Prop()
   subscriptionStatus?: string;
 }
-export const RoleSchemaFactory = SchemaFactory.createForClass(RoleSchemaDocument)
+export const RoleSchemaFactory =
+  SchemaFactory.createForClass(RoleSchemaDocument);

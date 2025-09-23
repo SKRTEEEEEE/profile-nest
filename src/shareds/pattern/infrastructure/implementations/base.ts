@@ -1,15 +1,14 @@
-import { Model } from "mongoose";
-import { MongooseBase, MongooseDocument } from "../types/mongoose";
-import { createDomainError } from "src/domain/flows/error.registry";
-import { ErrorCodes } from "src/domain/flows/error.type";
+import { Model } from 'mongoose';
+import { MongooseBase, MongooseDocument } from '../types/mongoose';
+import { createDomainError } from 'src/domain/flows/error.registry';
+import { ErrorCodes } from 'src/domain/flows/error.type';
 
-
-export abstract class MongooseBaseImpl<
-  TBase,
-  TOptions extends Partial<Record<keyof TBase & MongooseBase, (value: any) => any>> = {}
->  {
+export abstract class MongooseBaseImpl<TBase> {
   protected parseOpt?: TOptions;
-  constructor(protected Model: Model<any, {}, {}, {}, any, any>, parseOpt?: TOptions) {
+  constructor(
+    protected Model: Model,
+    parseOpt?: TOptions,
+  ) {
     this.parseOpt = parseOpt;
   }
   private flattenMap(value: any): any {
@@ -17,18 +16,20 @@ export abstract class MongooseBaseImpl<
       return Object.fromEntries(value);
     }
     if (Array.isArray(value)) {
-      return value.map(item => this.flattenMap(item));
+      return value.map((item) => this.flattenMap(item));
     }
     if (value && typeof value === 'object') {
       return Object.fromEntries(
-        Object.entries(value).map(([key, val]) => [key, this.flattenMap(val)])
+        Object.entries(value).map(([key, val]) => [key, this.flattenMap(val)]),
       );
     }
     return value;
   }
 
-// Uso en documentToPrimary
- protected documentToPrimary(document: TBase & MongooseDocument): TBase & MongooseBase {
+  // Uso en documentToPrimary
+  protected documentToPrimary(
+    document: TBase & MongooseDocument,
+  ): TBase & MongooseBase {
     const { _id, createdAt, updatedAt, ...rest } = document.toObject();
 
     let result: Partial<TBase & MongooseBase> = {
@@ -39,12 +40,13 @@ export abstract class MongooseBaseImpl<
     };
     result = this.flattenMap(result);
 
-
     // // Aplicar las transformaciones especificadas en las opciones
     if (this.parseOpt) {
       Object.entries(this.parseOpt).forEach(([key, transformFn]) => {
-        if (key in result && typeof transformFn === "function") {
-          result[key as keyof TBase & MongooseBase] = transformFn(result[key as keyof TBase & MongooseBase]);
+        if (key in result && typeof transformFn === 'function') {
+          result[key as keyof TBase & MongooseBase] = transformFn(
+            result[key as keyof TBase & MongooseBase],
+          );
         }
       });
     }
@@ -52,13 +54,24 @@ export abstract class MongooseBaseImpl<
     return result as TBase & MongooseBase;
   }
 
+  protected resArrCheck(
+    docs: (TBase & MongooseBase[]) | any[] | undefined | null,
+  ): { customMessage?: string } {
+    if (!docs)
+      throw createDomainError(
+        ErrorCodes.DATABASE_FIND,
+        MongooseBaseImpl,
+        'resArrCheck',
+        undefined,
+        { optionalMessage: 'Failed to find the documents' },
+      );
 
-  protected resArrCheck(docs: TBase & MongooseBase[] | any[] | undefined | null): { customMessage?: string } {
-  if(!docs) throw createDomainError(ErrorCodes.DATABASE_FIND, MongooseBaseImpl, 'resArrCheck', undefined, { optionalMessage: 'Failed to find the documents' });
-
-  if (Array.isArray(docs) && docs.length === 0) {
-    return { customMessage: "The query was successful but there are no matching documents." };
+    if (Array.isArray(docs) && docs.length === 0) {
+      return {
+        customMessage:
+          'The query was successful but there are no matching documents.',
+      };
+    }
+    return {};
   }
-  return {}
-}
 }
