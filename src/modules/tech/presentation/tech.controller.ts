@@ -4,7 +4,7 @@ import { TechForm } from "src/domain/entities/tech";
 import { TechReadUseCase } from "../application/tech-read.usecase";
 import { TechDeleteUseCase, TechReadByIdUseCase, TechUpdateByIdUseCase, TechUpdateUseCase } from "../application/tech.usecase";
 import { PublicRoute } from "src/shareds/jwt-auth/presentation/public-route.decorator";
-import { MongooseBase } from "src/shareds/pattern/infrastructure/types";
+import { MongooseBase } from "src/shareds/pattern/infrastructure/types/mongoose";
 import { TechOctokitCreateRepo } from "src/modules/tech/infrastructure/tech-octokit/create.repo";
 import { ActualizarGithubType, TechOctokitActualizarGithubRepo } from "../infrastructure/tech-octokit/actualizar.repo";
 import { createDomainError } from "src/domain/flows/error.registry";
@@ -18,8 +18,7 @@ import { ApiSuccessResponse } from "src/shareds/presentation/api-success.decorat
 import { ResCodes } from "src/domain/flows/res.type";
 import { ActualizarGithubParams, ReadAllParams } from "src/domain/entities/tech.type";
 import { VoidDto } from "src/shareds/presentation/pipes/void.dto";
-import { CacheInterceptor, CacheTTL } from "@nestjs/cache-manager";
-import { SkipThrottle, Throttle, ThrottlerGuard } from "@nestjs/throttler";
+import {  Throttle, ThrottlerGuard } from "@nestjs/throttler";
 
 
 

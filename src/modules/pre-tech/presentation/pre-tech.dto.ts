@@ -1,5 +1,5 @@
 import { IsString } from "class-validator";
-import { MongooseBase } from "src/shareds/pattern/infrastructure/types";
+import { MongooseBase } from "src/shareds/pattern/infrastructure/types/mongoose";
 import { ApiProperty } from "@nestjs/swagger";
 import { DatabaseDto } from "src/shareds/presentation/db.dto";
 import { ApiDtoMetadata } from "src/shareds/swagger/dto-metadata.decorator";

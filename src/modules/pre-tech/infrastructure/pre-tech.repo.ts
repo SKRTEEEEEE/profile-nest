@@ -4,19 +4,18 @@ import { Document, Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 
 import { PreTechInterface } from '../application/pre-tech.interface';
-import { MongooseRpPattern } from 'src/shareds/pattern/infrastructure/patterns/rp.pattern';
-import { MongooseBase } from 'src/shareds/pattern/infrastructure/types';
-import { MongooseReadI, MongooseReadImpl } from 'src/shareds/pattern/infrastructure/implementations/read.impl';
-import { MongoosePopulateI, MongoosePopulateImpl } from 'src/shareds/pattern/infrastructure/implementations/populate.impl';
+import { MongooseBase } from 'src/shareds/pattern/infrastructure/types/mongoose';
+import { MongoosePopulateImpl } from 'src/shareds/pattern/infrastructure/implementations/populate.impl';
 import { QueryDto } from 'src/shareds/presentation/pipes/query.dto';
 
 
 @Injectable()
 export class MongoosePreTechRepo 
-extends MongooseRpPattern<PreTechBase> 
-implements PreTechInterface<MongooseBase>, 
-MongooseReadI<PreTechBase>,
-MongoosePopulateI<PreTechBase>
+// extends MongooseRpPattern<PreTechBase> 
+extends MongoosePopulateImpl<PreTechBase>
+implements PreTechInterface<MongooseBase> 
+// MongooseReadI<PreTechBase>,
+// MongoosePopulateI<PreTechBase>
 {
   private mdUrl = 'https://raw.githubusercontent.com/simple-icons/simple-icons/master/slugs.md';
   private jsonUrl = 'https://raw.githubusercontent.com/simple-icons/simple-icons/master/_data/simple-icons.json';
@@ -24,24 +23,21 @@ MongoosePopulateI<PreTechBase>
   constructor(
     @InjectModel('PreTech') private readonly preTechModel: Model<PreTechBase & Document>,
   ) {
-    super(
-      preTechModel, 
-      new MongooseReadImpl(preTechModel), 
-      new MongoosePopulateImpl(preTechModel));
+    super(preTechModel)
   }
 
   async readByQuery(query: QueryDto): Promise<(PreTechBase & MongooseBase)[]> {
-  const opt = {
-    filter: {
-      $or: [
-        { nameId: { $regex: query.q, $options: 'i' } },
-        { nameBadge: { $regex: query.q, $options: 'i' } },
-      ]
-    },
-    projections: {},
-    options: { limit: 50 },
-  };
-  return this.read(opt);
+    const opt = {
+      filter: {
+        $or: [
+          { nameId: { $regex: query.q, $options: 'i' } },
+          { nameBadge: { $regex: query.q, $options: 'i' } },
+        ]
+      },
+      projections: {},
+      options: { limit: 50 },
+    };
+  return this.preTechModel.find(opt.filter,opt.projections,opt.options);
 }
 
 

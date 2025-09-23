@@ -1,6 +1,6 @@
 import { Body, Controller, Delete, Get, Param, Patch, Post, Put, Query, Req, UseGuards } from "@nestjs/common";
 import { UserCreateUseCase, UserDeleteByIdUseCase, UserReadByIdUseCase, UserReadOneUseCase, UserReadUseCase, UserUpdateByIdUseCase, UserVerifyEmailUseCase } from "../application/user.usecase";
-import { MongooseBase } from "src/shareds/pattern/infrastructure/types";
+import { MongooseBase } from "src/shareds/pattern/infrastructure/types/mongoose";
 import { PublicRoute } from "src/shareds/jwt-auth/presentation/public-route.decorator";
 import { RoleType } from "src/domain/entities/role.type";
 import { createDomainError } from "src/domain/flows/error.registry";
@@ -35,10 +35,10 @@ export class UserController {
         private readonly userCreateService: UserCreateUseCase<MongooseBase>,
         private readonly userReadOneService: UserReadOneUseCase<MongooseBase>,
         // private readonly userThirdWebCreateService: UserThirdWebLoginUseCase<MongooseBase>,
-        private readonly roleDeleteByIdService: RoleDeleteByIdUseCase<MongooseBase>,
+        private readonly roleDeleteByIdService: RoleDeleteByIdUseCase,
         private readonly userDeleteByIdService: UserDeleteByIdUseCase<MongooseBase>,
         // private readonly userRoleThirdWebDeleteService: UserRoleThirdWebDeleteUseCase<MongooseBase>,
-        private readonly roleCreateService: RoleCreateUseCase<MongooseBase>,
+        private readonly roleCreateService: RoleCreateUseCase,
         // private readonly userRoleThirdwebGiveRoleService: UserRoleThirdwebGiveRoleUseCase<MongooseBase>, 
     ) {
     }

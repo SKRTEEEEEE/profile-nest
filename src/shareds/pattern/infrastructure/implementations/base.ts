@@ -1,5 +1,5 @@
 import { Model } from "mongoose";
-import { MongooseBase, MongooseDocument } from "../types";
+import { MongooseBase, MongooseDocument } from "../types/mongoose";
 import { createDomainError } from "src/domain/flows/error.registry";
 import { ErrorCodes } from "src/domain/flows/error.type";
 
@@ -37,12 +37,6 @@ export abstract class MongooseBaseImpl<
       updatedAt: updatedAt.toISOString(),
       ...rest,
     };
-    // // Transformar automáticamente Maps a objetos planos
-    // Object.entries(result).forEach(([key, value]) => {
-    //   if (value instanceof Map) {
-    //     (result as any)[key] = Object.fromEntries(value);
-    //   }
-    // });
     result = this.flattenMap(result);
 
 

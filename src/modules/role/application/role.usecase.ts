@@ -1,76 +1,77 @@
-import { Injectable } from "@nestjs/common";
+import { Inject, Injectable } from "@nestjs/common";
 import { RoleBase } from "src/domain/entities/role";
 import { RoleType } from "src/domain/entities/role.type";
-import { CRRUDDRepository } from "src/shareds/pattern/application/usecases/crrudd.interface";
 import { RoleInterface } from "./role.interface";
-import { PersistedEntity } from "src/shareds/pattern/application/interfaces/adapter.type";
+import { MongooseBase } from "src/shareds/pattern/infrastructure/types/mongoose";
+import { ROLE_REPOSITORY } from "src/modules/tokens";
 
 @Injectable()
-export class RoleCreateUseCase<TDB extends PersistedEntity = PersistedEntity> {
+export class RoleCreateUseCase {
     constructor(
-        private readonly crruddRepository: CRRUDDRepository<RoleBase, TDB>
+        @Inject(ROLE_REPOSITORY) private readonly roleRepository: RoleInterface
     ) {}
 
-    async create(data: RoleBase): Promise<RoleBase & TDB> {
-        return await this.crruddRepository.create(data);
+    async create(data: Omit<RoleBase, 'id'>): Promise<RoleBase & MongooseBase> {
+        return await this.roleRepository.create(data);
     }
 }
 
 @Injectable()
-export class RoleReadByIdUseCase<TDB> {
+export class RoleReadByIdUseCase {
     constructor(
-        private readonly crruddRepository: CRRUDDRepository<RoleBase, TDB>
+        @Inject(ROLE_REPOSITORY) private readonly roleRepository: RoleInterface
     ) {}
 
-    async readById(id: ReadByIdProps<TDB>): Promise<RoleBase & TDB> {
-        return await this.crruddRepository.readById(id);
+    async readById(id: string): Promise<RoleBase & MongooseBase> {
+        return await this.roleRepository.readById(id);
     }
 }
 
 @Injectable()
-export class RoleReadUseCase<TDB> implements ReadI<RoleBase, TDB>, RoleInterface {
+export class RoleReadUseCase {
     constructor(
-        private readonly crruddRepository: CRRUDDRepository<RoleBase, TDB>
+        @Inject(ROLE_REPOSITORY) private readonly roleRepository: RoleInterface
     ) {}
 
-    async read(filter?: ReadProps<RoleBase, TDB>): Promise<(RoleBase & TDB)[]> {
-        return await this.crruddRepository.read(filter);
+    async read(filter?: Record<string, any>): Promise<(RoleBase & MongooseBase)[]> {
+        return await this.roleRepository.read(filter);
     }
+
     async isAdmin(address: string): Promise<boolean> {
-        const roles = await this.crruddRepository.read({ filter: { address } });
-        return roles.some(role => role.permissions === RoleType.ADMIN);
+        // ✅ Ahora usa el método específico del repositorio
+        return await this.roleRepository.isAdmin(address);
     }
 }
 
 @Injectable()
-export class RoleUpdateByIdUseCase<TDB> {
+export class RoleUpdateByIdUseCase {
     constructor(
-        private readonly crruddRepository: CRRUDDRepository<RoleBase, TDB>
+        @Inject(ROLE_REPOSITORY) private readonly roleRepository: RoleInterface
     ) {}
 
-    async updateById(props: UpdateByIdProps<RoleBase, TDB>): Promise<RoleBase & TDB> {
-        return await this.crruddRepository.updateById(props);
+    async updateById(props: UpdateByIdProps<RoleBase>): Promise<RoleBase & MongooseBase> {
+        return await this.roleRepository.updateById(props);
     }
 }
 
 @Injectable()
-export class RoleDeleteByIdUseCase<TDB> {
+export class RoleDeleteByIdUseCase {
     constructor(
-        private readonly crruddRepository: CRRUDDRepository<RoleBase, TDB>
+        @Inject(ROLE_REPOSITORY) private readonly roleRepository: RoleInterface
     ) {}
 
-    async deleteById(id: DeleteByIdProps<TDB>): Promise<RoleBase & TDB> {
-        return await this.crruddRepository.deleteById(id);
+    async deleteById(id: string): Promise<RoleBase & MongooseBase> {
+        return await this.roleRepository.deleteById(id);
     }
 }
 
 @Injectable()
-export class RoleDeleteUseCase<TDB> {
+export class RoleDeleteUseCase {
     constructor(
-        private readonly crruddRepository: CRRUDDRepository<RoleBase, TDB>
+        @Inject(ROLE_REPOSITORY) private readonly roleRepository: RoleInterface
     ) {}
 
-    async delete(props: DeleteProps<RoleBase, TDB>): Promise<RoleBase & TDB> {
-        return await this.crruddRepository.delete(props);
+    async delete(props: DeleteProps<RoleBase, MongooseBase>): Promise<RoleBase & MongooseBase> {
+        return await this.roleRepository.delete(props);
     }
 }

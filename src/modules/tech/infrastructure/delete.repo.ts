@@ -1,6 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { TechDeleteUseCase, TechReadOneUseCase } from "../application/tech.usecase";
-import { MongooseBase } from "src/shareds/pattern/infrastructure/types";
+import { MongooseBase } from "src/shareds/pattern/infrastructure/types/mongoose";
 import { FwBase } from "src/domain/entities/tech";
 import { Document } from "mongoose";
 import { createDomainError } from "src/domain/flows/error.registry";

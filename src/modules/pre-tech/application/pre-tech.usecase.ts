@@ -4,7 +4,7 @@ import { PreTechInterface } from './pre-tech.interface';
 
 @Injectable()
 export class PreTechEndpointUseCase<
-TDBBase, >
+TDBBase>
 // TReadMeta extends ReadMeta<PreTechBase, TDBBase, any, any, any>> 
 // TReadMeta extends ReadMeta<PreTechBase, TDBBase>> 
 implements PreTechInterface<TDBBase> // Se puede implementar o no, si implementamos nos obligara a crear todas las funcs
@@ -26,26 +26,26 @@ implements PreTechInterface<TDBBase> // Se puede implementar o no, si implementa
     
   }
 
-  @Injectable()
-export class PreTechReadUseCase<TDB> {
-  constructor(
-    @Inject('PreTechRepository') 
-    private readonly repo: ReadI<PreTechBase, TDB>
-  ) {}
+//   @Injectable()
+// export class PreTechReadUseCase<TDB> {
+//   constructor(
+//     @Inject('PreTechRepository') 
+//     private readonly repo: ReadI<PreTechBase, TDB>
+//   ) {}
 
-  async execute(props: ReadProps<PreTechBase, TDB>) {
-    return this.repo.read(props);
-  }
-}
+//   async execute(props: ReadProps<PreTechBase, TDB>) {
+//     return this.repo.read(props);
+//   }
+// }
 
-@Injectable()
-export class PreTechPopulateUseCase<TDB> {
-  constructor(
-    @Inject('PreTechRepository') 
-    private readonly repo: PopulateI<PreTechBase, TDB>
-  ) {}
+// @Injectable()
+// export class PreTechPopulateUseCase<TDB> {
+//   constructor(
+//     @Inject('PreTechRepository') 
+//     private readonly repo: PopulateI<PreTechBase, TDB>
+//   ) {}
 
-  async execute(docs) {
-    return this.repo.populate(docs);
-  }
-}
+//   async execute(docs) {
+//     return this.repo.populate(docs);
+//   }
+// }

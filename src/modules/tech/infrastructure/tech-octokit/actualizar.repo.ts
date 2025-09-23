@@ -2,7 +2,7 @@
 import { Injectable } from "@nestjs/common";
 import { FullTechData, LengBase, TechBase } from "src/domain/entities/tech";
 import { TechReadUseCase } from "src/modules/tech/application/tech-read.usecase";
-import { MongooseBase } from "src/shareds/pattern/infrastructure/types";
+import { MongooseBase } from "src/shareds/pattern/infrastructure/types/mongoose";
 import { OctokitRepo } from "src/shareds/octokit/infrastructure/octokit.service";
 
 // ⚠️ Hay que arreglar esto ⬇️⬇️

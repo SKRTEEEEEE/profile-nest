@@ -6,7 +6,7 @@ import { RoleAuthTokenGuard } from "src/shareds/role-auth/presentation/role-auth
 import { PublicRoute } from "src/shareds/jwt-auth/presentation/public-route.decorator";
 import { Roles } from "src/shareds/role-auth/presentation/role.decorator";
 import { QueryDto } from "src/shareds/presentation/pipes/query.dto";
-import { MongooseBase } from "src/shareds/pattern/infrastructure/types";
+import { MongooseBase } from "src/shareds/pattern/infrastructure/types/mongoose";
 import { ResCodes } from "src/domain/flows/res.type";
 import { PreTechInterface } from "../application/pre-tech.interface";
 import { ApiBearerAuth, ApiOperation, ApiTags } from "@nestjs/swagger";

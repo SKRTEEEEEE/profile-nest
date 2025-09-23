@@ -1,18 +1,17 @@
 import { Module } from "@nestjs/common";
 import { MongooseModule } from "@nestjs/mongoose";
 import { TechController } from "./tech.controller";
-import { CRRUUDRepository } from "src/shareds/pattern/application/usecases/crruud.interface";
-import { ReadOneRepository } from "src/shareds/pattern/application/usecases/read-one.interface";
 import { TechReadUseCase } from "../application/tech-read.usecase";
 import { LengSchemaFactory } from "../infrastructure/tech.schema";
 import { MongooseTechRepo } from "../infrastructure/tech.repo";
 import { OctokitModule } from "src/shareds/octokit/presentation/octokit.module";
 import { TechOctokitCreateRepo } from "../infrastructure/tech-octokit/create.repo";
-import { TechCreateUseCase, TechDeleteUseCase, TechReadOneUseCase, TechUpdateUseCase } from "../application/tech.usecase";
+import { TechCreateUseCase, TechDeleteUseCase, TechReadByIdUseCase, TechReadOneUseCase, TechUpdateByIdUseCase, TechUpdateUseCase } from "../application/tech.usecase";
 import { TechOctokitActualizarGithubRepo } from "../infrastructure/tech-octokit/actualizar.repo";
 import { TechOctokitUpdateRepo } from "../infrastructure/tech-octokit/update.repo";
 import { TechFindDeleteRepo } from "../infrastructure/delete.repo";
 import { CacheModule } from "@nestjs/cache-manager";
+import { TECH_REPOSITORY } from "src/modules/tokens";
 
 @Module({
     imports: [
@@ -25,16 +24,16 @@ import { CacheModule } from "@nestjs/cache-manager";
     ],
     controllers: [TechController],
     providers: [
-        {
-            provide: CRRUUDRepository, // Registra la interfaz CRRUUDRepository
-            useClass: MongooseTechRepo, // Usa MongooseTechRepo como implementación
-        },
+        // {
+        //     provide: CRRUUDRepository, // Registra la interfaz CRRUUDRepository
+        //     useClass: MongooseTechRepo, // Usa MongooseTechRepo como implementación
+        // },
         // {
         //     provide: ReadOneRepository,
         //     useClass: MongooseTechRepo
         // },
         {
-            provide: "TechRepository",
+            provide: TECH_REPOSITORY,
             useClass: MongooseTechRepo
         },
         TechOctokitUpdateRepo, // nuevo
@@ -43,16 +42,16 @@ import { CacheModule } from "@nestjs/cache-manager";
         TechCreateUseCase, // 
         TechFindDeleteRepo,
         TechReadUseCase, //
-        // TechReadByIdUseCase, 
+        TechReadByIdUseCase, 
         TechUpdateUseCase, 
-        // TechUpdateByIdUseCase, 
+        TechUpdateByIdUseCase, 
         TechDeleteUseCase,
-        // TechReadOneUseCase // cambio por ->
-        {
-            provide: TechReadOneUseCase,
-            useFactory: (repo) => new TechReadOneUseCase(repo),
-            inject: ["TechRepository"]
-        },
+        TechReadOneUseCase // cambio por ->
+        // {
+        //     provide: TechReadOneUseCase,
+        //     useFactory: (repo) => new TechReadOneUseCase(repo),
+        //     inject: ["TechRepository"]
+        // },
         // RoleAuthUseCase, // RoleAuthUseCase ya está registrado
     ],
     // exports: [

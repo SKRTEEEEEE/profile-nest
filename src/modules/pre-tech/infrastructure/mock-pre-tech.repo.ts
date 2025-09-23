@@ -1,6 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { PreTechInterface } from "../application/pre-tech.interface";
-import { MongooseBase } from "src/shareds/pattern/infrastructure/types";
+import { MongooseBase } from "src/shareds/pattern/infrastructure/types/mongoose";
 import { createDomainError } from "src/domain/flows/error.registry";
 import { ErrorCodes } from "src/domain/flows/error.type";
 import { ResCodes } from "src/domain/flows/res.type";

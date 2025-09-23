@@ -1,5 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { MongooseBase } from "../pattern/infrastructure/types";
+import { MongooseBase } from "../pattern/infrastructure/types/mongoose";
 import { IsString } from "class-validator";
 
 export class DatabaseDto implements MongooseBase {

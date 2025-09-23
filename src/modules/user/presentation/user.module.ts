@@ -1,18 +1,17 @@
 import { Module } from "@nestjs/common";
 import { MongooseModule } from "@nestjs/mongoose";
 import { UserSchemaFactory } from "../infrastructure/user.schema";
-import { CRRUUDIdRepository } from "src/shareds/pattern/application/usecases/crruud-id.interface";
 import { MongooseUserRepo } from "../infrastructure/user.repo";
-import {  UserCreateUseCase, UserDeleteByIdUseCase, UserReadByIdUseCase, UserReadOneUseCase, UserReadUseCase, UserUpdateByIdUseCase, UserUpdateUseCase, UserVerifyEmailUseCase } from "../application/user.usecase";
+import {  UserCreateUseCase, UserDeleteByIdUseCase, UserReadByIdUseCase, UserReadOneUseCase, UserReadUseCase, UserUpdateByIdUseCase,  UserVerifyEmailUseCase } from "../application/user.usecase";
 import { UserController } from "./user.controller";
 // import { UserThirdWebLoginUseCase } from "../application/user-thirdweb.usecase";
 import { ThirdWebModule } from "src/shareds/thirdweb/thirdweb.module";
-import { ReadOneRepository } from "src/shareds/pattern/application/usecases/read-one.interface";
 import { NodemailerModule } from "src/shareds/nodemailer/nodemailer.module";
 // import { UserRoleThirdWebDeleteUseCase, UserRoleThirdwebGiveRoleUseCase } from "../application/user-role-thirdweb.usecase";
 import { RoleModule } from "src/modules/role/presentation/role.module";
 import { UserNodemailerUpdateUseCase } from "../application/user-nodemailer.usecase";
 import { SignatureAuthModule } from "src/shareds/signature-auth/presentation/signature-auth.module";
+import { USER_REPOSITORY } from "src/modules/tokens";
 
 @Module({
     imports: [
@@ -29,13 +28,17 @@ import { SignatureAuthModule } from "src/shareds/signature-auth/presentation/sig
     ],
     providers: [
         {
-            provide: CRRUUDIdRepository,
-            useClass: MongooseUserRepo,
-        },
-        {
-            provide: ReadOneRepository,
+            provide: USER_REPOSITORY,
             useClass: MongooseUserRepo
         },
+        // {
+        //     provide: CRRUUDIdRepository,
+        //     useClass: MongooseUserRepo,
+        // },
+        // {
+        //     provide: ReadOneRepository,
+        //     useClass: MongooseUserRepo
+        // },
         // UserRoleThirdWebDeleteUseCase,
         // UserRoleThirdwebGiveRoleUseCase,
         UserNodemailerUpdateUseCase,

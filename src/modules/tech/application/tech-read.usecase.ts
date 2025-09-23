@@ -1,7 +1,7 @@
-import { Injectable } from "@nestjs/common"
-import { CRRUUDRepository } from "src/shareds/pattern/application/usecases/crruud.interface"
+import { Inject, Injectable } from "@nestjs/common"
 import { FullTechData, LengBase, ReadAllFlattenTechsRes } from "src/domain/entities/tech"
-import { MongooseBase } from "src/shareds/pattern/infrastructure/types";
+import { TechRepository } from "./tech.interface";
+import { TECH_REPOSITORY } from "src/modules/tokens";
 
 
 type BadgeAndValue = {
@@ -12,15 +12,15 @@ type BadgeAndValue = {
 @Injectable()
 export class TechReadUseCase<TDB> {
     constructor(
-        private readonly crruudRepository: CRRUUDRepository<LengBase, TDB>
+        @Inject(TECH_REPOSITORY) private readonly techRepository: TechRepository< TDB>
     ) {}
 
-    async read(filter?: ReadProps<LengBase, TDB>): Promise<(LengBase & TDB)[]> {
-        return await this.crruudRepository.read(filter);
+    async read(filter?: Partial<LengBase&TDB>): Promise<(LengBase & TDB)[]> {
+        return await this.techRepository.read(filter);
     }
     // Este tiene logica ponerlo aqui porque es una excision de read
     async readAllC(): Promise<ReadAllFlattenTechsRes<TDB>>  {
-    const proyectosDB = await this.crruudRepository.read({})
+    const proyectosDB = await this.techRepository.read({})
     const dispoLeng = proyectosDB?.map((lenguaje: {nameId:string}) => ({ name: lenguaje.nameId }));
     const dispoFw = proyectosDB?.flatMap((lenguaje) => {
         if (Array.isArray(lenguaje.frameworks) && lenguaje.frameworks.length > 0) {
@@ -31,14 +31,14 @@ export class TechReadUseCase<TDB> {
         return {techs:proyectosDB,flattenTechs:this.flattenTechs(proyectosDB),dispoFw, dispoLeng}
     }
     async readAll(): Promise<(LengBase & TDB)[]> {
-        return await this.crruudRepository.read({})
+        return await this.techRepository.read({})
     }
     async readAllFlatten(): Promise<FullTechData[]> {
-        const res = await this.crruudRepository.read({})
+        const res = await this.techRepository.read({})
         return this.flattenTechs(res)
     }
     async readAllCat(): Promise<Omit<ReadAllFlattenTechsRes<TDB>,"techs" | "flattenTechs">>{
-            const proyectosDB = await this.crruudRepository.read({})
+            const proyectosDB = await this.techRepository.read({})
     const dispoLeng = proyectosDB?.map((lenguaje: {nameId:string}) => ({ name: lenguaje.nameId }));
     const dispoFw = proyectosDB?.flatMap((lenguaje) => {
         if (Array.isArray(lenguaje.frameworks) && lenguaje.frameworks.length > 0) {

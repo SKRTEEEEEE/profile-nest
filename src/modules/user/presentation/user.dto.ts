@@ -1,7 +1,7 @@
 import { Type } from "class-transformer";
 import { IsEnum,  IsOptional,  IsString, Matches, ValidateNested } from "class-validator";
 import { apiRoleType, RoleType } from "src/domain/entities/role.type";
-import { MongooseBase } from "src/shareds/pattern/infrastructure/types";
+import { MongooseBase } from "src/shareds/pattern/infrastructure/types/mongoose";
 import { AuthThirdWebVerifyPayloadDto } from "src/shareds/thirdweb/auth-thirdweb.dto";
 import { LoginPayload } from "thirdweb/auth";
 import { UserNodemailerUpdateProps } from "../application/user-nodemailer.usecase";
@@ -29,19 +29,13 @@ import { ApiDtoMetadata } from "src/shareds/swagger/dto-metadata.decorator";
 //     address: string;
 // }
 //give role
-type UserRoleThirdWebGiveRoleProps = {
-//     payload: {
-//   signature: `0x${string}` | string;
-//   payload: LoginPayload;
-// }, 
-id: ReadByIdProps<MongooseBase>, solicitud: RoleType
-}
+
 @ApiDtoMetadata({
     description: "Data necessary for give or request a user role",
     title: "User Manage Role",
     group: "User"
 })
-export class UserManageRoleDto implements UserRoleThirdWebGiveRoleProps {
+export class UserManageRoleDto  {
     // @ValidateNested()
     // @Type(() => AuthThirdWebVerifyPayloadDto)
     // payload: AuthThirdWebVerifyPayloadDto;
@@ -52,7 +46,7 @@ export class UserManageRoleDto implements UserRoleThirdWebGiveRoleProps {
         example: "665b1c2f8f1b2a0012a34567"
     })
     @IsString()
-    id: ReadByIdProps<MongooseBase>;
+    id: string;
 
     @ApiProperty(apiRoleType)
     @IsEnum(RoleType)

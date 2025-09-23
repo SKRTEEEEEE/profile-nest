@@ -3,7 +3,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { PreTechSchemaFactory } from '../infrastructure/pre-tech.schema';
 import { PreTechController } from './pre-tech.controller';
 import { MongoosePreTechRepo } from '../infrastructure/pre-tech.repo';
-import { PreTechEndpointUseCase, PreTechReadUseCase, PreTechPopulateUseCase } from '../application/pre-tech.usecase';
+import { PreTechEndpointUseCase,  } from '../application/pre-tech.usecase';
 
 
 @Module({
@@ -22,16 +22,16 @@ import { PreTechEndpointUseCase, PreTechReadUseCase, PreTechPopulateUseCase } fr
       provide: 'PreTechRepository',
       useClass: MongoosePreTechRepo,
     },
-    {
-      provide: PreTechReadUseCase,
-      useFactory:(repo) => new PreTechReadUseCase(repo),
-      inject: ['PreTechRepository']
-    },
-    {
-      provide: PreTechPopulateUseCase,
-      useFactory:(repo) => new PreTechPopulateUseCase(repo),
-      inject: ['PreTechRepository']
-    },
+    // {
+    //   provide: PreTechReadUseCase,
+    //   useFactory:(repo) => new PreTechReadUseCase(repo),
+    //   inject: ['PreTechRepository']
+    // },
+    // {
+    //   provide: PreTechPopulateUseCase,
+    //   useFactory:(repo) => new PreTechPopulateUseCase(repo),
+    //   inject: ['PreTechRepository']
+    // },
     // {
     //   provide: PreTechInterface,
     //   useClass: MongoosePreTechRepo

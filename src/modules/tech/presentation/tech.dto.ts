@@ -4,7 +4,7 @@ import { IsEnum, IsNumber, IsOptional, IsString, ValidateNested } from "class-va
 import { FullTechData, FwBase, LengBase, TechBase, TechForm } from "src/domain/entities/tech";
 import { apiTechFormCategory, TechFormCategory } from "src/domain/entities/tech.type";
 import { PreTechBaseDto } from "src/modules/pre-tech/presentation/pre-tech.dto";
-import { MongooseBase } from "src/shareds/pattern/infrastructure/types";
+import { MongooseBase } from "src/shareds/pattern/infrastructure/types/mongoose";
 import { IntlDto } from "src/shareds/presentation/intl.dto";
 import { ApiDtoMetadata } from "src/shareds/swagger/dto-metadata.decorator";
 
