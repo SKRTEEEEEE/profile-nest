@@ -21,7 +21,7 @@
 - [x] [**PR title conventional commits**](./workflows/lint-pr-title.yml)
     - [x] [**`labels` by tittle**](./workflows/conventional-label.yml)
 - [x] [**`labels` based on files**](./workflows/pr-scope-label.yml)
-- [ ] **size**: ?add rules?? and labels 
+- [x] [**size**: add rules and labels](./workflows/pr-size-labeler.yml)
 - [ ] **coverage**: Test coverage --hard (80%) and add info to PR
 - [x] **assign-me**: Assign the PR to the creator of the project?
 
