@@ -1,8 +1,11 @@
 name: '🙋‍♂️ Assign me'
-
 on:
   pull_request:
     types: [opened, synchronize, reopened]
+
+permissions:
+  pull-requests: write
+  issues: write
 
 jobs:
   set_assignee:
