@@ -9,10 +9,12 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
+      pull-requests: write    # ⬅️ necesario para que funcione la Action
     steps:
       - uses: bcoe/conventional-release-labels@v1
         with:
           type_labels: '{"feat": "🚀 Feature", "fix": "🕵🏻 Fix", "breaking": "⚠️ Breaking Change"}'
+
 #         with:
 #   type_labels: |
 #     {
