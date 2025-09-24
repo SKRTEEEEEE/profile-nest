@@ -14,6 +14,7 @@
     - [x] lint: ejecuta los lint (sin --fix)
     - [x] test: ejecuta los test
 - [ ] **coverage**: Test coverage --soft(60%)
+- [x] [order labels]
 
 
 ### **on pull_request**
@@ -24,14 +25,17 @@
 - [x] [**size**: add rules and labels](./workflows/pr-size-labeler.yml)
 - [ ] **coverage**: Test coverage --hard (80%) and add info to PR
 - [x] **assign-me**: Assign the PR to the creator of the project?
+- [x] **dependency review**: Review of dependency vulnerabilities
+- [x] **dependabot auto merge with security check**
+
 
 
 - [ ] **comment con resultados**: ? en la PR automáticamente
 
 ### **on main**
+#### future-soon-
 - [ ] **readme**: update readme with new info(here?)
     - [ ] test coverage info
-#### future-soon-
     - [ ] actualizar readme
     - [ ] nice lowlight
 - [ ] **project labels**: actualizar labels con las tecnologias de desarrollo (excluir dev-deps y ciertas libs, ya pensaremos como) 
@@ -39,13 +43,12 @@
 - [ ] **tag creation**: auto-tag con versión
 
 ### **regular/scheduled**
-- [ ] **dependabot**: automated dependency updates
 - [ ] **health checks**: daily API endpoint monitoring
-- [ ] **cleanup**: ?? old artifacts, stale branches
+- [x] [**stale PR cleanup**: close old PRs](./workflows/stale-issues-and-prs.yml)
 
 ### other conditions
+- [x] **dependabot**: automated dependency updates
 - [x] **greetings**: on PR and issue
-- [ ]
 
 ---
 
@@ -60,7 +63,6 @@
 - [ ] **load testing**: k6 o artillery
 
 - [ ] **rollback automático**: si health check falla
-- [ ] **stale PR cleanup**: close old PRs
 
 - [ ] **license scanning**: ensure compliance
 
