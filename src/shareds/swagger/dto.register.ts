@@ -1,4 +1,3 @@
-
 // dto-registry.ts
 // Función utilizada para registrar los dto y añadirles info en swagger
 export const dtoRegistry: { [key: string]: any } = {};

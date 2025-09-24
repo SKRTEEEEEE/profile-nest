@@ -1,7 +1,12 @@
-import { applyDecorators, SetMetadata, Type } from "@nestjs/common";
-import { ApiCreatedResponse, ApiExtraModels, ApiOkResponse, getSchemaPath } from "@nestjs/swagger";
-import { ResCodes } from "src/domain/flows/res.type";
-import { SuccessResponseDto } from "./pipes/success-res.dto";
+import { applyDecorators, SetMetadata, Type } from '@nestjs/common';
+import {
+  ApiCreatedResponse,
+  ApiExtraModels,
+  ApiOkResponse,
+  getSchemaPath,
+} from '@nestjs/swagger';
+import { ResCodes } from 'src/domain/flows/res.type';
+import { SuccessResponseDto } from './pipes/success-res.dto';
 
 export const API_RESPONSE_META = 'API_RESPONSE_META';
 
@@ -11,9 +16,9 @@ export function ApiSuccessResponse<TModel extends Type<any>>(
   model: TModel,
   type: ResCodes,
   isArray = false,
-  message?: string
+  message?: string,
 ) {
-  if(type === ResCodes.ENTITY_CREATED) {
+  if (type === ResCodes.ENTITY_CREATED) {
     return applyDecorators(
       ApiExtraModels(SuccessResponseDto, model),
       ApiCreatedResponse({
@@ -22,18 +27,16 @@ export function ApiSuccessResponse<TModel extends Type<any>>(
             { $ref: getSchemaPath(SuccessResponseDto) },
             {
               properties: {
-                data: { $ref: getSchemaPath(model) }
-              }
-            }
-          ]
-        }
+                data: { $ref: getSchemaPath(model) },
+              },
+            },
+          ],
+        },
       }),
-      ...([SetMetadata(API_RESPONSE_META, { type, message })])
+      ...[SetMetadata(API_RESPONSE_META, { type, message })],
     );
-  }
-  else {
+  } else {
     return applyDecorators(
-      
       ApiExtraModels(SuccessResponseDto, model),
       ApiOkResponse({
         schema: {
@@ -43,14 +46,13 @@ export function ApiSuccessResponse<TModel extends Type<any>>(
               properties: {
                 data: isArray
                   ? { type: 'array', items: { $ref: getSchemaPath(model) } }
-                  : { $ref: getSchemaPath(model) }
-              }
-            }
-          ]
-        }
+                  : { $ref: getSchemaPath(model) },
+              },
+            },
+          ],
+        },
       }),
-      ...([SetMetadata(API_RESPONSE_META, { type, message })])
+      ...[SetMetadata(API_RESPONSE_META, { type, message })],
     );
   }
-
 }

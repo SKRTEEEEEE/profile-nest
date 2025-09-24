@@ -1,6 +1,11 @@
 // response.interceptor.ts
 // ESTO ES UN INTERCEPTOR !! ⚠️
-import { Injectable, NestInterceptor, ExecutionContext, CallHandler } from '@nestjs/common';
+import {
+  Injectable,
+  NestInterceptor,
+  ExecutionContext,
+  CallHandler,
+} from '@nestjs/common';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { ResCodes, ResFlow } from 'src/domain/flows/res.type';
@@ -14,7 +19,10 @@ import { API_RESPONSE_META } from './api-success.decorator';
 export class ResponseInterceptor<T> implements NestInterceptor<T, ResFlow<T>> {
   constructor(private readonly reflector: Reflector) {}
 
-  intercept(context: ExecutionContext, next: CallHandler): Observable<ResFlow<T>> {
+  intercept(
+    context: ExecutionContext,
+    next: CallHandler,
+  ): Observable<ResFlow<T>> {
     const meta = this.reflector.get<{ type?: ResCodes; message?: string }>(
       API_RESPONSE_META,
       context.getHandler(),
@@ -29,7 +37,7 @@ export class ResponseInterceptor<T> implements NestInterceptor<T, ResFlow<T>> {
       // })),
       map((data: any) => {
         const message = data?.message || meta?.message;
-        console.log(meta?.type)
+        console.log(meta?.type);
         const response = {
           success: true,
           type: meta?.type ?? ResCodes.OPERATION_SUCCESS,

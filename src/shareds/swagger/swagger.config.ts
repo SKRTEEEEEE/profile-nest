@@ -1,5 +1,5 @@
 enum AppMainParts {
-  ADMIN = "ADMIN",
+  ADMIN = 'ADMIN',
   // Puedes añadir más partes aquí si tu app crece
 }
 
@@ -8,14 +8,14 @@ interface SwaggerPartConfig {
   description: string;
   version: string;
   tags?: string[];
-//   path: string; // ruta donde se monta la doc
+  //   path: string; // ruta donde se monta la doc
 }
 
 export const SWAGGER_CONFIGS: Record<AppMainParts, SwaggerPartConfig> = {
   [AppMainParts.ADMIN]: {
-    title: "Admin API",
-    description: "Documentación de la API principal de la aplicación.",
-    version: "1.0",
+    title: 'Admin API',
+    description: 'Documentación de la API principal de la aplicación.',
+    version: '1.0',
     // tags: ["admin", "users", "cats"],
     // path: "admin/docs" // Esta parte es para indicar el endpoint
   },

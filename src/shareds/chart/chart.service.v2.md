@@ -4,20 +4,19 @@ const QuickChart = require('quickchart-js');
 
 @Injectable()
 export class ChartService {
-  async renderBarChart(owner: string, topicsSizePer: { name: string, percentage: number }[], topicRestData: { name: string, topicRepoPer: number, topicRepoFrac: string }[]): Promise<Buffer> {
-    const top25 = topicsSizePer
-      .sort((a, b) => b.percentage - a.percentage)
-      .slice(0, 25);
-    const merged = topicsSizePer.map(topic => {
-      const rest = topicRestData.find(r => r.name === topic.name);
-      if (!rest) console.warn(`No matching data found for topic: ${topic.name}`);
-      return {
-        ...topic,
-        ...rest,
-        topicImportanceScore: (topic.percentage * rest!.topicRepoPer) / 20,
-      };
-    });
-
+async renderBarChart(owner: string, topicsSizePer: { name: string, percentage: number }[], topicRestData: { name: string, topicRepoPer: number, topicRepoFrac: string }[]): Promise<Buffer> {
+const top25 = topicsSizePer
+.sort((a, b) => b.percentage - a.percentage)
+.slice(0, 25);
+const merged = topicsSizePer.map(topic => {
+const rest = topicRestData.find(r => r.name === topic.name);
+if (!rest) console.warn(`No matching data found for topic: ${topic.name}`);
+return {
+...topic,
+...rest,
+topicImportanceScore: (topic.percentage \* rest!.topicRepoPer) / 20,
+};
+});
 
     const labels = top25.map(d => d.name);
     const topicSizePer = top25.map(d => d.percentage);
@@ -168,5 +167,6 @@ export class ChartService {
 
     // Devuelve el buffer de la imagen
     return await chart.toBinary();
-  }
+
+}
 }

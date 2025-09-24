@@ -1,9 +1,14 @@
-import { ExecutionContext, Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+  ExecutionContext,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { AuthGuard } from '@nestjs/passport';
 import { Observable } from 'rxjs';
 import { PUBLIC_ROUTE_KEY } from './public-route.decorator';
-import { UnauthorizedError } from 'src/domain/flows/domain.error';
+import { createDomainError } from 'src/domain/flows/error.registry';
+import { ErrorCodes } from 'src/domain/flows/error.type';
 
 @Injectable()
 export class JwtAuthMockGuard extends AuthGuard('mock') {
@@ -15,10 +20,10 @@ export class JwtAuthMockGuard extends AuthGuard('mock') {
     context: ExecutionContext,
   ): boolean | Promise<boolean> | Observable<boolean> {
     // Check if the route is marked as public using the @PublicRoute() decorator
-    const isPublic = this.reflector.getAllAndOverride<boolean>(PUBLIC_ROUTE_KEY, [
-      context.getHandler(),
-      context.getClass(),
-    ]);
+    const isPublic = this.reflector.getAllAndOverride<boolean>(
+      PUBLIC_ROUTE_KEY,
+      [context.getHandler(), context.getClass()],
+    );
 
     if (isPublic) {
       return true;
@@ -31,7 +36,15 @@ export class JwtAuthMockGuard extends AuthGuard('mock') {
   handleRequest(err, user, info) {
     // Customize error handling
     if (err || !user) {
-      throw err || new UnauthorizedError(JwtAuthMockGuard,'Mock authentication failed');
+      throw (
+        err ||
+        createDomainError(
+          ErrorCodes.UNAUTHORIZED_ACTION,
+          JwtAuthMockGuard,
+          'handleRequest',
+          'credentials--mock',
+        )
+      );
     }
     return user;
   }

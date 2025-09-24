@@ -1,4 +1,5 @@
 Implementar en el futuro, para dividir el UI de swagger en las distintas familias (admin, useTopics, academia, etc..)
+
 ```ts
 import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger";
 import { INestApplication } from "@nestjs/common";
@@ -28,7 +29,7 @@ const SWAGGER_CONFIGS: Record<AppMainParts, SwaggerPartConfig> = {
 };
 
   static setup(app: INestApplication) {
-    
+
     const config = new DocumentBuilder()
       .setTitle('Cats example')
       .setDescription('The cats API description')
@@ -42,3 +43,4 @@ const SWAGGER_CONFIGS: Record<AppMainParts, SwaggerPartConfig> = {
     SwaggerModule.setup('api', app, document);
   }
 }
+```

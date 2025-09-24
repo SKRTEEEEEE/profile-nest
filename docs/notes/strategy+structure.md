@@ -1,4 +1,5 @@
 # Estructura general y estrategia levantamiento backend
+
 ## 🎯 **Estrategia Cloud-Native Distribuida**
 
 ### 🏗️ **Arquitectura Recomendada:**
@@ -32,6 +33,7 @@ nestjs-backend/
 ## 🚀 **Configuración Recomendada:**
 
 ### **1. Environment Strategy**
+
 ```env
 # .env.production (Railway/Cloud)
 NODE_ENV=production
@@ -39,7 +41,7 @@ DATABASE_STRATEGY=atlas
 MONGODB_URI=mongodb+srv://cluster.atlas.com/prod
 
 # .env.development (Local)
-NODE_ENV=development  
+NODE_ENV=development
 DATABASE_STRATEGY=local
 MONGODB_URI=mongodb://localhost:27017/dev
 
@@ -50,6 +52,7 @@ MONGODB_URI=mongodb://localhost:27018/test
 ```
 
 ### **2. Docker Solo Para Desarrollo Local**
+
 ```yaml
 # docker/docker-compose.dev.yml
 version: '3.8'
@@ -57,7 +60,7 @@ services:
   mongodb-dev:
     image: mongo:7
     ports:
-      - "27017:27017"
+      - '27017:27017'
     volumes:
       - mongodb_data:/data/db
       - ./backups:/backups
@@ -67,15 +70,16 @@ services:
   mongodb-test:
     image: mongo:7-alpine
     ports:
-      - "27018:27017"
+      - '27018:27017'
     tmpfs:
-      - /data/db  # In-memory for testing
+      - /data/db # In-memory for testing
 
 volumes:
   mongodb_data:
 ```
 
 ### **3. Dockerfile Para Cloud Deployment**
+
 ```dockerfile
 # Dockerfile (para Railway, Render, etc.)
 FROM node:18-alpine AS builder
@@ -99,6 +103,7 @@ CMD ["node", "dist/main"]
 ```
 
 ### **4. NPM Scripts Optimizados**
+
 ```json
 {
   "scripts": {
@@ -106,14 +111,14 @@ CMD ["node", "dist/main"]
     "start": "node dist/main",
     "start:dev": "nest start --watch",
     "start:debug": "nest start --debug --watch",
-    
+
     "dev:db-up": "docker-compose -f docker/docker-compose.dev.yml up -d",
     "dev:db-down": "docker-compose -f docker/docker-compose.dev.yml down",
     "dev:full": "npm run dev:db-up && npm run start:dev",
-    
+
     "test": "jest",
     "test:e2e": "npm run dev:db-up && jest --config ./test/jest-e2e.json",
-    
+
     "db:backup": "docker exec mongodb-dev mongodump --out /backups/$(date +%Y%m%d_%H%M%S)"
   }
 }
@@ -122,17 +127,20 @@ CMD ["node", "dist/main"]
 ## 🎯 **Workflow de Desarrollo:**
 
 ### **Desarrollo Local:**
+
 ```bash
 npm run dev:full    # MongoDB local + NestJS dev server
 ```
 
 ### **Testing:**
+
 ```bash
 npm run test        # Mock database
 npm run test:e2e    # Local MongoDB container
 ```
 
 ### **Deployment:**
+
 ```bash
 git push origin main  # Auto-deploy a Railway/Render
 ```
@@ -147,7 +155,6 @@ git push origin main  # Auto-deploy a Railway/Render
 
 ✅ **Escalabilidad independiente**
 ✅ **Costos optimizados** (paga solo lo que usas)
-✅ **Mantenimiento separado** 
+✅ **Mantenimiento separado**
 ✅ **Deploy independiente** (rollbacks por servicio)
 ✅ **Especialización** (cada servicio en su plataforma óptima)
-

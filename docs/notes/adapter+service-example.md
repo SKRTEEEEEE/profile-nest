@@ -55,7 +55,7 @@ export class UserService {
     await this.emailSender.sendEmail(
       email,
       'Bienvenido a Mi App 🎉',
-      'Gracias por registrarte. ¡Disfruta!'
+      'Gracias por registrarte. ¡Disfruta!',
     );
   }
 }
@@ -88,8 +88,8 @@ export class UserModule {}
 
 ## ✅ Resultado
 
-* `UserService` no tiene idea de que Nodemailer existe.
-* Puedes cambiar el adapter por otro (`ConsoleAdapter`, `SESAdapter`, etc.) sin tocar nada más.
-* Estás cumpliendo con los principios de inversión de dependencias.
+- `UserService` no tiene idea de que Nodemailer existe.
+- Puedes cambiar el adapter por otro (`ConsoleAdapter`, `SESAdapter`, etc.) sin tocar nada más.
+- Estás cumpliendo con los principios de inversión de dependencias.
 
-¿Quieres que te lo extienda para tener un adapter *mock* también y cambiarlo por entorno?
+¿Quieres que te lo extienda para tener un adapter _mock_ también y cambiarlo por entorno?

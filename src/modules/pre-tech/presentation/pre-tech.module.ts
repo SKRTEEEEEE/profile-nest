@@ -3,8 +3,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { PreTechSchemaFactory } from '../infrastructure/pre-tech.schema';
 import { PreTechController } from './pre-tech.controller';
 import { MongoosePreTechRepo } from '../infrastructure/pre-tech.repo';
-import { PreTechEndpointUseCase, PreTechReadUseCase, PreTechPopulateUseCase } from '../application/pre-tech.usecase';
-
+import { PreTechEndpointUseCase } from '../application/pre-tech.usecase';
 
 @Module({
   imports: [
@@ -22,24 +21,24 @@ import { PreTechEndpointUseCase, PreTechReadUseCase, PreTechPopulateUseCase } fr
       provide: 'PreTechRepository',
       useClass: MongoosePreTechRepo,
     },
-    {
-      provide: PreTechReadUseCase,
-      useFactory:(repo) => new PreTechReadUseCase(repo),
-      inject: ['PreTechRepository']
-    },
-    {
-      provide: PreTechPopulateUseCase,
-      useFactory:(repo) => new PreTechPopulateUseCase(repo),
-      inject: ['PreTechRepository']
-    },
+    // {
+    //   provide: PreTechReadUseCase,
+    //   useFactory:(repo) => new PreTechReadUseCase(repo),
+    //   inject: ['PreTechRepository']
+    // },
+    // {
+    //   provide: PreTechPopulateUseCase,
+    //   useFactory:(repo) => new PreTechPopulateUseCase(repo),
+    //   inject: ['PreTechRepository']
+    // },
     // {
     //   provide: PreTechInterface,
     //   useClass: MongoosePreTechRepo
-    // }, // -> Puedo comentarlo porque le 'inyecto' PreTechRepository 
+    // }, // -> Puedo comentarlo porque le 'inyecto' PreTechRepository
     // PreTechReadUseCase,
     // PreTechPopulateUseCase,
     PreTechEndpointUseCase,
-    // RoleAuthUseCase 
+    // RoleAuthUseCase
   ],
   exports: [
     // PreTechEndpointUseCase // -> Al no utilizar-se fuera del 'modulo' -> osea el subconjunto marcado por este archivo, no es necesario exportarlo
@@ -64,7 +63,7 @@ export class PreTechModule {}
 //       },
 //       inject: [MongoosePreTechRepo],
 //     }
-//     ,RoleAuthUseCase 
+//     ,RoleAuthUseCase
 //   ],
 //   exports: [
 //     // PreTechEndpointUseCase // -> Al no utilizar-se fuera del 'modulo' -> osea el subconjunto marcado por este archivo, no es necesario exportarlo

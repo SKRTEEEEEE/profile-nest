@@ -1,5 +1,7 @@
 ## v3 working
+
 ### module
+
 ```ts
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
@@ -19,20 +21,21 @@ import { ThirdwebAuthUserGuard } from '../guards/thirdweb-auth-user.guard';
   exports: ['AUTH_GUARD'],
 })
 export class JwtAuthUserModule {}
-
 ```
+
 ### no/without strategy
+
 ### guard
+
 ```ts
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { ExecutionContext } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { Request } from 'express';
-import { createAuth } from "thirdweb/auth";
+import { createAuth } from 'thirdweb/auth';
 import { createThirdwebClient } from 'thirdweb';
-import { privateKeyToAccount } from "thirdweb/wallets";
-
+import { privateKeyToAccount } from 'thirdweb/wallets';
 
 @Injectable()
 export class ThirdwebAuthUserGuard extends AuthGuard('thirdweb') {
@@ -49,15 +52,20 @@ export class ThirdwebAuthUserGuard extends AuthGuard('thirdweb') {
     }
 
     try {
-      const client = createThirdwebClient({clientId: process.env.NEXT_PUBLIC_THIRDWEB_CLIENT_ID!})
-      const account = privateKeyToAccount({client, privateKey: process.env.THIRDWEB_ADMIN_PRIVATE_KEY!});
-      
-      const auth = createAuth({
-        domain: 'http://localhost:3000', // reemplaza con tu dominio
-        adminAccount: account
+      const client = createThirdwebClient({
+        clientId: process.env.NEXT_PUBLIC_THIRDWEB_CLIENT_ID!,
+      });
+      const account = privateKeyToAccount({
+        client,
+        privateKey: process.env.THIRDWEB_ADMIN_PRIVATE_KEY!,
       });
 
-      const payload = await auth.verifyJWT({jwt: token});
+      const auth = createAuth({
+        domain: 'http://localhost:3000', // reemplaza con tu dominio
+        adminAccount: account,
+      });
+
+      const payload = await auth.verifyJWT({ jwt: token });
 
       // Inyecta el usuario en el request para acceder desde el controller
       request.user = payload;
@@ -69,67 +77,70 @@ export class ThirdwebAuthUserGuard extends AuthGuard('thirdweb') {
   }
 }
 ```
+
 ## v for basic
+
 ```ts
-import { Injectable, UnauthorizedException } from "@nestjs/common";
-import { ConfigService } from "@nestjs/config";
+import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 // import { ConfigService } from "@nestjs/config";
-import { PassportStrategy } from "@nestjs/passport";
-import { Request } from "express";
-import { ExtractJwt, Strategy, StrategyOptionsWithRequest } from "passport-jwt";
-import { AuthUserJWTPayload } from "src/application/interfaces/shareds/auth-user.interface";
+import { PassportStrategy } from '@nestjs/passport';
+import { Request } from 'express';
+import { ExtractJwt, Strategy, StrategyOptionsWithRequest } from 'passport-jwt';
+import { AuthUserJWTPayload } from 'src/application/interfaces/shareds/auth-user.interface';
 // import { AuthUserService } from "src/application/usecases/shareds/auth-user.service";
 
 @Injectable()
 export class JwtAuthUserStrategy extends PassportStrategy(Strategy) {
-    constructor(
-        private configService: ConfigService,
-        // private authUserService: AuthUserService // -> creo que no hace falta ya que se hace por inyeccion ❓
-    ){
-        super({
-            jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-            ignoreExpiration: false,
-            // Para el otro algoritmo
-            // secretOrKey: configService.get<string>('JWT_SECRET_KEY'),
-            // Si Thirdweb usa RS256, usarías esto en lugar de secretOrKey:
-            secretOrKeyProvider: (request, rawJwtToken, done) => {
-                const publicKey = this.configService.get<string>("JWT_PUBLIC_KEY");
-                console.log("pubKey: ",publicKey)
-                done(null, publicKey);
-            },
-            verifyOptions: {
-                algorithms: ["ES256"]
-            },
-            // secretOrKey: configService.get<string>("JWT_PUBLIC_KEY"),
-            passReqToCallback: true,
-        }as StrategyOptionsWithRequest)
-    }
-    async validate(req:Request, payload: AuthUserJWTPayload){
-        console.log("validating..")
-        // Acceder al token JWT crudo
-        const rawJwt = req.headers.authorization?.replace('Bearer ', '');
-        console.log('Token JWT crudo:', rawJwt);
-        console.log('Payload decodificado:', payload);
-            if(!payload || !payload.sub)throw new UnauthorizedException("Token JWT inválido")
+  constructor(
+    private configService: ConfigService,
+    // private authUserService: AuthUserService // -> creo que no hace falta ya que se hace por inyeccion ❓
+  ) {
+    super({
+      jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+      ignoreExpiration: false,
+      // Para el otro algoritmo
+      // secretOrKey: configService.get<string>('JWT_SECRET_KEY'),
+      // Si Thirdweb usa RS256, usarías esto en lugar de secretOrKey:
+      secretOrKeyProvider: (request, rawJwtToken, done) => {
+        const publicKey = this.configService.get<string>('JWT_PUBLIC_KEY');
+        console.log('pubKey: ', publicKey);
+        done(null, publicKey);
+      },
+      verifyOptions: {
+        algorithms: ['ES256'],
+      },
+      // secretOrKey: configService.get<string>("JWT_PUBLIC_KEY"),
+      passReqToCallback: true,
+    } as StrategyOptionsWithRequest);
+  }
+  async validate(req: Request, payload: AuthUserJWTPayload) {
+    console.log('validating..');
+    // Acceder al token JWT crudo
+    const rawJwt = req.headers.authorization?.replace('Bearer ', '');
+    console.log('Token JWT crudo:', rawJwt);
+    console.log('Payload decodificado:', payload);
+    if (!payload || !payload.sub)
+      throw new UnauthorizedException('Token JWT inválido');
 
-        // Aquí puedes buscar el usuario en tu base de datos usando la dirección
+    // Aquí puedes buscar el usuario en tu base de datos usando la dirección
     // y añadir lógica adicional según tus requisitos
     // const user = await this.usersService.findByWalletAddress(payload.address);
-    
+
     // if (!user) {
     //   // También puedes decidir si quieres crear el usuario automáticamente
     //   // o rechazar el token si el usuario no existe en tu base de datos
     //   throw new UnauthorizedException('Usuario no encontrado');
-      
+
     //   // Alternativamente, podrías crear el usuario automáticamente:
     //   // return await this.usersService.createUser({
     //   //   walletAddress: payload.address,
     //   //   role: payload.role || 'user',
     //   // });
     // }
-    
-    return payload.ctx
-    }
+
+    return payload.ctx;
+  }
 }
 ```
 
@@ -172,8 +183,12 @@ class CustomJwtStrategy extends Strategy {
       throw new Error('Invalid JWT format');
     }
 
-    const header = JSON.parse(Buffer.from(headerB64, 'base64').toString('utf8'));
-    const payload = JSON.parse(Buffer.from(payloadB64, 'base64').toString('utf8'));
+    const header = JSON.parse(
+      Buffer.from(headerB64, 'base64').toString('utf8'),
+    );
+    const payload = JSON.parse(
+      Buffer.from(payloadB64, 'base64').toString('utf8'),
+    );
 
     if (header.alg !== 'ES256') {
       throw new Error('Invalid algorithm: ES256 required');
@@ -202,7 +217,10 @@ class CustomJwtStrategy extends Strategy {
     for (const v of [27, 28]) {
       try {
         const signatureWithV = `0x${compactSignatureHex}${v.toString(16).padStart(2, '0')}`;
-        const address = ethers.recoverAddress(messageHashBuffer, signatureWithV);
+        const address = ethers.recoverAddress(
+          messageHashBuffer,
+          signatureWithV,
+        );
         if (address.toLowerCase() === payload.iss.toLowerCase()) {
           recoveredAddress = address;
           break;
@@ -229,9 +247,12 @@ class CustomJwtStrategy extends Strategy {
 }
 
 @Injectable()
-export class JwtAuthUserStrategy extends PassportStrategy(CustomJwtStrategy, 'jwt') {
+export class JwtAuthUserStrategy extends PassportStrategy(
+  CustomJwtStrategy,
+  'jwt',
+) {
   constructor(configService: ConfigService) {
-    super( configService );
+    super(configService);
   }
 
   async validate(req: Request, payload: AuthUserJWTPayload) {

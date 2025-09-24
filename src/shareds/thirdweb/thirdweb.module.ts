@@ -1,12 +1,8 @@
-import { Module } from "@nestjs/common";
-import { AuthThirdWebRepo } from "./auth-thirdweb.repo";
+import { Module } from '@nestjs/common';
+import { AuthThirdWebRepo } from './auth-thirdweb.repo';
 
 @Module({
-    providers: [
-        AuthThirdWebRepo
-    ],
-    exports:[
-        AuthThirdWebRepo
-    ]
+  providers: [AuthThirdWebRepo],
+  exports: [AuthThirdWebRepo],
 })
-export class ThirdWebModule{}
+export class ThirdWebModule {}

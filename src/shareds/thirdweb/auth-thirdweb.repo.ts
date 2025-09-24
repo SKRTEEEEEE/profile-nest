@@ -1,10 +1,11 @@
-import { Injectable } from "@nestjs/common";
-import { VerifyJWTRes } from "../jwt-auth/application/jwt-auth.interface";
-import { UnauthorizedError } from "src/domain/flows/domain.error";
+import { Injectable } from '@nestjs/common';
+import { VerifyJWTRes } from '../jwt-auth/application/jwt-auth.interface';
+import { createDomainError } from 'src/domain/flows/error.registry';
+import { ErrorCodes } from 'src/domain/flows/error.type';
 import { createThirdwebClient, ThirdwebClient } from 'thirdweb';
 import { createAuth, VerifyLoginPayloadParams } from 'thirdweb/auth';
 import { Account, privateKeyToAccount } from 'thirdweb/wallets';
-import { AuthThirdWebVerifyPayloadDto } from "./auth-thirdweb.dto";
+import { AuthThirdWebVerifyPayloadDto } from './auth-thirdweb.dto';
 
 @Injectable()
 // TESTING
@@ -37,15 +38,32 @@ export class AuthThirdWebRepo {
 
   async verifyJWT(token: string): Promise<VerifyJWTRes> {
     if (!token) {
-      throw new UnauthorizedError(AuthThirdWebRepo,'No token provided');
+      throw createDomainError(
+        ErrorCodes.UNAUTHORIZED_ACTION,
+        AuthThirdWebRepo,
+        'verifyJWT',
+        undefined,
+        { shortDesc: 'No token provided' },
+      );
     }
 
     try {
       const res = await this.auth.verifyJWT({ jwt: token });
-      if (!res.valid) throw new UnauthorizedError(AuthThirdWebRepo,"No valid token");
+      if (!res.valid)
+        throw createDomainError(
+          ErrorCodes.UNAUTHORIZED_ACTION,
+          AuthThirdWebRepo,
+          'verifyJWT',
+          'credentials',
+        );
       return res;
     } catch (error) {
-      throw new UnauthorizedError(AuthThirdWebRepo, "Error at auth.verifyJwt")
+      throw createDomainError(
+        ErrorCodes.UNAUTHORIZED_ACTION,
+        AuthThirdWebRepo,
+        'verifyJWT',
+        'credentials',
+      );
     }
   }
 
