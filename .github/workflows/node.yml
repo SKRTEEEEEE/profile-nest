@@ -31,7 +31,7 @@ jobs:
         if: steps.cache-node_modules.outputs.cache-hit != true
         run: npm ci
       - name: Build TypeScript 📦
-        run: npm run build && find dist/main.js
+        run: npm run build && find dist/src/main.js
       - name: Lint code 💅
         run: npm run lint
       - name: Run tests ✅

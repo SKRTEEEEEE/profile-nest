@@ -1,5 +1,5 @@
 /** @type {import('jest').Config} */
-export default {
+const config = {
   moduleFileExtensions: ['js', 'json', 'ts'],
   rootDir: 'test/units',
   testRegex: '.*\\.spec\\.ts$',
@@ -7,9 +7,11 @@ export default {
     '^.+\\.(t|j)s$': 'ts-jest',
   },
   moduleNameMapper: {
-    '^src/(.*)$': '<rootDir>/../../src/$1'
+    '^src/(.*)$': '<rootDir>/../../src/$1',
   },
   collectCoverageFrom: ['../../src/**/*.ts'],
   coverageDirectory: 'coverage/unit',
   testEnvironment: 'node',
 };
+
+export default config;
