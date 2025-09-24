@@ -1,0 +1,62 @@
+💻 Source:
+  - changed-files:
+      - any-glob-to-any-file:
+          - src/**
+
+🧪 Tests:
+  - changed-files:
+      - any-glob-to-any-file:
+          - test/**
+          - jest.unit.config.js
+          - '**/*.spec.ts'
+          - '**/*.test.ts'
+
+📝 Documentation:
+  - changed-files:
+      - any-glob-to-any-file:
+          - README.md
+          - .github/README.md
+          - docs/**
+
+🐳 Build:
+  - changed-files:
+      - any-glob-to-any-file:
+          - Dockerfile
+          - nest-cli.json
+          - tsconfig.json
+          - tsconfig.build.json
+
+⚙️ Configuration:
+  - changed-files:
+      - any-glob-to-any-file:
+          - .env
+          - .gitignore
+          - .gitmodules
+          - .prettierrc
+          - commitlint.config.js
+          - eslint.config.js
+          - jest.unit.config.js
+          - nest-cli.json
+          - tsconfig.json
+          - tsconfig.build.json
+
+📦 Dependencies:
+  - changed-files:
+      - any-glob-to-any-file:
+          - package.json
+          - package-lock.json
+
+🚀 CI/CD:
+  - changed-files:
+      - any-glob-to-any-file:
+          - .github/workflows/**
+          - .github/list-config.sh
+
+🏠 GitHub Configuration:
+  - changed-files:
+      - any-glob-to-any-file:
+          - .github/ISSUE_TEMPLATE/**
+          - .github/labels.yml
+          - .github/pr-scope-labeler.yml
+          - .github/PULL_REQUEST_TEMPLATE.md
+          - .github/README.md

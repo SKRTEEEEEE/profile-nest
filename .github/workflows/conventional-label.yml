@@ -1,0 +1,29 @@
+name: '🏷️ Conventional release labels'
+
+on:
+  pull_request_target:
+    types: [opened, edited, reopened]
+
+jobs:
+  label:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: bcoe/conventional-release-labels@v1
+        with:
+          type_labels: '{"feat": "🚀 Feature", "fix": "🕵🏻 Fix", "breaking": "⚠️ Breaking Change"}'
+#         with:
+#   type_labels: |
+#     {
+#       "feat": "🚀 Feature", 
+#       "fix": "🐛 Bug Fix",
+#       "docs": "📝 Documentation",
+#       "style": "💅 Style",
+#       "refactor": "♻️ Refactor",
+#       "perf": "⚡ Performance",
+#       "test": "🧪 Tests",
+#       "build": "📦 Build",
+#       "ci": "🔧 CI/CD",
+#       "chore": "🧹 Chore",
+#       "revert": "⏪ Revert",
+#       "breaking": "⚠️ Breaking Change"
+#     }
