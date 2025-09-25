@@ -1,52 +1,36 @@
-name: '🤖 Dependabot auto merge with security check'
+name: "🤖 Dependabot auto merge with security check"
 
 on:
-  # Ejecuta en el contexto de la rama base (permite acceder a secrets)
   pull_request_target:
     types: [opened, synchronize, reopened]
 
 permissions:
   contents: write
   pull-requests: write
-  checks: read
 
 jobs:
   dependency-review:
-    name: '🔍 Dependency Review'
+    name: "🔍 Dependency Review"
     runs-on: ubuntu-latest
-    # sólo ejecutamos si es Dependabot (reduce riesgo)
     if: github.actor == 'dependabot[bot]'
     steps:
-      - name: Checkout PR head (safe)
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
         with:
-          # checkout del commit del PR para que el review analice los cambios
           ref: ${{ github.event.pull_request.head.sha }}
           fetch-depth: 0
 
-      - name: Run Dependency Review
-        uses: actions/dependency-review-action@v4
+      - uses: actions/dependency-review-action@v4
         with:
           comment-summary-in-pr: always
 
   auto-merge:
-    
-    name: '✅ Auto-merge Dependabot PR'
+    name: "✅ Auto-merge Dependabot PR"
     needs: dependency-review
     runs-on: ubuntu-latest
     if: github.actor == 'dependabot[bot]'
     steps:
-      - name: Checkout PR head
-        uses: actions/checkout@v4
-        with:
-          ref: ${{ github.event.pull_request.head.sha }}
-          fetch-depth: 0
-
-      - name: Auto-merge Dependabot PR
-        uses: ahmadnassri/action-dependabot-auto-merge@v2
+      - uses: ahmadnassri/action-dependabot-auto-merge@v2
         with:
           target: minor
           command: squash and merge
-          # Puedes usar el secret PAT (si lo tienes) o probar con GITHUB_TOKEN
-          github-token: ${{ secrets.DEPENDABOT_AUTO_MERGE_GITHUB_TOKEN }}
-          
+          github-token: ${{ secrets.GITHUB_TOKEN }}
