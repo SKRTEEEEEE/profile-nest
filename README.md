@@ -48,14 +48,14 @@ Construido con **NestJS** como framework principal.
 - ⬜ [Versioning](https://docs.nestjs.com/techniques/versioning)
 - ⬜ [Task scheduling](https://docs.nestjs.com/techniques/task-scheduling)
 - ⬜ [Queues](https://docs.nestjs.com/techniques/queues)
-- 🟩 [Logging](https://docs.nestjs.com/techniques/logging)
+- 🟪 [Logging](https://docs.nestjs.com/techniques/logging)
 - ⬜ [Cookies](https://docs.nestjs.com/techniques/cookies)
 
 <b>🔒 Security</b>
 
-- 🟧 [Authentication](https://docs.nestjs.com/security/authentication)
+- 🟪 [Authentication](https://docs.nestjs.com/security/authentication)
 - ✅ [Authorization](https://docs.nestjs.com/security/authorization)
-- 🟧 [Encryption & Hashing](https://docs.nestjs.com/security/encryption)
+- 🟪 [Encryption & Hashing](https://docs.nestjs.com/security/encryption)
 - ⬜ [CSRF Protection](https://docs.nestjs.com/security/csrf)
 - ⬜ [Helmet](https://docs.nestjs.com/security/helmet)
 - ⬜ [CORS](https://docs.nestjs.com/security/cors)
