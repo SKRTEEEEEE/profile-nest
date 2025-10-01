@@ -6,7 +6,7 @@ import { RoleAuthTokenGuard } from 'src/shareds/role-auth/presentation/role-auth
 import { PublicRoute } from 'src/shareds/jwt-auth/presentation/public-route.decorator';
 import { Roles } from 'src/shareds/role-auth/presentation/role.decorator';
 import { QueryDto } from 'src/shareds/presentation/pipes/query.dto';
-import { MongooseBase } from 'src/shareds/pattern/infrastructure/types/mongoose';
+import { DBBase } from 'src/dynamic.types';;
 import { ResCodes } from 'src/domain/flows/res.type';
 import { PreTechInterface } from '../application/pre-tech.interface';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
@@ -17,9 +17,9 @@ import { ThrottlerGuard } from '@nestjs/throttler';
 
 @ApiTags('Pre Tech')
 @Controller('/pre-tech')
-export class PreTechController implements PreTechInterface<MongooseBase> {
+export class PreTechController implements PreTechInterface<DBBase> {
   constructor(
-    private readonly preTechEndpointService: PreTechEndpointUseCase<MongooseBase>,
+    private readonly preTechEndpointService: PreTechEndpointUseCase<DBBase>,
   ) {} // Esto proviene de /app y no depende de ninguna librería tan solo del domain(typescript puro)
 
   // Este endpoint, es Post, porque estas ejecutando una acción que provoca cambios en el estado del servidor, y no es una operación idempotente ni pura (por tanto no GET, no PUT, no PATCH).
@@ -64,7 +64,7 @@ Useful for listing, searching, or filtering technologies in the application.`,
   // // @Roles() // Actuara como una ruta protegida normal (token validado - sin rol -> pasara ok)
   async readByQuery(
     @Query() query: QueryDto,
-  ): Promise<PreTech<MongooseBase>[]> {
+  ): Promise<(PreTechBase&DBBase)[]> {
     return await this.preTechEndpointService.readByQuery(query);
   }
 }

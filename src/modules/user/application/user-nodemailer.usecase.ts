@@ -15,11 +15,11 @@ export type UserNodemailerUpdateProps =
   UserFormS & { id: any };
 
 @Injectable()
-export class UserNodemailerUpdateUseCase<TDB> {
+export class UserNodemailerUpdateUseCase {
   constructor(
     private readonly nodemailerRepository: EmailNodemailerRepo,
-    private readonly userUpdateByIdService: UserUpdateByIdUseCase<TDB>,
-    private readonly userReadByIdService: UserReadByIdUseCase<TDB>,
+    private readonly userUpdateByIdService: UserUpdateByIdUseCase,
+    private readonly userReadByIdService: UserReadByIdUseCase,
   ) {}
   async update(userUpdateProps: UserNodemailerUpdateProps) {
     let verifyToken, verifyTokenExpire;

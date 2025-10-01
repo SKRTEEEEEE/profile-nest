@@ -4,11 +4,9 @@ import { MongooseBaseImpl } from './base';
 import { createDomainError } from 'src/domain/flows/error.registry';
 import { ErrorCodes } from 'src/domain/flows/error.type';
 
-const thisIsThest = 'pepe';
-
 export type MongooseUpdateByIdProps<TBase> = {
   id: string;
-  updateData: UpdateQuery<TBase> | undefined;
+  updateData: UpdateQuery<TBase> ;
   options?: QueryOptions<TBase> | null | undefined;
 };
 export type MongooseCRUI<TBase> = {
@@ -22,7 +20,7 @@ export class MongooseCRUImpl<TBase>
   extends MongooseBaseImpl<TBase>
   implements MongooseCRUI<TBase>
 {
-  async create(data: Omit<TBase, 'id'>): CreateRes<TBase, MongooseBase> {
+  async create(data: Omit<TBase, 'id'>): Promise<TBase & MongooseBase> {
     try {
       const newDocument: TBase & MongooseDocument = new this.Model(data);
       const savedDocument = await newDocument.save();
@@ -47,7 +45,7 @@ export class MongooseCRUImpl<TBase>
     }
   }
 
-  async readById(id: string): ReadByIdRes<TBase, MongooseBase> {
+  async readById(id: string): Promise<TBase & MongooseBase> {
     try {
       const document = await this.Model.findById(id);
       if (!document) {
@@ -75,7 +73,7 @@ export class MongooseCRUImpl<TBase>
     id,
     updateData,
     options,
-  }: MongooseUpdateByIdProps<TBase>): UpdateByIdRes<TBase, MongooseBase> {
+  }: MongooseUpdateByIdProps<TBase>): Promise<TBase & MongooseBase> {
     try {
       const updatedDocument = await this.Model.findByIdAndUpdate(
         id,

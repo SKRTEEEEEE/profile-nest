@@ -1,8 +1,8 @@
+import { DBBase } from '@/dynamic.types';
 import { ApiProperty } from '@nestjs/swagger';
-import { MongooseBase } from '../pattern/infrastructure/types/mongoose';
 import { IsString } from 'class-validator';
 
-export class DatabaseDto implements MongooseBase {
+export class DatabaseDto implements DBBase {
   @ApiProperty()
   @IsString()
   id: string;

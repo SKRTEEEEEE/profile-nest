@@ -3,28 +3,28 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Document, Model, ModifyResult } from 'mongoose';
 import { MongooseCRUImpl } from 'src/shareds/pattern/infrastructure/implementations/cru.impl';
 import {
-  MongooseBase,
-  MongooseDocument,
-} from 'src/shareds/pattern/infrastructure/types/mongoose';
+  DBBase,
+} from 'src/dynamic.types';;
 import { UserInterface } from '../application/user.interface';
 import { createDomainError } from 'src/domain/flows/error.registry';
 import { ErrorCodes } from 'src/domain/flows/error.type';
 import { RoleType } from 'src/domain/entities/role.type';
+import { MongooseDocument } from '@/shareds/pattern/infrastructure/types/mongoose';
 
 @Injectable()
 export class MongooseUserRepo
   extends MongooseCRUImpl<UserBase>
-  implements UserInterface<MongooseBase>
+  implements UserInterface
 {
   constructor(
     @InjectModel('User')
-    private readonly userModel: Model<UserBase & MongooseBase & Document>,
+    private readonly userModel: Model<UserBase>,
   ) {
     super(userModel);
   }
   async readOne(
     filter: Record<string, any>,
-  ): EntitieRes<UserBase, MongooseBase> {
+  ): Promise<UserBase & DBBase> {
     try {
       const doc = await this.userModel.findOne(filter);
       if (!doc)
@@ -35,7 +35,7 @@ export class MongooseUserRepo
           undefined,
           { optionalMessage: 'Error en la operación de lectura' },
         );
-      return doc;
+      return this.documentToPrimary(doc);
     } catch (error) {
       throw createDomainError(
         ErrorCodes.DATABASE_FIND,
@@ -49,13 +49,13 @@ export class MongooseUserRepo
   async update(
     filter: Record<string, any>,
     options: Record<string, any>,
-  ): EntitieRes<UserBase, MongooseBase> {
+  ): Promise<UserBase & DBBase> {
     try {
       const updatedDocument: ModifyResult<UserBase & MongooseDocument> | null =
         await this.userModel.findOneAndUpdate(filter, undefined, options);
       return this.documentToPrimary(
         updatedDocument?.value as UserBase & MongooseDocument,
-      ) as UserBase & MongooseBase;
+      ) as UserBase & DBBase;
     } catch (error) {
       console.error('Error al actualizar el documento:', error);
       throw createDomainError(
@@ -67,9 +67,9 @@ export class MongooseUserRepo
       );
     }
   }
-  async deleteById(id: string): DeleteByIdRes<UserBase, MongooseBase> {
+  async deleteById(id: string): Promise<UserBase & DBBase> {
     try {
-      const result: (UserBase & MongooseBase) | null =
+      const result: (UserBase & DBBase) | null =
         await this.userModel.findByIdAndDelete(id);
       if (!result)
         throw createDomainError(
@@ -91,8 +91,8 @@ export class MongooseUserRepo
     }
   }
   async read(
-    filter: Partial<UserBase & MongooseBase>,
-  ): EntitieArrayRes<UserBase, MongooseBase> {
+    filter: Partial<UserBase & DBBase>,
+  ): Promise<(UserBase & DBBase)[]> {
     try {
       const docs = await this.userModel.find(filter);
       this.resArrCheck(docs);
@@ -117,7 +117,7 @@ export class MongooseUserRepo
       verifyToken?: string;
       verifyTokenExpire?: string;
       paymentId?: string;
-    } & MongooseBase
+    } & DBBase
   > {
     try {
       const res = await this.userModel.findOne({ filter: address });
@@ -129,7 +129,7 @@ export class MongooseUserRepo
           undefined,
           { optionalMessage: 'Error en la operación de lectura' },
         );
-      return res;
+      return this.documentToPrimary(res);
     } catch {
       throw createDomainError(
         ErrorCodes.DATABASE_FIND,

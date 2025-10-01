@@ -6,6 +6,7 @@ import {
 } from 'src/domain/entities/tech';
 import { TechRepository } from './tech.interface';
 import { TECH_REPOSITORY } from 'src/modules/tokens';
+import { DBBase } from '@/dynamic.types';
 
 type BadgeAndValue = {
   badge: string;
@@ -13,17 +14,13 @@ type BadgeAndValue = {
 };
 // Service for reading Tech entities
 @Injectable()
-export class TechReadUseCase<TDB> {
+export class TechReadUseCase {
   constructor(
     @Inject(TECH_REPOSITORY)
-    private readonly techRepository: TechRepository<TDB>,
+    private readonly techRepository: TechRepository,
   ) {}
 
-  async read(filter?: Partial<LengBase & TDB>): Promise<(LengBase & TDB)[]> {
-    return await this.techRepository.read(filter);
-  }
-  // Este tiene logica ponerlo aqui porque es una excision de read
-  async readAllC(): Promise<ReadAllFlattenTechsRes<TDB>> {
+  async readAllC(): Promise<ReadAllFlattenTechsRes> {
     const proyectosDB = await this.techRepository.read({});
     const dispoLeng = proyectosDB?.map((lenguaje: { nameId: string }) => ({
       name: lenguaje.nameId,
@@ -46,15 +43,15 @@ export class TechReadUseCase<TDB> {
       dispoLeng,
     };
   }
-  async readAll(): Promise<(LengBase & TDB)[]> {
+  async readAll() {
     return await this.techRepository.read({});
-  }
+  } //este lo voy a quitar
   async readAllFlatten(): Promise<FullTechData[]> {
     const res = await this.techRepository.read({});
     return this.flattenTechs(res);
   }
   async readAllCat(): Promise<
-    Omit<ReadAllFlattenTechsRes<TDB>, 'techs' | 'flattenTechs'>
+    Omit<ReadAllFlattenTechsRes, 'techs' | 'flattenTechs'>
   > {
     const proyectosDB = await this.techRepository.read({});
     const dispoLeng = proyectosDB?.map((lenguaje: { nameId: string }) => ({
@@ -73,7 +70,7 @@ export class TechReadUseCase<TDB> {
     });
     return { dispoFw, dispoLeng };
   }
-  private flattenTechs = (proyectos: (LengBase & TDB)[]): FullTechData[] => {
+  private flattenTechs = (proyectos: (LengBase & DBBase)[]): FullTechData[] => {
     const flattenedArray: FullTechData[] = [];
 
     proyectos.forEach((proyecto) => {

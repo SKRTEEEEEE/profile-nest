@@ -20,7 +20,7 @@ import {
   UserUpdateByIdUseCase,
   UserVerifyEmailUseCase,
 } from '../application/user.usecase';
-import { MongooseBase } from 'src/shareds/pattern/infrastructure/types/mongoose';
+import { DBBase } from 'src/dynamic.types';;
 import { PublicRoute } from 'src/shareds/jwt-auth/presentation/public-route.decorator';
 import { RoleType } from 'src/domain/entities/role.type';
 import { createDomainError } from 'src/domain/flows/error.registry';
@@ -58,21 +58,21 @@ enum ManageRoleParam {
 @ApiTags('User')
 export class UserController {
   constructor(
-    private readonly userReadByIdService: UserReadByIdUseCase<MongooseBase>,
-    private readonly userReadService: UserReadUseCase<MongooseBase>,
-    private readonly userUpdateByIdService: UserUpdateByIdUseCase<MongooseBase>,
-    private readonly userVerifyEmailService: UserVerifyEmailUseCase<MongooseBase>,
-    private readonly userNodemailerUpdateService: UserNodemailerUpdateUseCase<MongooseBase>, // 🧠 -> No es necesario 'crear' este tipo de UseCase (varios module -user, tech, etc..- con dif use cases) -> Podemos montar dicha endpoint aquí, evitando tener capa app
+    private readonly userReadByIdService: UserReadByIdUseCase,
+    private readonly userReadService: UserReadUseCase,
+    private readonly userUpdateByIdService: UserUpdateByIdUseCase,
+    private readonly userVerifyEmailService: UserVerifyEmailUseCase,
+    private readonly userNodemailerUpdateService: UserNodemailerUpdateUseCase, // 🧠 -> No es necesario 'crear' este tipo de UseCase (varios module -user, tech, etc..- con dif use cases) -> Podemos montar dicha endpoint aquí, evitando tener capa app
     // use Repo here!!
     // private readonly authThirdWebRepository: AuthThirdWebRepo,
-    private readonly userCreateService: UserCreateUseCase<MongooseBase>,
-    private readonly userReadOneService: UserReadOneUseCase<MongooseBase>,
-    // private readonly userThirdWebCreateService: UserThirdWebLoginUseCase<MongooseBase>,
+    private readonly userCreateService: UserCreateUseCase,
+    private readonly userReadOneService: UserReadOneUseCase,
+    // private readonly userThirdWebCreateService: UserThirdWebLoginUseCase<DBBase>,
     private readonly roleDeleteByIdService: RoleDeleteByIdUseCase,
-    private readonly userDeleteByIdService: UserDeleteByIdUseCase<MongooseBase>,
-    // private readonly userRoleThirdWebDeleteService: UserRoleThirdWebDeleteUseCase<MongooseBase>,
+    private readonly userDeleteByIdService: UserDeleteByIdUseCase,
+    // private readonly userRoleThirdWebDeleteService: UserRoleThirdWebDeleteUseCase<DBBase>,
     private readonly roleCreateService: RoleCreateUseCase,
-    // private readonly userRoleThirdwebGiveRoleService: UserRoleThirdwebGiveRoleUseCase<MongooseBase>,
+    // private readonly userRoleThirdwebGiveRoleService: UserRoleThirdwebGiveRoleUseCase<DBBase>,
   ) {}
 
   @Post()
@@ -216,7 +216,7 @@ Use this endpoint to permanently remove your user and her data from the system.`
       );
     if (user.roleId !== null) {
       await this.roleDeleteByIdService.deleteById(
-        user.roleId as DeleteByIdProps<MongooseBase>,
+        user.roleId as string,
       );
     }
     await this.userDeleteByIdService.deleteById(userId);

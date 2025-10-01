@@ -2,8 +2,10 @@ import { Inject, Injectable } from '@nestjs/common';
 import { RoleBase } from 'src/domain/entities/role';
 import { RoleType } from 'src/domain/entities/role.type';
 import { RoleInterface } from './role.interface';
-import { MongooseBase } from 'src/shareds/pattern/infrastructure/types/mongoose';
+import { DBBase } from 'src/dynamic.types';;
 import { ROLE_REPOSITORY } from 'src/modules/tokens';
+import { UpdateByIdProps } from '@/shareds/pattern/application/interfaces/cru';
+import { DeleteProps } from '@/shareds/pattern/application/interfaces/delete';
 
 @Injectable()
 export class RoleCreateUseCase {
@@ -11,7 +13,7 @@ export class RoleCreateUseCase {
     @Inject(ROLE_REPOSITORY) private readonly roleRepository: RoleInterface,
   ) {}
 
-  async create(data: Omit<RoleBase, 'id'>): Promise<RoleBase & MongooseBase> {
+  async create(data: Omit<RoleBase, 'id'>): Promise<RoleBase & DBBase> {
     return await this.roleRepository.create(data);
   }
 }
@@ -22,7 +24,7 @@ export class RoleReadByIdUseCase {
     @Inject(ROLE_REPOSITORY) private readonly roleRepository: RoleInterface,
   ) {}
 
-  async readById(id: string): Promise<RoleBase & MongooseBase> {
+  async readById(id: string): Promise<RoleBase & DBBase> {
     return await this.roleRepository.readById(id);
   }
 }
@@ -35,7 +37,7 @@ export class RoleReadUseCase {
 
   async read(
     filter?: Record<string, any>,
-  ): Promise<(RoleBase & MongooseBase)[]> {
+  ): Promise<(RoleBase & DBBase)[]> {
     return await this.roleRepository.read(filter);
   }
 
@@ -53,7 +55,7 @@ export class RoleUpdateByIdUseCase {
 
   async updateById(
     props: UpdateByIdProps<RoleBase>,
-  ): Promise<RoleBase & MongooseBase> {
+  ): Promise<RoleBase & DBBase> {
     return await this.roleRepository.updateById(props);
   }
 }
@@ -64,7 +66,7 @@ export class RoleDeleteByIdUseCase {
     @Inject(ROLE_REPOSITORY) private readonly roleRepository: RoleInterface,
   ) {}
 
-  async deleteById(id: string): Promise<RoleBase & MongooseBase> {
+  async deleteById(id: string): Promise<RoleBase & DBBase> {
     return await this.roleRepository.deleteById(id);
   }
 }
@@ -76,8 +78,8 @@ export class RoleDeleteUseCase {
   ) {}
 
   async delete(
-    props: DeleteProps<RoleBase, MongooseBase>,
-  ): Promise<RoleBase & MongooseBase> {
+    props: DeleteProps<RoleBase>,
+  ): Promise<Array<RoleBase & DBBase>> {
     return await this.roleRepository.delete(props);
   }
 }

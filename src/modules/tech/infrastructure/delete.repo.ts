@@ -3,7 +3,7 @@ import {
   TechDeleteUseCase,
   TechReadOneUseCase,
 } from '../application/tech.usecase';
-import { MongooseBase } from 'src/shareds/pattern/infrastructure/types/mongoose';
+import { DBBase } from 'src/dynamic.types';;
 import { FwBase } from 'src/domain/entities/tech';
 import { Document } from 'mongoose';
 import { createDomainError } from 'src/domain/flows/error.registry';
@@ -16,8 +16,8 @@ import { FwDocument, LibDocument } from './tech.schema';
 @Injectable()
 export class TechFindDeleteRepo {
   constructor(
-    private readonly techReadOneService: TechReadOneUseCase<MongooseBase>,
-    private readonly techDeleteService: TechDeleteUseCase<MongooseBase>,
+    private readonly techReadOneService: TechReadOneUseCase,
+    private readonly techDeleteService: TechDeleteUseCase,
   ) {}
   async findAndDelete(name: string) {
     try {

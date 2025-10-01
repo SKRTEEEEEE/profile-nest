@@ -1,25 +1,28 @@
 import { Injectable } from '@nestjs/common';
-import { FwBase, LengBase, TechBase, TechForm } from 'src/domain/entities/tech';
-import { Model, ModifyResult } from 'mongoose';
+import { Fw, FwBase, Leng, LengBase, TechBase, TechForm } from 'src/domain/entities/tech';
+import { Document, Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 import { MongooseCRUImpl } from 'src/shareds/pattern/infrastructure/implementations/cru.impl';
 
 import {
-  MongooseBase,
-  MongooseDocument,
-} from 'src/shareds/pattern/infrastructure/types/mongoose';
+  DBBase,
+} from 'src/dynamic.types';;
 import { TechRepository } from '../application/tech.interface';
 import { createDomainError } from 'src/domain/flows/error.registry';
 import { ErrorCodes } from 'src/domain/flows/error.type';
+import { MongooseDocument } from '@/shareds/pattern/infrastructure/types/mongoose';
+import { DeleteProps } from '@/shareds/pattern/application/interfaces/delete';
+
+
 
 @Injectable()
 export class MongooseTechRepo
   extends MongooseCRUImpl<LengBase>
-  implements TechRepository<MongooseBase>
+  implements TechRepository
 {
   constructor(
     @InjectModel('Lenguaje')
-    private readonly lengModel: Model<LengBase & MongooseBase & Document>,
+    private readonly lengModel: Model<LengBase>,
   ) {
     super(lengModel);
   }
@@ -32,7 +35,7 @@ export class MongooseTechRepo
           MongooseTechRepo,
           'readOne',
         );
-      return res;
+      return this.documentToPrimary(res) as Leng;
     } catch (error) {
       throw createDomainError(
         ErrorCodes.DATABASE_FIND,
@@ -42,12 +45,14 @@ export class MongooseTechRepo
     }
   }
   async read(
-    filter: Partial<LengBase & MongooseBase>,
-  ): EntitieArrayRes<LengBase, MongooseBase> {
+    filter?: Partial<LengBase & DBBase>,
+  ): Promise<Leng[]> {
     try {
-      const docs = await this.lengModel.find(filter);
+      let docs;
+      if(!filter){docs = await this.lengModel.find({}) }else{       docs = await this.lengModel.find(filter);
+}
       this.resArrCheck(docs);
-      return docs.map((doc) => this.documentToPrimary(doc));
+      return this.techToPrim(docs)
     } catch (error) {
       throw createDomainError(
         ErrorCodes.DATABASE_FIND,
@@ -58,11 +63,48 @@ export class MongooseTechRepo
       );
     }
   }
+  private techToPrim = (proyectos: (LengBase & MongooseDocument)[]): Leng[] => {
+    const flattenedArray: Leng[] = [];
+
+    proyectos.forEach((proyecto) => {
+      // Proyecto principal
+      const { _id, createdAt, updatedAt, frameworks, ...rest } = proyecto.toObject();
+
+      const leng: Leng = {
+        id: _id.toString(),
+        createdAt: createdAt.toISOString(),
+        updatedAt: updatedAt.toISOString(),
+        ...rest,
+        frameworks: frameworks ? frameworks.map(fw => {
+          const { _id, createdAt, updatedAt, librerias, ...restFw } = fw;
+          const fwBase: Fw = {
+            id: _id.toString(),
+            createdAt: createdAt.toISOString(),
+            updatedAt: updatedAt.toISOString(),
+            ...restFw,
+            librerias: librerias ? librerias.map(lib => {
+              const { _id, createdAt, updatedAt, ...restLib } = lib;
+              return {
+                id: _id.toString(),
+                createdAt: createdAt.toISOString(),
+                updatedAt: updatedAt.toISOString(),
+                ...restLib,
+              }
+            }) : undefined
+          }
+          return fwBase
+        }) : undefined
+      };
+      flattenedArray.push(leng);
+    });
+
+    return flattenedArray;
+  };
   async updateByNameId(
     nameId: string,
     updateData: Partial<LengBase>,
   ): Promise<
-    (TechBase & { frameworks?: FwBase[] } & MongooseBase) | undefined | null
+    (TechBase & { frameworks?: FwBase[] } & DBBase) | undefined | null
   > {
     try {
       return this.lengModel.findOneAndUpdate({
@@ -87,7 +129,7 @@ export class MongooseTechRepo
   }
   async updateByForm(
     updateData: Partial<TechForm>,
-  ): EntitieRes<LengBase, MongooseBase> {
+  ): Promise<LengBase & DBBase> {
     try {
       let proyectoActualizado;
       if ('fwTo' in updateData) {
@@ -151,17 +193,17 @@ export class MongooseTechRepo
     }
   }
   async delete(
-    filter: Record<string, any>,
-  ): EntitieRes<LengBase, MongooseBase> {
+    filter: DeleteProps<LengBase>,
+  ): Promise<LengBase & DBBase> {
     try {
-      const res = await this.lengModel.findOneAndDelete(filter);
+      const res = await this.lengModel.findOneAndDelete(filter.filter);
       if (!res)
         throw createDomainError(
           ErrorCodes.DATABASE_ACTION,
           MongooseTechRepo,
           'delete',
         );
-      return res;
+      return this.documentToPrimary(res);
     } catch (error) {
       throw createDomainError(
         ErrorCodes.DATABASE_ACTION,

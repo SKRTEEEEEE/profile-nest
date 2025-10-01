@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { FullTechData, LengBase, TechBase } from 'src/domain/entities/tech';
 import { TechReadUseCase } from 'src/modules/tech/application/tech-read.usecase';
-import { MongooseBase } from 'src/shareds/pattern/infrastructure/types/mongoose';
+import { DBBase } from 'src/dynamic.types';;
 import { OctokitRepo } from 'src/shareds/octokit/infrastructure/octokit.service';
 
 // ⚠️ Hay que arreglar esto ⬇️⬇️
@@ -24,10 +24,10 @@ type ActualizarGithubTechsProps = {
   type: ActualizarGithubType;
   create?: {
     base: PreTechBase;
-    oldTechs: (LengBase & MongooseBase)[];
+    oldTechs: (LengBase & DBBase)[];
   };
-  // techs: ReadAllFlattenTechsRes<MongooseBase>["techs"],
-  // flattenTechs: ReadAllFlattenTechsRes<MongooseBase>["flattenTechs"]
+  // techs: ReadAllFlattenTechsRes<DBBase>["techs"],
+  // flattenTechs: ReadAllFlattenTechsRes<DBBase>["flattenTechs"]
 };
 type TechJsonData = {
   name: string;
@@ -51,14 +51,14 @@ type GetLinksResp = {
 @Injectable()
 export class TechOctokitActualizarGithubRepo {
   constructor(
-    private readonly techReadService: TechReadUseCase<MongooseBase>,
+    private readonly techReadService: TechReadUseCase,
     private readonly octokit: OctokitRepo,
   ) {}
   async actualizar(props: {
     type: ActualizarGithubType;
     create?: {
       base: PreTechBase;
-      oldTechs: (LengBase & MongooseBase)[];
+      oldTechs: (LengBase & DBBase)[];
     };
   }) {
     const { flattenTechs, techs } = await this.techReadService.readAllC();
@@ -91,7 +91,7 @@ export class TechOctokitActualizarGithubRepo {
   }
   private async actualizarMd(props: {
     create?: ActualizarGithubTechsProps['create'];
-    proyectosDB?: (LengBase & MongooseBase)[];
+    proyectosDB?: (LengBase & DBBase)[];
   }) {
     const { create, proyectosDB } = props;
     try {
