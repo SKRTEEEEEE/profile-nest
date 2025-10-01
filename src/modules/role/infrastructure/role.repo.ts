@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Document, Model } from 'mongoose';
+import { Model } from 'mongoose';
 
 import { RoleBase } from 'src/domain/entities/role';
 import { MongooseCRUImpl } from 'src/shareds/pattern/infrastructure/implementations/cru.impl';
@@ -8,6 +8,7 @@ import { RoleInterface } from '../application/role.interface';
 import { DBBase } from 'src/dynamic.types';;
 import { ErrorCodes } from 'src/domain/flows/error.type';
 import { createDomainError } from 'src/domain/flows/error.registry';
+import { DeleteProps } from '@/shareds/pattern/application/interfaces/delete';
 
 @Injectable()
 export class MongooseRoleRepo
@@ -15,29 +16,26 @@ export class MongooseRoleRepo
   implements RoleInterface
 {
   constructor(
-    @InjectModel('Role') private readonly roleModel: Model<RoleBase & Document>,
+    @InjectModel('Role') private readonly roleModel: Model<RoleBase>,
   ) {
     super(roleModel);
   }
 
-  // ✔ Arreglado: antes estabas metiendo el filtro dentro de otro objeto {filter}
   async read(
     filter?: Record<string, any>,
-  ): EntitieArrayRes<RoleBase, DBBase> {
+  ): Promise<(RoleBase & DBBase)[]> {
     const docs = await this.roleModel.find(filter ? { filter } : {});
     return docs.map((doc) => this.documentToPrimary(doc));
   }
 
-  // ✔ Comprueba si la dirección tiene un rol de admin
   async isAdmin(address: string): Promise<boolean> {
     const role = await this.roleModel.findOne({ address, name: 'admin' });
     return !!role;
   }
 
-  // ✔ Borra un documento por id y devuelve el documento borrado convertido
   async deleteById(
-    id: DeleteByIdProps<DBBase>,
-  ): DeleteByIdRes<RoleBase, DBBase> {
+    id: string,
+  ): Promise<RoleBase & DBBase> {
     const deleted = await this.roleModel.findByIdAndDelete(id);
     if (!deleted)
       throw createDomainError(
@@ -50,19 +48,18 @@ export class MongooseRoleRepo
     return this.documentToPrimary(deleted);
   }
 
-  // ✔ Borra por condiciones (ejemplo: por address o por cualquier campo del Role)
   async delete(
-    props: DeleteProps<RoleBase, DBBase>,
-  ): DeleteRes<RoleBase, DBBase> {
+    props: DeleteProps<RoleBase>,
+  ): Promise<(RoleBase & DBBase)[]> {
     try {
-      const res = await this.roleModel.findOneAndDelete(props);
+      const res = await this.roleModel.findOneAndDelete(props.filter);
       if (!res)
         throw createDomainError(
           ErrorCodes.DATABASE_ACTION,
           MongooseRoleRepo,
           'delete',
         );
-      return this.documentToPrimary(res);
+      return [this.documentToPrimary(res) as RoleBase & DBBase];
     } catch (error) {
       throw createDomainError(
         ErrorCodes.DATABASE_ACTION,

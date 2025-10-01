@@ -18,10 +18,10 @@ import { ErrorCodes } from 'src/domain/flows/error.type';
 @Injectable()
 export class TechOctokitCreateRepo {
   constructor(
-    private readonly techCreateService: TechCreateUseCase<DBBase>,
-    private readonly techReadService: TechReadUseCase<DBBase>,
-    private readonly techReadOneService: TechReadOneUseCase<DBBase>,
-    private readonly techUpdateService: TechUpdateUseCase<DBBase>,
+    private readonly techCreateService: TechCreateUseCase,
+    private readonly techReadService: TechReadUseCase,
+    private readonly techReadOneService: TechReadOneUseCase,
+    private readonly techUpdateService: TechUpdateUseCase,
     private readonly octokit: OctokitRepo, //github percentage
     private readonly techOctokitActualizarGithubRepo: TechOctokitActualizarGithubRepo,
     // private readonly octokitUFCService: OctokitUpdateFileContentService//github actualizarTech

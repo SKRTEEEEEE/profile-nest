@@ -16,8 +16,8 @@ import { FwDocument, LibDocument } from './tech.schema';
 @Injectable()
 export class TechFindDeleteRepo {
   constructor(
-    private readonly techReadOneService: TechReadOneUseCase<DBBase>,
-    private readonly techDeleteService: TechDeleteUseCase<DBBase>,
+    private readonly techReadOneService: TechReadOneUseCase,
+    private readonly techDeleteService: TechDeleteUseCase,
   ) {}
   async findAndDelete(name: string) {
     try {

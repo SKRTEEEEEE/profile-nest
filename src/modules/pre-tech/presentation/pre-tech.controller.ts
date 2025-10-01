@@ -64,7 +64,7 @@ Useful for listing, searching, or filtering technologies in the application.`,
   // // @Roles() // Actuara como una ruta protegida normal (token validado - sin rol -> pasara ok)
   async readByQuery(
     @Query() query: QueryDto,
-  ): Promise<PreTech<DBBase>[]> {
+  ): Promise<(PreTechBase&DBBase)[]> {
     return await this.preTechEndpointService.readByQuery(query);
   }
 }

@@ -8,19 +8,10 @@ import {
   Post,
   Put,
   UseGuards,
-  UseInterceptors,
 } from '@nestjs/common';
-
-import { TechForm } from 'src/domain/entities/tech';
 import { TechReadUseCase } from '../application/tech-read.usecase';
-import {
-  TechDeleteUseCase,
-  TechReadByIdUseCase,
-  TechUpdateByIdUseCase,
-  TechUpdateUseCase,
-} from '../application/tech.usecase';
+
 import { PublicRoute } from 'src/shareds/jwt-auth/presentation/public-route.decorator';
-import { DBBase } from 'src/dynamic.types';;
 import { TechOctokitCreateRepo } from 'src/modules/tech/infrastructure/tech-octokit/create.repo';
 import {
   ActualizarGithubType,
@@ -62,7 +53,7 @@ export class TechController {
     private readonly techOctokitActualizarGithubRepo: TechOctokitActualizarGithubRepo,
     private readonly techOctokitCreateRepo: TechOctokitCreateRepo,
     private readonly techFindAndDeleteRepo: TechFindDeleteRepo,
-    private readonly techReadService: TechReadUseCase<DBBase>,
+    private readonly techReadService: TechReadUseCase,
     // private readonly techReadByIdService: TechReadByIdUseCase<DBBase>,
     // private readonly techUpdateService: TechUpdateUseCase<DBBase>,
     // private readonly techUpdateByIdService: TechUpdateByIdUseCase<DBBase>,

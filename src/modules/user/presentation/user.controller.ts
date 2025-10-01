@@ -58,18 +58,18 @@ enum ManageRoleParam {
 @ApiTags('User')
 export class UserController {
   constructor(
-    private readonly userReadByIdService: UserReadByIdUseCase<DBBase>,
-    private readonly userReadService: UserReadUseCase<DBBase>,
-    private readonly userUpdateByIdService: UserUpdateByIdUseCase<DBBase>,
-    private readonly userVerifyEmailService: UserVerifyEmailUseCase<DBBase>,
-    private readonly userNodemailerUpdateService: UserNodemailerUpdateUseCase<DBBase>, // 🧠 -> No es necesario 'crear' este tipo de UseCase (varios module -user, tech, etc..- con dif use cases) -> Podemos montar dicha endpoint aquí, evitando tener capa app
+    private readonly userReadByIdService: UserReadByIdUseCase,
+    private readonly userReadService: UserReadUseCase,
+    private readonly userUpdateByIdService: UserUpdateByIdUseCase,
+    private readonly userVerifyEmailService: UserVerifyEmailUseCase,
+    private readonly userNodemailerUpdateService: UserNodemailerUpdateUseCase, // 🧠 -> No es necesario 'crear' este tipo de UseCase (varios module -user, tech, etc..- con dif use cases) -> Podemos montar dicha endpoint aquí, evitando tener capa app
     // use Repo here!!
     // private readonly authThirdWebRepository: AuthThirdWebRepo,
-    private readonly userCreateService: UserCreateUseCase<DBBase>,
-    private readonly userReadOneService: UserReadOneUseCase<DBBase>,
+    private readonly userCreateService: UserCreateUseCase,
+    private readonly userReadOneService: UserReadOneUseCase,
     // private readonly userThirdWebCreateService: UserThirdWebLoginUseCase<DBBase>,
     private readonly roleDeleteByIdService: RoleDeleteByIdUseCase,
-    private readonly userDeleteByIdService: UserDeleteByIdUseCase<DBBase>,
+    private readonly userDeleteByIdService: UserDeleteByIdUseCase,
     // private readonly userRoleThirdWebDeleteService: UserRoleThirdWebDeleteUseCase<DBBase>,
     private readonly roleCreateService: RoleCreateUseCase,
     // private readonly userRoleThirdwebGiveRoleService: UserRoleThirdwebGiveRoleUseCase<DBBase>,
@@ -216,7 +216,7 @@ Use this endpoint to permanently remove your user and her data from the system.`
       );
     if (user.roleId !== null) {
       await this.roleDeleteByIdService.deleteById(
-        user.roleId as DeleteByIdProps<DBBase>,
+        user.roleId as string,
       );
     }
     await this.userDeleteByIdService.deleteById(userId);

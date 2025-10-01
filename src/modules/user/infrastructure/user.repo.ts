@@ -14,17 +14,17 @@ import { MongooseDocument } from '@/shareds/pattern/infrastructure/types/mongoos
 @Injectable()
 export class MongooseUserRepo
   extends MongooseCRUImpl<UserBase>
-  implements UserInterface<DBBase>
+  implements UserInterface
 {
   constructor(
     @InjectModel('User')
-    private readonly userModel: Model<UserBase & DBBase & Document>,
+    private readonly userModel: Model<UserBase>,
   ) {
     super(userModel);
   }
   async readOne(
     filter: Record<string, any>,
-  ): EntitieRes<UserBase, DBBase> {
+  ): Promise<UserBase & DBBase> {
     try {
       const doc = await this.userModel.findOne(filter);
       if (!doc)
@@ -35,7 +35,7 @@ export class MongooseUserRepo
           undefined,
           { optionalMessage: 'Error en la operación de lectura' },
         );
-      return doc;
+      return this.documentToPrimary(doc);
     } catch (error) {
       throw createDomainError(
         ErrorCodes.DATABASE_FIND,
@@ -49,7 +49,7 @@ export class MongooseUserRepo
   async update(
     filter: Record<string, any>,
     options: Record<string, any>,
-  ): EntitieRes<UserBase, DBBase> {
+  ): Promise<UserBase & DBBase> {
     try {
       const updatedDocument: ModifyResult<UserBase & MongooseDocument> | null =
         await this.userModel.findOneAndUpdate(filter, undefined, options);
@@ -67,7 +67,7 @@ export class MongooseUserRepo
       );
     }
   }
-  async deleteById(id: string): DeleteByIdRes<UserBase, DBBase> {
+  async deleteById(id: string): Promise<UserBase & DBBase> {
     try {
       const result: (UserBase & DBBase) | null =
         await this.userModel.findByIdAndDelete(id);
@@ -92,7 +92,7 @@ export class MongooseUserRepo
   }
   async read(
     filter: Partial<UserBase & DBBase>,
-  ): EntitieArrayRes<UserBase, DBBase> {
+  ): Promise<(UserBase & DBBase)[]> {
     try {
       const docs = await this.userModel.find(filter);
       this.resArrCheck(docs);
@@ -129,7 +129,7 @@ export class MongooseUserRepo
           undefined,
           { optionalMessage: 'Error en la operación de lectura' },
         );
-      return res;
+      return this.documentToPrimary(res);
     } catch {
       throw createDomainError(
         ErrorCodes.DATABASE_FIND,

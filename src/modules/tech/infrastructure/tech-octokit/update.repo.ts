@@ -12,7 +12,7 @@ import { ErrorCodes } from 'src/domain/flows/error.type';
 @Injectable()
 export class TechOctokitUpdateRepo {
   constructor(
-    private readonly techUpdateService: TechUpdateUseCase<DBBase>,
+    private readonly techUpdateService: TechUpdateUseCase,
     private readonly techOctokitActualizarGithubRepo: TechOctokitActualizarGithubRepo,
   ) {}
   async update(updateData: Partial<TechForm>) {

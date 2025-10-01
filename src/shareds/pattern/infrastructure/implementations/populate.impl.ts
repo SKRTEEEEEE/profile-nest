@@ -21,10 +21,8 @@ export type MongoosePopulateI<TBase> = {
 
 export class MongoosePopulateImpl<TBase> extends MongooseBaseImpl<TBase> {
   constructor(
-    protected readonly model: Model<any>,
-    parseOpt?: Function,
-  ) {
-    super(model, parseOpt);
+    protected readonly model: Model<any>  ) {
+    super(model);
   }
 
   async populate(

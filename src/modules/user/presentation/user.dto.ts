@@ -143,12 +143,13 @@ export class UserLoginMockDto {
   @IsString()
   password: string;
 }
+type User = DBBase & UserBase;
 @ApiDtoMetadata({
   description: 'All info about User included the Database metadata',
   title: 'User',
   group: 'User',
 })
-export class UserDto extends UserUpdateDto implements User<DBBase> {
+export class UserDto extends UserUpdateDto implements User {
   @ApiProperty({
     title: 'Wallet Address',
     description: 'Blockchain wallet address of the user.',

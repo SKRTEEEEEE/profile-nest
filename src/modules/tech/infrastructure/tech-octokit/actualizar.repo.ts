@@ -51,7 +51,7 @@ type GetLinksResp = {
 @Injectable()
 export class TechOctokitActualizarGithubRepo {
   constructor(
-    private readonly techReadService: TechReadUseCase<DBBase>,
+    private readonly techReadService: TechReadUseCase,
     private readonly octokit: OctokitRepo,
   ) {}
   async actualizar(props: {

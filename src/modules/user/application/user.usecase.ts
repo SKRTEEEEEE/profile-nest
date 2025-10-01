@@ -3,24 +3,26 @@ import { createDomainError } from 'src/domain/flows/error.registry';
 import { ErrorCodes } from 'src/domain/flows/error.type';
 import { UserInterface } from './user.interface';
 import { USER_REPOSITORY } from 'src/modules/tokens';
+import { DBBase } from '@/dynamic.types';
+import { CreateProps, UpdateByIdProps } from '@/shareds/pattern/application/interfaces/cru';
 
 @Injectable()
-export class UserCreateUseCase<TDB> {
+export class UserCreateUseCase {
   constructor(
     @Inject(USER_REPOSITORY)
-    private readonly userRepository: UserInterface<TDB>,
+    private readonly userRepository: UserInterface,
   ) {}
 
-  async create(props: CreateProps<UserBase>): Promise<UserBase & TDB> {
+  async create(props: CreateProps<UserBase>): Promise<UserBase & DBBase> {
     return await this.userRepository.create(props);
   }
 }
 
 @Injectable()
-export class UserReadOneUseCase<TDB> {
+export class UserReadOneUseCase {
   constructor(
     @Inject(USER_REPOSITORY)
-    private readonly userRepository: UserInterface<TDB>,
+    private readonly userRepository: UserInterface,
   ) {}
 
   async readOne(filter: Record<string, any>) {
@@ -34,34 +36,34 @@ export class UserReadOneUseCase<TDB> {
 }
 
 @Injectable()
-export class UserReadUseCase<TDB> {
+export class UserReadUseCase {
   constructor(
     @Inject(USER_REPOSITORY)
-    private readonly userRepository: UserInterface<TDB>,
+    private readonly userRepository: UserInterface,
   ) {}
 
-  async read(filter?: Partial<UserBase & TDB>): Promise<(UserBase & TDB)[]> {
+  async read(filter?: Partial<UserBase & DBBase>): Promise<(UserBase & DBBase)[]> {
     return await this.userRepository.read(filter);
   }
 }
 
 @Injectable()
-export class UserReadByIdUseCase<TDB> {
+export class UserReadByIdUseCase {
   constructor(
     @Inject(USER_REPOSITORY)
-    private readonly userRepository: UserInterface<TDB>,
+    private readonly userRepository: UserInterface,
   ) {}
 
-  async readById(id: string): ReadByIdRes<UserBase, TDB> {
+  async readById(id: string): Promise<UserBase & DBBase> {
     return await this.userRepository.readById(id);
   }
 }
 
 @Injectable()
-export class UserUpdateUseCase<TDB> {
+export class UserUpdateUseCase {
   constructor(
     @Inject(USER_REPOSITORY)
-    private readonly userRepository: UserInterface<TDB>,
+    private readonly userRepository: UserInterface,
   ) {}
 
   async update(filter: Record<string, any>, options: Record<string, any>) {
@@ -70,40 +72,40 @@ export class UserUpdateUseCase<TDB> {
 }
 
 @Injectable()
-export class UserUpdateByIdUseCase<TDB> {
+export class UserUpdateByIdUseCase {
   constructor(
     @Inject(USER_REPOSITORY)
-    private readonly userRepository: UserInterface<TDB>,
+    private readonly userRepository: UserInterface,
   ) {}
 
-  async updateById(props: UpdateByIdProps<UserBase>): Promise<UserBase & TDB> {
+  async updateById(props: UpdateByIdProps<UserBase>): Promise<UserBase & DBBase> {
     return await this.userRepository.updateById(props);
   }
 }
 
 @Injectable()
-export class UserDeleteByIdUseCase<TDB> {
+export class UserDeleteByIdUseCase {
   constructor(
     @Inject(USER_REPOSITORY)
-    private readonly userRepository: UserInterface<TDB>,
+    private readonly userRepository: UserInterface,
   ) {}
 
-  async deleteById(props: DeleteByIdProps<TDB>): DeleteByIdRes<UserBase, TDB> {
+  async deleteById(props: string): Promise<UserBase & DBBase> {
     return this.userRepository.deleteById(props);
   }
 }
 
 @Injectable()
-export class UserVerifyEmailUseCase<TDB> {
+export class UserVerifyEmailUseCase {
   constructor(
     @Inject(USER_REPOSITORY)
-    private readonly userRepository: UserInterface<TDB>,
+    private readonly userRepository: UserInterface,
   ) {}
 
   async verifyEmail(props: {
     id: string;
     verifyToken: string;
-  }): Promise<UserBase & TDB> {
+  }): Promise<UserBase & DBBase> {
     const user = await this.userRepository.readById(props.id);
     if (!user) {
       throw createDomainError(

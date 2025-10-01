@@ -4,6 +4,8 @@ import { RoleType } from 'src/domain/entities/role.type';
 import { RoleInterface } from './role.interface';
 import { DBBase } from 'src/dynamic.types';;
 import { ROLE_REPOSITORY } from 'src/modules/tokens';
+import { UpdateByIdProps } from '@/shareds/pattern/application/interfaces/cru';
+import { DeleteProps } from '@/shareds/pattern/application/interfaces/delete';
 
 @Injectable()
 export class RoleCreateUseCase {
@@ -76,8 +78,8 @@ export class RoleDeleteUseCase {
   ) {}
 
   async delete(
-    props: DeleteProps<RoleBase, DBBase>,
-  ): Promise<RoleBase & DBBase> {
+    props: DeleteProps<RoleBase>,
+  ): Promise<Array<RoleBase & DBBase>> {
     return await this.roleRepository.delete(props);
   }
 }

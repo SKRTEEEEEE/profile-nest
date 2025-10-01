@@ -1,13 +1,13 @@
-type DeleteByIdRes<TB, TDB> = EntitieRes<TB, TDB>;
-type DeleteRes<TB, TDB> = EntitieRes<TB, TDB>;
+import { DBBase } from "@/dynamic.types";
 
-type DeleteByIdProps<TDB> = TDB['id'];
-type DeleteProps<TB, TDB> = { filter: Partial<TB & TDB>; options?: Record };
 
-type DeleteByIdI<TB, TDB> = {
-  deleteById: (id: DeleteByIdProps<TDB>) => DeleteByIdRes<TB, TDB>;
+
+type DeleteProps<T> = { filter: Partial<T & DBBase>; options?: Record };
+
+type DeleteByIdI<T> = {
+  deleteById: (id: string) => Promise<T & DBBase>;
 };
 
-type DeleteI<TB, TDB> = {
-  delete: (props: DeleteProps<TB, TDB>) => DeleteRes<TB, TDB>;
+type DeleteI<T> = {
+  delete: (props: DeleteProps<T>) =>Promise<Array<T & DBBase>>;
 };
