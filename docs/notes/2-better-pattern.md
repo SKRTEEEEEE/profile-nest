@@ -43,8 +43,8 @@ type ReadProps<TB, TDB> =
 if (this.parseOpt) {
   Object.entries(this.parseOpt).forEach(([key, transformFn]) => {
     if (key in result && typeof transformFn === 'function') {
-      result[key as keyof TBase & MongooseBase] = transformFn(
-        result[key as keyof TBase & MongooseBase],
+      result[key as keyof TBase & DBBase] = transformFn(
+        result[key as keyof TBase & DBBase],
       );
     }
   });

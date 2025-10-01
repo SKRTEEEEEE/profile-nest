@@ -19,9 +19,9 @@ export class TechReadUseCase<TDB> {
     private readonly techRepository: TechRepository<TDB>,
   ) {}
 
-  async read(filter?: Partial<LengBase & TDB>): Promise<(LengBase & TDB)[]> {
-    return await this.techRepository.read(filter);
-  }
+  // async read(filter?: Partial<LengBase & TDB>): Promise<(LengBase & TDB)[]> {
+  //   return await this.techRepository.read(filter);
+  // }
   // Este tiene logica ponerlo aqui porque es una excision de read
   async readAllC(): Promise<ReadAllFlattenTechsRes<TDB>> {
     const proyectosDB = await this.techRepository.read({});
@@ -48,7 +48,7 @@ export class TechReadUseCase<TDB> {
   }
   async readAll(): Promise<(LengBase & TDB)[]> {
     return await this.techRepository.read({});
-  }
+  } //este lo voy a quitar
   async readAllFlatten(): Promise<FullTechData[]> {
     const res = await this.techRepository.read({});
     return this.flattenTechs(res);

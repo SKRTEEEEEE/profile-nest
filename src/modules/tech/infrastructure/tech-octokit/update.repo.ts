@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { TechUpdateUseCase } from '../../application/tech.usecase';
-import { MongooseBase } from 'src/shareds/pattern/infrastructure/types/mongoose';
+import { DBBase } from 'src/dynamic.types';;
 import {
   ActualizarGithubType,
   TechOctokitActualizarGithubRepo,
@@ -12,7 +12,7 @@ import { ErrorCodes } from 'src/domain/flows/error.type';
 @Injectable()
 export class TechOctokitUpdateRepo {
   constructor(
-    private readonly techUpdateService: TechUpdateUseCase<MongooseBase>,
+    private readonly techUpdateService: TechUpdateUseCase<DBBase>,
     private readonly techOctokitActualizarGithubRepo: TechOctokitActualizarGithubRepo,
   ) {}
   async update(updateData: Partial<TechForm>) {

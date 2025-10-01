@@ -1,13 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { PreTechInterface } from '../application/pre-tech.interface';
-import { MongooseBase } from 'src/shareds/pattern/infrastructure/types/mongoose';
+import { DBBase } from 'src/dynamic.types';;
 import { createDomainError } from 'src/domain/flows/error.registry';
 import { ErrorCodes } from 'src/domain/flows/error.type';
 import { ResCodes } from 'src/domain/flows/res.type';
 
 @Injectable()
-export class MockPreTechRepo implements PreTechInterface<MongooseBase> {
-  private preTechs: (PreTechBase & MongooseBase)[] = [
+export class MockPreTechRepo implements PreTechInterface<DBBase> {
+  private preTechs: (PreTechBase & DBBase)[] = [
     {
       id: 'idkjejkre',
       nameId: 'Hola mundo',
@@ -20,7 +20,7 @@ export class MockPreTechRepo implements PreTechInterface<MongooseBase> {
   ];
   async readByQuery(query: {
     q: string;
-  }): Promise<(PreTechBase & MongooseBase)[]> {
+  }): Promise<(PreTechBase & DBBase)[]> {
     const tech = this.preTechs.find((tech) => tech.nameId == query.q);
     if (!tech)
       throw createDomainError(

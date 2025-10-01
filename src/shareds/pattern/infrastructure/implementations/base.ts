@@ -1,7 +1,8 @@
 import { Model } from 'mongoose';
-import { MongooseBase, MongooseDocument } from '../types/mongoose';
+import { MongooseDocument } from '../types/mongoose';
 import { createDomainError } from 'src/domain/flows/error.registry';
 import { ErrorCodes } from 'src/domain/flows/error.type';
+import { DBBase } from '@/dynamic.types';
 
 export abstract class MongooseBaseImpl<TBase> {
   protected parseOpt?: any;
@@ -29,33 +30,34 @@ export abstract class MongooseBaseImpl<TBase> {
   // Uso en documentToPrimary
   protected documentToPrimary(
     document: TBase & MongooseDocument,
-  ): TBase & MongooseBase {
+  ): TBase & DBBase {
     const { _id, createdAt, updatedAt, ...rest } = document.toObject();
 
-    let result: Partial<TBase & MongooseBase> = {
+    let result: Partial<TBase & DBBase> = {
       id: _id.toString(),
       createdAt: createdAt.toISOString(),
       updatedAt: updatedAt.toISOString(),
       ...rest,
     };
+    console.log('Result before flattenMap:', result);
     result = this.flattenMap(result);
 
     // // Aplicar las transformaciones especificadas en las opciones
     if (this.parseOpt) {
       Object.entries(this.parseOpt).forEach(([key, transformFn]) => {
         if (key in result && typeof transformFn === 'function') {
-          result[key as keyof TBase & MongooseBase] = transformFn(
-            result[key as keyof TBase & MongooseBase],
+          result[key as keyof TBase & DBBase] = transformFn(
+            result[key as keyof TBase & DBBase],
           );
         }
       });
     }
 
-    return result as TBase & MongooseBase;
+    return result as TBase & DBBase;
   }
 
   protected resArrCheck(
-    docs: (TBase & MongooseBase[]) | any[] | undefined | null,
+    docs: (TBase & DBBase[]) | any[] | undefined | null,
   ): { customMessage?: string } {
     if (!docs)
       throw createDomainError(

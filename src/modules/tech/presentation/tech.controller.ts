@@ -20,7 +20,7 @@ import {
   TechUpdateUseCase,
 } from '../application/tech.usecase';
 import { PublicRoute } from 'src/shareds/jwt-auth/presentation/public-route.decorator';
-import { MongooseBase } from 'src/shareds/pattern/infrastructure/types/mongoose';
+import { DBBase } from 'src/dynamic.types';;
 import { TechOctokitCreateRepo } from 'src/modules/tech/infrastructure/tech-octokit/create.repo';
 import {
   ActualizarGithubType,
@@ -57,16 +57,16 @@ import { Throttle, ThrottlerGuard } from '@nestjs/throttler';
 @Controller('/tech')
 export class TechController {
   constructor(
-    // private readonly techCreateService: TechCreateUseCase<MongooseBase>,
+    // private readonly techCreateService: TechCreateUseCase<DBBase>,
     private readonly techOctokitUpdateRepo: TechOctokitUpdateRepo,
     private readonly techOctokitActualizarGithubRepo: TechOctokitActualizarGithubRepo,
     private readonly techOctokitCreateRepo: TechOctokitCreateRepo,
     private readonly techFindAndDeleteRepo: TechFindDeleteRepo,
-    private readonly techReadService: TechReadUseCase<MongooseBase>,
-    // private readonly techReadByIdService: TechReadByIdUseCase<MongooseBase>,
-    // private readonly techUpdateService: TechUpdateUseCase<MongooseBase>,
-    // private readonly techUpdateByIdService: TechUpdateByIdUseCase<MongooseBase>,
-    // private readonly techDeleteService: TechDeleteUseCase<MongooseBase>
+    private readonly techReadService: TechReadUseCase<DBBase>,
+    // private readonly techReadByIdService: TechReadByIdUseCase<DBBase>,
+    // private readonly techUpdateService: TechUpdateUseCase<DBBase>,
+    // private readonly techUpdateByIdService: TechUpdateByIdUseCase<DBBase>,
+    // private readonly techDeleteService: TechDeleteUseCase<DBBase>
   ) {}
 
   @Delete('/:nameId')

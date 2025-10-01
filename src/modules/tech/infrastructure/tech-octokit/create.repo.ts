@@ -6,7 +6,7 @@ import {
   TechReadOneUseCase,
   TechUpdateUseCase,
 } from 'src/modules/tech/application/tech.usecase';
-import { MongooseBase } from 'src/shareds/pattern/infrastructure/types/mongoose';
+import { DBBase } from 'src/dynamic.types';;
 import { OctokitRepo } from 'src/shareds/octokit/infrastructure/octokit.service';
 import {
   ActualizarGithubType,
@@ -18,10 +18,10 @@ import { ErrorCodes } from 'src/domain/flows/error.type';
 @Injectable()
 export class TechOctokitCreateRepo {
   constructor(
-    private readonly techCreateService: TechCreateUseCase<MongooseBase>,
-    private readonly techReadService: TechReadUseCase<MongooseBase>,
-    private readonly techReadOneService: TechReadOneUseCase<MongooseBase>,
-    private readonly techUpdateService: TechUpdateUseCase<MongooseBase>,
+    private readonly techCreateService: TechCreateUseCase<DBBase>,
+    private readonly techReadService: TechReadUseCase<DBBase>,
+    private readonly techReadOneService: TechReadOneUseCase<DBBase>,
+    private readonly techUpdateService: TechUpdateUseCase<DBBase>,
     private readonly octokit: OctokitRepo, //github percentage
     private readonly techOctokitActualizarGithubRepo: TechOctokitActualizarGithubRepo,
     // private readonly octokitUFCService: OctokitUpdateFileContentService//github actualizarTech
@@ -41,7 +41,8 @@ export class TechOctokitCreateRepo {
     } = data;
     try {
       // 1. Obtener el estado actual de la BD y calcular uso de GitHub
-      const proyectosDB = await this.techReadService.read({});
+      // const proyectosDB = await this.techReadService.read({});
+      const proyectosDB = await this.techReadService.readAll()
       const { topicSizePer: usoGithub } = await this.octokit.getTopicGithubData(
         nameId,
         owner,
@@ -159,7 +160,7 @@ export class TechOctokitCreateRepo {
     return expected;
   }
   private async calculateNextPreference(
-    allTechs: (LengBase & MongooseBase)[],
+    allTechs: (LengBase & DBBase)[],
     lengTo?: string,
     fwTo?: string,
   ): Promise<number> {

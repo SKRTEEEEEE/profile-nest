@@ -7,7 +7,7 @@ import {
   ValidateNested,
 } from 'class-validator';
 import { apiRoleType, RoleType } from 'src/domain/entities/role.type';
-import { MongooseBase } from 'src/shareds/pattern/infrastructure/types/mongoose';
+import { DBBase } from 'src/dynamic.types';;
 import { AuthThirdWebVerifyPayloadDto } from 'src/shareds/thirdweb/auth-thirdweb.dto';
 import { LoginPayload } from 'thirdweb/auth';
 import { UserNodemailerUpdateProps } from '../application/user-nodemailer.usecase';
@@ -148,7 +148,7 @@ export class UserLoginMockDto {
   title: 'User',
   group: 'User',
 })
-export class UserDto extends UserUpdateDto implements User<MongooseBase> {
+export class UserDto extends UserUpdateDto implements User<DBBase> {
   @ApiProperty({
     title: 'Wallet Address',
     description: 'Blockchain wallet address of the user.',

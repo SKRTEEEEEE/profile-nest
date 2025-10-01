@@ -5,9 +5,8 @@ import { InjectModel } from '@nestjs/mongoose';
 import { MongooseCRUImpl } from 'src/shareds/pattern/infrastructure/implementations/cru.impl';
 
 import {
-  MongooseBase,
-  MongooseDocument,
-} from 'src/shareds/pattern/infrastructure/types/mongoose';
+  DBBase,
+} from 'src/dynamic.types';;
 import { TechRepository } from '../application/tech.interface';
 import { createDomainError } from 'src/domain/flows/error.registry';
 import { ErrorCodes } from 'src/domain/flows/error.type';
@@ -15,11 +14,11 @@ import { ErrorCodes } from 'src/domain/flows/error.type';
 @Injectable()
 export class MongooseTechRepo
   extends MongooseCRUImpl<LengBase>
-  implements TechRepository<MongooseBase>
+  implements TechRepository<DBBase>
 {
   constructor(
     @InjectModel('Lenguaje')
-    private readonly lengModel: Model<LengBase & MongooseBase & Document>,
+    private readonly lengModel: Model<LengBase & DBBase & Document>,
   ) {
     super(lengModel);
   }
@@ -42,8 +41,8 @@ export class MongooseTechRepo
     }
   }
   async read(
-    filter: Partial<LengBase & MongooseBase>,
-  ): EntitieArrayRes<LengBase, MongooseBase> {
+    filter: Partial<LengBase & DBBase>,
+  ): EntitieArrayRes<LengBase, DBBase> {
     try {
       const docs = await this.lengModel.find(filter);
       this.resArrCheck(docs);
@@ -62,7 +61,7 @@ export class MongooseTechRepo
     nameId: string,
     updateData: Partial<LengBase>,
   ): Promise<
-    (TechBase & { frameworks?: FwBase[] } & MongooseBase) | undefined | null
+    (TechBase & { frameworks?: FwBase[] } & DBBase) | undefined | null
   > {
     try {
       return this.lengModel.findOneAndUpdate({
@@ -87,7 +86,7 @@ export class MongooseTechRepo
   }
   async updateByForm(
     updateData: Partial<TechForm>,
-  ): EntitieRes<LengBase, MongooseBase> {
+  ): EntitieRes<LengBase, DBBase> {
     try {
       let proyectoActualizado;
       if ('fwTo' in updateData) {
@@ -152,7 +151,7 @@ export class MongooseTechRepo
   }
   async delete(
     filter: Record<string, any>,
-  ): EntitieRes<LengBase, MongooseBase> {
+  ): EntitieRes<LengBase, DBBase> {
     try {
       const res = await this.lengModel.findOneAndDelete(filter);
       if (!res)

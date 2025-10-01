@@ -5,7 +5,7 @@ import { Document, Model } from 'mongoose';
 import { RoleBase } from 'src/domain/entities/role';
 import { MongooseCRUImpl } from 'src/shareds/pattern/infrastructure/implementations/cru.impl';
 import { RoleInterface } from '../application/role.interface';
-import { MongooseBase } from 'src/shareds/pattern/infrastructure/types/mongoose';
+import { DBBase } from 'src/dynamic.types';;
 import { ErrorCodes } from 'src/domain/flows/error.type';
 import { createDomainError } from 'src/domain/flows/error.registry';
 
@@ -23,7 +23,7 @@ export class MongooseRoleRepo
   // ✔ Arreglado: antes estabas metiendo el filtro dentro de otro objeto {filter}
   async read(
     filter?: Record<string, any>,
-  ): EntitieArrayRes<RoleBase, MongooseBase> {
+  ): EntitieArrayRes<RoleBase, DBBase> {
     const docs = await this.roleModel.find(filter ? { filter } : {});
     return docs.map((doc) => this.documentToPrimary(doc));
   }
@@ -36,8 +36,8 @@ export class MongooseRoleRepo
 
   // ✔ Borra un documento por id y devuelve el documento borrado convertido
   async deleteById(
-    id: DeleteByIdProps<MongooseBase>,
-  ): DeleteByIdRes<RoleBase, MongooseBase> {
+    id: DeleteByIdProps<DBBase>,
+  ): DeleteByIdRes<RoleBase, DBBase> {
     const deleted = await this.roleModel.findByIdAndDelete(id);
     if (!deleted)
       throw createDomainError(
@@ -52,8 +52,8 @@ export class MongooseRoleRepo
 
   // ✔ Borra por condiciones (ejemplo: por address o por cualquier campo del Role)
   async delete(
-    props: DeleteProps<RoleBase, MongooseBase>,
-  ): DeleteRes<RoleBase, MongooseBase> {
+    props: DeleteProps<RoleBase, DBBase>,
+  ): DeleteRes<RoleBase, DBBase> {
     try {
       const res = await this.roleModel.findOneAndDelete(props);
       if (!res)

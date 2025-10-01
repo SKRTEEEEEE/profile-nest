@@ -19,7 +19,7 @@ import {
   TechFormCategory,
 } from 'src/domain/entities/tech.type';
 import { PreTechBaseDto } from 'src/modules/pre-tech/presentation/pre-tech.dto';
-import { MongooseBase } from 'src/shareds/pattern/infrastructure/types/mongoose';
+import { DBBase } from 'src/dynamic.types';;
 import { IntlDto } from 'src/shareds/presentation/intl.dto';
 import { ApiDtoMetadata } from 'src/shareds/swagger/dto-metadata.decorator';
 
@@ -179,7 +179,7 @@ export class TechFormDtoOptional extends PartialType(TechFormDto) {
     'Represents a programming language with its associated frameworks, libs and metadata.',
   group: 'Tech',
 })
-export class LangDto extends TechBaseDto implements LengBase, MongooseBase {
+export class LangDto extends TechBaseDto implements LengBase, DBBase {
   @ApiProperty({
     title: 'Frameworks',
     description: 'List of frameworks associated with this language.',
@@ -233,7 +233,7 @@ export class LangDto extends TechBaseDto implements LengBase, MongooseBase {
 })
 export class FullTechDataDto
   extends TechBaseDto
-  implements FullTechData, MongooseBase
+  implements FullTechData, DBBase
 {
   @ApiProperty({
     title: 'Affinity Value',
@@ -303,7 +303,7 @@ export class FullTechDataDto
   description: 'Tech data response',
   group: 'Tech',
 })
-export class TechDto extends TechBaseDto implements TechBase, MongooseBase {
+export class TechDto extends TechBaseDto implements TechBase, DBBase {
   @ApiProperty({
     title: 'ID',
     description:

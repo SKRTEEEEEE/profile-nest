@@ -4,7 +4,7 @@ import { Document, Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 
 import { PreTechInterface } from '../application/pre-tech.interface';
-import { MongooseBase } from 'src/shareds/pattern/infrastructure/types/mongoose';
+import { DBBase } from 'src/dynamic.types';;
 import { MongoosePopulateImpl } from 'src/shareds/pattern/infrastructure/implementations/populate.impl';
 import { QueryDto } from 'src/shareds/presentation/pipes/query.dto';
 
@@ -14,7 +14,7 @@ import { QueryDto } from 'src/shareds/presentation/pipes/query.dto';
 // MongoosePopulateI<PreTechBase>
 export class MongoosePreTechRepo
   extends MongoosePopulateImpl<PreTechBase>
-  implements PreTechInterface<MongooseBase>
+  implements PreTechInterface<DBBase>
 {
   private mdUrl =
     'https://raw.githubusercontent.com/simple-icons/simple-icons/master/slugs.md';
@@ -28,7 +28,7 @@ export class MongoosePreTechRepo
     super(preTechModel);
   }
 
-  async readByQuery(query: QueryDto): Promise<(PreTechBase & MongooseBase)[]> {
+  async readByQuery(query: QueryDto): Promise<(PreTechBase & DBBase)[]> {
     const opt = {
       filter: {
         $or: [

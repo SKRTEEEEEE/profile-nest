@@ -3,7 +3,7 @@
 // import { ROLES_KEY } from '../decorators/role.decorator';
 // import { RoleType } from 'src/domain/entities/role.type';
 // import { RoleAuthUseCase } from '../../application/usecases/shareds/role-auth.service';
-// import { MongooseBase } from 'src/infrastructure/mongoose/types';
+// import { DBBase } from 'src/infrastructure/mongoose/types';
 
 // Not TESTED - Working/TODO
 // Una versión con extra de seguridad en el que se comprueba que el token concuerde con el role en la bdd
@@ -13,7 +13,7 @@
 //   constructor(
 //     private reflector: Reflector,
 //     private roleAuthService: RoleAuthUseCase,
-//     private roleRepository: RoleRepository<MongooseBase> // o UserInterface, lo que uses
+//     private roleRepository: RoleRepository<DBBase> // o UserInterface, lo que uses
 //   ) {}
 
 //   async canActivate(context: ExecutionContext): Promise<boolean> {
