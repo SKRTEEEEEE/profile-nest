@@ -1,18 +1,19 @@
 import { Model } from 'mongoose';
 import { MongooseBaseImpl } from './base';
-import { MongooseBase, MongooseDocument } from '../types/mongoose';
+import { MongooseDocument } from '../types/mongoose';
 import { createDomainError } from 'src/domain/flows/error.registry';
 import { ErrorCodes } from 'src/domain/flows/error.type';
+import { DBBase } from '@/dynamic.types';
 
 //ToDo
 type OptionalMessage<TBase> = {
-  data: (TBase & MongooseBase)[];
+  data: (TBase & DBBase)[];
   message: string;
 };
 
 export type MongoosePopulateProps<TBase> = Array<TBase>;
 export type MongoosePopulateResponse<TBase> = Promise<
-  (TBase & MongooseBase)[] | OptionalMessage<TBase>
+  (TBase & DBBase)[] | OptionalMessage<TBase>
 >;
 
 export type MongoosePopulateI<TBase> = {
