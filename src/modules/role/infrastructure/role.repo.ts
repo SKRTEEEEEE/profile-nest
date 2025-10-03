@@ -8,7 +8,7 @@ import { RoleInterface } from '../application/role.interface';
 import { DBBase } from 'src/dynamic.types';;
 import { ErrorCodes } from 'src/domain/flows/error.type';
 import { createDomainError } from 'src/domain/flows/error.registry';
-import { DeleteProps } from '@/shareds/pattern/application/interfaces/delete';
+import { DeleteProps } from 'src/shareds/pattern/application/interfaces/delete';
 
 @Injectable()
 export class MongooseRoleRepo

@@ -1,4 +1,4 @@
-import { DBBase } from '@/dynamic.types';
+import { DBBase } from 'src/dynamic.types';
 import { ApiProperty } from '@nestjs/swagger';
 import { IsString } from 'class-validator';
 

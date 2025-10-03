@@ -3,8 +3,8 @@ import { createDomainError } from 'src/domain/flows/error.registry';
 import { ErrorCodes } from 'src/domain/flows/error.type';
 import { UserInterface } from './user.interface';
 import { USER_REPOSITORY } from 'src/modules/tokens';
-import { DBBase } from '@/dynamic.types';
-import { CreateProps, UpdateByIdProps } from '@/shareds/pattern/application/interfaces/cru';
+import { DBBase } from 'src/dynamic.types';
+import { CreateProps, UpdateByIdProps } from 'src/shareds/pattern/application/interfaces/cru';
 
 @Injectable()
 export class UserCreateUseCase {

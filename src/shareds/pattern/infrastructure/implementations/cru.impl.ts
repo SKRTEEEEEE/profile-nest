@@ -1,8 +1,9 @@
 import { QueryOptions, UpdateQuery } from 'mongoose';
-import { MongooseBase, MongooseDocument } from '../types/mongoose';
+import { MongooseDocument } from '../types/mongoose';
 import { MongooseBaseImpl } from './base';
 import { createDomainError } from 'src/domain/flows/error.registry';
 import { ErrorCodes } from 'src/domain/flows/error.type';
+import { DBBase } from 'src/dynamic.types';
 
 export type MongooseUpdateByIdProps<TBase> = {
   id: string;
@@ -10,17 +11,17 @@ export type MongooseUpdateByIdProps<TBase> = {
   options?: QueryOptions<TBase> | null | undefined;
 };
 export type MongooseCRUI<TBase> = {
-  create(data: Omit<TBase, 'id'>): Promise<TBase & MongooseBase>;
-  readById(id: string): Promise<TBase & MongooseBase>;
+  create(data: Omit<TBase, 'id'>): Promise<TBase & DBBase>;
+  readById(id: string): Promise<TBase & DBBase>;
   updateById(
     props: MongooseUpdateByIdProps<TBase>,
-  ): Promise<TBase & MongooseBase>;
+  ): Promise<TBase & DBBase>;
 };
 export class MongooseCRUImpl<TBase>
   extends MongooseBaseImpl<TBase>
   implements MongooseCRUI<TBase>
 {
-  async create(data: Omit<TBase, 'id'>): Promise<TBase & MongooseBase> {
+  async create(data: Omit<TBase, 'id'>): Promise<TBase & DBBase> {
     try {
       const newDocument: TBase & MongooseDocument = new this.Model(data);
       const savedDocument = await newDocument.save();
@@ -45,7 +46,7 @@ export class MongooseCRUImpl<TBase>
     }
   }
 
-  async readById(id: string): Promise<TBase & MongooseBase> {
+  async readById(id: string): Promise<TBase & DBBase> {
     try {
       const document = await this.Model.findById(id);
       if (!document) {
@@ -73,7 +74,7 @@ export class MongooseCRUImpl<TBase>
     id,
     updateData,
     options,
-  }: MongooseUpdateByIdProps<TBase>): Promise<TBase & MongooseBase> {
+  }: MongooseUpdateByIdProps<TBase>): Promise<TBase & DBBase> {
     try {
       const updatedDocument = await this.Model.findByIdAndUpdate(
         id,

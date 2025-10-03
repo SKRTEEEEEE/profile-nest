@@ -22,6 +22,7 @@ import { CorrelationIdMiddleware } from './shareds/presentation/correlation-id.m
 import { Request } from 'express';
 import { DomainErrorFilter } from './shareds/presentation/filters/domain-error.filter';
 import { LoggerModuleCustom } from './shareds/presentation/logger.module';
+import { ProjectModule } from './modules/project/presentation/project.module';
 
 @Module({
   imports: [
@@ -31,6 +32,7 @@ import { LoggerModuleCustom } from './shareds/presentation/logger.module';
     PreTechModule,
     TechModule,
     UserModule,
+    ProjectModule,
     process.env.JWT_STRATEGY === 'mock'
       ? JwtAuthMockModule
       : JwtAuthThirdWebModule,

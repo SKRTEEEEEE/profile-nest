@@ -1,5 +1,5 @@
 
-import { DBBase } from "@/dynamic.types";
+import { DBBase } from "src/dynamic.types";
 
 
 

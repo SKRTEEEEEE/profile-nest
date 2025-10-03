@@ -1,5 +1,5 @@
-import { DBBase } from "@/dynamic.types";
-import { CRUI } from "@/shareds/pattern/application/interfaces/cru";
+import { DBBase } from "src/dynamic.types";
+import { CRUI } from "src/shareds/pattern/application/interfaces/cru";
 
 export interface UserInterface extends CRUI<UserBase> {
   read(filter?: Partial<UserBase & DBBase>): Promise<(UserBase & DBBase)[]>;

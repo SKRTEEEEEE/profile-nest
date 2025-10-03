@@ -2,11 +2,10 @@ import { Inject, Injectable } from '@nestjs/common';
 import {
   FullTechData,
   LengBase,
-  ReadAllFlattenTechsRes,
 } from 'src/domain/entities/tech';
-import { TechRepository } from './tech.interface';
+import { ReadAllFlattenTechsRes, TechRepository } from './tech.interface';
 import { TECH_REPOSITORY } from 'src/modules/tokens';
-import { DBBase } from '@/dynamic.types';
+import { DBBase } from 'src/dynamic.types';
 
 type BadgeAndValue = {
   badge: string;

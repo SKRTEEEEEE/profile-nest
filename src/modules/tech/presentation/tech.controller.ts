@@ -84,7 +84,8 @@ Use this endpoint to permanently remove a technology from the system.`,
   @Throttle({ short: { limit: 1, ttl: 60 } })
   // @UseInterceptors(CacheInterceptor)
   // @CacheTTL(1 * 60 * 60)
-  @ApiErrorResponse('get', '--protected')
+  // @ApiErrorResponse('get', '--protected') // Nose porque le puse --protected si no debería sacar un unauthorized
+  @ApiErrorResponse('get')
   @ApiSuccessResponse(FullTechDataDto, ResCodes.ENTITIES_FOUND, true) //Hay que mostrar lo que devuelve
   @ApiParam({ name: 'type', enum: ReadAllParams })
   @ApiOperation({

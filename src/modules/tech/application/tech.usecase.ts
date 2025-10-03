@@ -1,13 +1,11 @@
 import { Inject, Injectable } from '@nestjs/common';
 // import { ReadOneRepository } from "src/shareds/pattern/application/usecases/read-one.interface";
-import { Leng, LengBase, TechBase, TechForm } from 'src/domain/entities/tech';
-import { TechRepository } from './tech.interface';
+import {  LengBase, TechBase, TechForm } from 'src/domain/entities/tech';
+import { Leng, TechRepository } from './tech.interface';
 import { TECH_REPOSITORY } from 'src/modules/tokens';
-import { MongooseBase } from 'src/shareds/pattern/infrastructure/types/mongoose';
-import { DeleteI, DeleteProps } from '@/shareds/pattern/application/interfaces/delete';
-import { DBBase } from '@/dynamic.types';
-import { UpdateByIdProps } from '@/shareds/pattern/application/interfaces/cru';
-import { LinkedEditingInfo } from 'typescript';
+import { DeleteI, DeleteProps } from 'src/shareds/pattern/application/interfaces/delete';
+import { DBBase } from 'src/dynamic.types';
+import { UpdateByIdProps } from 'src/shareds/pattern/application/interfaces/cru';
 
 // Si esto funciona asi, probablemente sea la mejor manera asi expongo los Service que quiero
 
