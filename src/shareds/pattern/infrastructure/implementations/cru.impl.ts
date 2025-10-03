@@ -3,7 +3,7 @@ import { MongooseDocument } from '../types/mongoose';
 import { MongooseBaseImpl } from './base';
 import { createDomainError } from 'src/domain/flows/error.registry';
 import { ErrorCodes } from 'src/domain/flows/error.type';
-import { DBBase } from '@/dynamic.types';
+import { DBBase } from 'src/dynamic.types';
 
 export type MongooseUpdateByIdProps<TBase> = {
   id: string;

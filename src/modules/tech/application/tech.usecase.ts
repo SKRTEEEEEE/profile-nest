@@ -3,9 +3,9 @@ import { Inject, Injectable } from '@nestjs/common';
 import {  LengBase, TechBase, TechForm } from 'src/domain/entities/tech';
 import { Leng, TechRepository } from './tech.interface';
 import { TECH_REPOSITORY } from 'src/modules/tokens';
-import { DeleteI, DeleteProps } from '@/shareds/pattern/application/interfaces/delete';
-import { DBBase } from '@/dynamic.types';
-import { UpdateByIdProps } from '@/shareds/pattern/application/interfaces/cru';
+import { DeleteI, DeleteProps } from 'src/shareds/pattern/application/interfaces/delete';
+import { DBBase } from 'src/dynamic.types';
+import { UpdateByIdProps } from 'src/shareds/pattern/application/interfaces/cru';
 
 // Si esto funciona asi, probablemente sea la mejor manera asi expongo los Service que quiero
 

@@ -1,8 +1,8 @@
 // import { TechBase } from "src/domain/entities/tech";
 
-import { DBBase } from '@/dynamic.types';
-import { CRUI } from '@/shareds/pattern/application/interfaces/cru';
-import { DeleteProps } from '@/shareds/pattern/application/interfaces/delete';
+import { DBBase } from 'src/dynamic.types';
+import { CRUI } from 'src/shareds/pattern/application/interfaces/cru';
+import { DeleteProps } from 'src/shareds/pattern/application/interfaces/delete';
 import { FullTechData, LengBase, LibBase, TechBase, TechForm } from 'src/domain/entities/tech';
 
 export type Fw = TechBase & DBBase & {

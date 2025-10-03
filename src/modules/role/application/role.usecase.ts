@@ -4,8 +4,8 @@ import { RoleType } from 'src/domain/entities/role.type';
 import { RoleInterface } from './role.interface';
 import { DBBase } from 'src/dynamic.types';;
 import { ROLE_REPOSITORY } from 'src/modules/tokens';
-import { UpdateByIdProps } from '@/shareds/pattern/application/interfaces/cru';
-import { DeleteProps } from '@/shareds/pattern/application/interfaces/delete';
+import { UpdateByIdProps } from 'src/shareds/pattern/application/interfaces/cru';
+import { DeleteProps } from 'src/shareds/pattern/application/interfaces/delete';
 
 @Injectable()
 export class RoleCreateUseCase {

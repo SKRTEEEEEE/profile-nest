@@ -10,8 +10,8 @@ import {
 import { Fw,  Leng,  TechRepository } from '../application/tech.interface';
 import { createDomainError } from 'src/domain/flows/error.registry';
 import { ErrorCodes } from 'src/domain/flows/error.type';
-import { MongooseDocument } from '@/shareds/pattern/infrastructure/types/mongoose';
-import { DeleteProps } from '@/shareds/pattern/application/interfaces/delete';
+import { MongooseDocument } from 'src/shareds/pattern/infrastructure/types/mongoose';
+import { DeleteProps } from 'src/shareds/pattern/application/interfaces/delete';
 
 
 

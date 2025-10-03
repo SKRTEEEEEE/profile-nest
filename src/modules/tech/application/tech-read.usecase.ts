@@ -5,7 +5,7 @@ import {
 } from 'src/domain/entities/tech';
 import { ReadAllFlattenTechsRes, TechRepository } from './tech.interface';
 import { TECH_REPOSITORY } from 'src/modules/tokens';
-import { DBBase } from '@/dynamic.types';
+import { DBBase } from 'src/dynamic.types';
 
 type BadgeAndValue = {
   badge: string;

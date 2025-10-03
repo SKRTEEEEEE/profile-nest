@@ -23,7 +23,7 @@ export class MongoosePreTechRepo
 
   constructor(
     @InjectModel('PreTech')
-    private readonly preTechModel: Model<PreTechBase & Document>,
+    private readonly preTechModel: Model<PreTechBase>,
   ) {
     super(preTechModel);
   }

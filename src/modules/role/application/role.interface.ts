@@ -1,8 +1,8 @@
 // import { RoleBase } from "src/domain/entities/role";
 // import { CRRUDDRepository } from "../patterns/crrudd.interface";
 
-import { CRUI } from '@/shareds/pattern/application/interfaces/cru';
-import { DeleteProps } from '@/shareds/pattern/application/interfaces/delete';
+import { CRUI } from 'src/shareds/pattern/application/interfaces/cru';
+import { DeleteProps } from 'src/shareds/pattern/application/interfaces/delete';
 import { RoleBase } from 'src/domain/entities/role';
 import { DBBase } from 'src/dynamic.types';;
 

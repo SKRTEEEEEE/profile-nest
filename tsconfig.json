@@ -19,7 +19,7 @@
     "noFallthroughCasesInSwitch": false,
     // Con use this for more similarity with frontend
     "paths": {
-      "@/*": ["src/*"]
+      "src/*": ["src/*"]
     }
   }
 }

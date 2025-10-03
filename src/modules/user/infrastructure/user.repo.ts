@@ -9,7 +9,7 @@ import { UserInterface } from '../application/user.interface';
 import { createDomainError } from 'src/domain/flows/error.registry';
 import { ErrorCodes } from 'src/domain/flows/error.type';
 import { RoleType } from 'src/domain/entities/role.type';
-import { MongooseDocument } from '@/shareds/pattern/infrastructure/types/mongoose';
+import { MongooseDocument } from 'src/shareds/pattern/infrastructure/types/mongoose';
 
 @Injectable()
 export class MongooseUserRepo

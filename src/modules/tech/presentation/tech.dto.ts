@@ -29,42 +29,6 @@ import { ApiDtoMetadata } from 'src/shareds/swagger/dto-metadata.decorator';
   group: 'Tech',
 })
 class TechBaseDto extends PreTechBaseDto implements TechBase {
-  // @ApiProperty({
-  //     title: "Name ID",
-  //     description: "Unique identifier for the technology.",
-  //     example: "react",
-  //     type: String,
-  // })
-  // @IsString()
-  // nameId: string;
-
-  // @ApiProperty({
-  //     title: "Name Badge",
-  //     description: "Display name or badge for the technology.",
-  //     example: "React.js",
-  //     type: String,
-  // })
-  // @IsString()
-  // nameBadge: string;
-
-  // @ApiProperty({
-  //     title: "Color",
-  //     description: "Color associated with the technology, typically in hexadecimal format.",
-  //     example: "#61DAFB",
-  //     type: String,
-  // })
-  // @IsString()
-  // color: string;
-
-  // @ApiProperty({
-  //     title: "Website",
-  //     description: "Official website URL for the technology.",
-  //     example: "https://reactjs.org",
-  //     type: String,
-  // })
-  // @IsString()
-  // web: string;
-
   @ApiProperty({
     title: 'Preference',
     description: 'Preference level (order) for the technology (numeric value).',
@@ -105,11 +69,6 @@ class TechBaseDto extends PreTechBaseDto implements TechBase {
   @IsOptional()
   img: string | null;
 
-  // @ApiProperty({
-  //     title: "Description",
-  //     description: "Internationalized description of the technology in multiple languages.",
-  //     // type: () => IntlDto,
-  // })
   @ValidateNested()
   @Type(() => IntlDto)
   desc: IntlDto;
@@ -164,15 +123,7 @@ export class TechFormDto extends TechBaseDto implements TechForm {
     'Form data for update a tech (identify ever user used technology)',
   group: 'Tech',
 })
-export class TechFormDtoOptional extends PartialType(TechFormDto) {
-  // @ApiProperty({
-  // title: "Name ID",
-  // description: "Unique identifier for the technology.",
-  // example: "react",
-  // })
-  // @IsString()
-  // nameId: string;
-}
+export class TechFormDtoOptional extends PartialType(TechFormDto) {}
 @ApiDtoMetadata({
   title: 'Language',
   description:
