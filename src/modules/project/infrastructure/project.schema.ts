@@ -18,13 +18,31 @@ export class TechProjectSchema {
   @Prop({ type: String, required: true })
   web: string;
 
-  @Prop({ type: Map, of: String, required: true })
+  @Prop({
+    type: {
+      es: { type: String, required: true },
+      en: { type: String, required: true },
+      ca: { type: String, required: true },
+      de: { type: String, required: true },
+    },
+    required: true,
+    _id: false,
+  })
   desc: IntlBase;
 
   @Prop({ type: [String], required: true, enum: Object.values(TypeProject) })
   type: TypeProject[];
 
-  @Prop({ type: Map, of: String, required: true })
+  @Prop({
+    type: {
+      es: { type: String, required: true },
+      en: { type: String, required: true },
+      ca: { type: String, required: true },
+      de: { type: String, required: true },
+    },
+    required: true,
+    _id: false,
+  })
   typeDesc: IntlBase;
 
   @Prop({ type: String, default: null })
@@ -36,13 +54,31 @@ export const TechProjectSchemaFactory = SchemaFactory.createForClass(TechProject
 // Sub-esquema para TimeProject
 @Schema({ _id: true })
 export class TimeProjectSchema {
-  @Prop({ type: Map, of: String, required: true })
+  @Prop({
+    type: {
+      es: { type: String, required: true },
+      en: { type: String, required: true },
+      ca: { type: String, required: true },
+      de: { type: String, required: true },
+    },
+    required: true,
+    _id: false,
+  })
   title: IntlBase;
 
   @Prop({ type: String, required: true })
   date: string;
 
-  @Prop({ type: Map, of: String, required: true })
+  @Prop({
+    type: {
+      es: { type: String, required: true },
+      en: { type: String, required: true },
+      ca: { type: String, required: true },
+      de: { type: String, required: true },
+    },
+    required: true,
+    _id: false,
+  })
   desc: IntlBase;
 
   @Prop({ type: [String], required: true, enum: Object.values(TypeProject) })
@@ -71,10 +107,28 @@ export class KeyProjectSchema {
     className: string;
   };
 
-  @Prop({ type: Map, of: String, required: true })
+  @Prop({
+    type: {
+      es: { type: String, required: true },
+      en: { type: String, required: true },
+      ca: { type: String, required: true },
+      de: { type: String, required: true },
+    },
+    required: true,
+    _id: false,
+  })
   title: IntlBase;
 
-  @Prop({ type: Map, of: String, required: true })
+  @Prop({
+    type: {
+      es: { type: String, required: true },
+      en: { type: String, required: true },
+      ca: { type: String, required: true },
+      de: { type: String, required: true },
+    },
+    required: true,
+    _id: false,
+  })
   desc: IntlBase;
 }
 
@@ -101,13 +155,40 @@ export class ProjectSchemaDocument extends Document {
   @Prop({ type: String, required: true })
   icon: string;
 
-  @Prop({ type: Map, of: String, required: true })
+  @Prop({
+    type: {
+      es: { type: String, required: true },
+      en: { type: String, required: true },
+      ca: { type: String, required: true },
+      de: { type: String, required: true },
+    },
+    required: true,
+    _id: false,
+  })
   title: IntlBase;
 
-  @Prop({ type: Map, of: String, required: true })
+  @Prop({
+    type: {
+      es: { type: String, required: true },
+      en: { type: String, required: true },
+      ca: { type: String, required: true },
+      de: { type: String, required: true },
+    },
+    required: true,
+    _id: false,
+  })
   desc: IntlBase;
 
-  @Prop({ type: Map, of: String, required: true })
+  @Prop({
+    type: {
+      es: { type: String, required: true },
+      en: { type: String, required: true },
+      ca: { type: String, required: true },
+      de: { type: String, required: true },
+    },
+    required: true,
+    _id: false,
+  })
   lilDesc: IntlBase;
 
   @Prop({ type: [TimeProjectSchema], default: [] })
