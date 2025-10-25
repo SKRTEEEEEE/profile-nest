@@ -1,6 +1,6 @@
-import { Body, Controller, Get, Post } from "@nestjs/common";
+import { Body, Controller, Get, Param, Post } from "@nestjs/common";
 import { ApiBearerAuth, ApiOperation, ApiTags } from "@nestjs/swagger";
-import { ProjectPopulateUseCase, ProjectReadEjemploUseCase } from "../application/project.usecase";
+import { ProjectPopulateUseCase, ProjectReadByIdUseCase, ProjectReadEjemploUseCase } from "../application/project.usecase";
 import { ProjectInterface } from "../application/project.interface";
 import { ProjectBase } from "src/domain/entities/project";
 import { PublicRoute } from "src/shareds/jwt-auth/presentation/public-route.decorator";
@@ -15,6 +15,7 @@ import { ResCodes } from "src/domain/flows/res.type";
 export class ProjectController implements ProjectInterface {
   constructor(
     private readonly projectReadEjemploUseCase: ProjectReadEjemploUseCase,
+    private readonly projectReadByIdUseCase: ProjectReadByIdUseCase,
     private readonly projectPopulateUseCase: ProjectPopulateUseCase,
   ) {}
 
@@ -34,6 +35,24 @@ Use this endpoint to view the example projects displayed on the portfolio or dem
   })
   async readEjemplo() {
     return await this.projectReadEjemploUseCase.execute();
+  }
+
+  @Get(':id')
+  @PublicRoute()
+  @ApiErrorResponse('get')
+  @ApiSuccessResponse(ProjectDto, ResCodes.ENTITY_FOUND)
+  @ApiOperation({
+    summary: '📖 Read - Project by ID',
+    description: `Returns a single project by its ID.
+
+- 🌐 **Public endpoint**: No authentication required.
+- 🧩 **Operation**: Fetches a specific project from the database by its ID.
+- 📦 **Response**: Returns a single project in \`ProjectDto\` format, or null if not found.
+
+Use this endpoint to view the details of a specific project.`,
+  })
+  async readById(@Param('id') id: string) {
+    return await this.projectReadByIdUseCase.execute(id);
   }
 
   @Post()

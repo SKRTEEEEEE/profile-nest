@@ -3,7 +3,7 @@ import { MongooseModule } from "@nestjs/mongoose";
 import { ProjectSchemaFactory } from "../infrastructure/project.schema";
 import { PROJECT_REPOSITORY } from "src/modules/tokens";
 import { MongooseProjectRepo } from "../infrastructure/project.repo";
-import { ProjectPopulateUseCase, ProjectReadEjemploUseCase } from "../application/project.usecase";
+import { ProjectPopulateUseCase, ProjectReadByIdUseCase, ProjectReadEjemploUseCase } from "../application/project.usecase";
 import { ProjectController } from "./project.controller";
 
 
@@ -20,7 +20,8 @@ import { ProjectController } from "./project.controller";
             useClass: MongooseProjectRepo
         },
         ProjectPopulateUseCase,
-        ProjectReadEjemploUseCase
+        ProjectReadEjemploUseCase,
+        ProjectReadByIdUseCase
     ]
 })
 export class ProjectModule {}

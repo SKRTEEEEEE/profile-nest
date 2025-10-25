@@ -31,6 +31,18 @@ implements ProjectInterface {
         const res = await this.projectModel.find({ejemplo:true})  
         this.resArrCheck(res)
         return res.map((doc) => this.documentToPrimary(doc))
+    }
 
+    async readById(id: string): Promise<(ProjectBase & import("src/dynamic.types").DBBase) | null> {
+        try {
+            const res = await this.projectModel.findById(id)
+            if (!res) {
+                return null
+            }
+            return this.documentToPrimary(res)
+        } catch (error) {
+            console.error(`Error finding project by id ${id}:`, error)
+            return null
+        }
     }
 }
