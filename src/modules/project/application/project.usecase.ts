@@ -28,3 +28,19 @@ export class ProjectReadEjemploUseCase {
     return projects
   }
 }
+
+@Injectable()
+export class ProjectReadByIdUseCase {
+  constructor(@Inject(PROJECT_REPOSITORY)private projectRepo: ProjectInterface) {}
+
+  async execute(id: string): Promise<(ProjectBase & DBBase) | null> {
+    const project = await this.projectRepo.readById(id)
+
+    // Reglas de negocio opcionales
+    if (!project) {
+      console.warn(`Proyecto con id ${id} no encontrado en la DB`)
+    }
+
+    return project
+  }
+}

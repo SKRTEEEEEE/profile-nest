@@ -22,4 +22,5 @@ export interface ProjectInterface
  {
     populate(data:ProjectBase[]): Promise<(ProjectBase & DBBase) []>
     readEjemplo(): Promise<(ProjectBase & DBBase) []>
+    readById(id: string): Promise<(ProjectBase & DBBase) | null>
 }
