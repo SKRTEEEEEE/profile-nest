@@ -8,8 +8,13 @@ import * as path from 'path';
 import { CORRELATION_ID_HEADER } from './correlation-id.middleware';
 import { CustomLoggerService } from './logger.service';
 
+// Detecta ambiente de desarrollo: NODE_ENV=development, JWT_STRATEGY=mock, o cualquier comando start:dev*
 const isDev =
-  process.env.NODE_ENV === 'development' || process.env.JWT_STRATEGY === 'mock';
+  process.env.NODE_ENV === 'development' || 
+  process.env.JWT_STRATEGY === 'mock' ||
+  process.env.JWT_STRATEGY === 'd' ||
+  !process.env.NODE_ENV; // Si NODE_ENV no está definido, asume desarrollo
+
 const isProduction = process.env.NODE_ENV === 'production';
 
 // Configure log rotation for production

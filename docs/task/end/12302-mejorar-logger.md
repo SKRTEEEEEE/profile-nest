@@ -66,8 +66,29 @@ Las siguientes dependencias ya estaban instaladas y se utilizan ahora correctame
 ## 🔧 Archivos modificados
 
 ### Código principal
-- `src/shareds/presentation/logger.module.ts` - Configuración mejorada de Pino
+- `src/shareds/presentation/logger.module.ts` - Configuración mejorada de Pino con detección de ambiente
 - `src/shareds/presentation/logger.service.ts` - Simplificación del servicio
+
+### 🎯 Detección de Ambiente
+
+El logger ahora detecta automáticamente el ambiente de desarrollo en múltiples escenarios:
+
+```typescript
+const isDev =
+  process.env.NODE_ENV === 'development' || 
+  process.env.JWT_STRATEGY === 'mock' ||
+  process.env.JWT_STRATEGY === 'd' ||
+  !process.env.NODE_ENV; // Si NODE_ENV no está definido, asume desarrollo
+```
+
+**Funciona con:**
+- ✅ `npm run start:dev` - NODE_ENV no definido
+- ✅ `npm run start:dev-next` - JWT_STRATEGY='d'
+- ✅ `npm run start:dev-mock` - JWT_STRATEGY='mock'
+- ✅ Cualquier ambiente sin NODE_ENV definido (por defecto desarrollo)
+
+**Producción requiere:**
+- ⚠️ `NODE_ENV=production` explícitamente configurado
 
 ### Tests
 - `test/units/logger.service.spec.ts` - **NUEVO** - Tests unitarios completos
