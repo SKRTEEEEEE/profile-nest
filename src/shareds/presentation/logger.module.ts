@@ -17,6 +17,25 @@ const isDev =
 
 const isProduction = process.env.NODE_ENV === 'production';
 
+// Helper para obtener emojis según contexto
+function getContextEmoji(context: string): string {
+  const emojiMap: Record<string, string> = {
+    'NestFactory': '🏭',
+    'InstanceLoader': '📦',
+    'RoutesResolver': '🛣️',
+    'RouterExplorer': '🗺️',
+    'NestApplication': '🚀',
+    'ResponseInterceptor': '🔄',
+    'DomainErrorFilter': '❌',
+    'MongooseModule': '🍃',
+    'ConfigService': '⚙️',
+    'AuthGuard': '🔐',
+    'ValidationPipe': '✅',
+  };
+  
+  return emojiMap[context] || '📌';
+}
+
 // Configure log rotation for production
 const getProductionStream = () => {
   const logDir = path.join(process.cwd(), 'logs');
@@ -98,12 +117,53 @@ const getProductionStream = () => {
               target: 'pino-pretty',
               options: {
                 colorize: true,
-                translateTime: 'HH:MM:ss',
-                ignore: 'pid,hostname,time,level',
+                translateTime: false, // No mostrar tiempo, solo usar colores para diferenciar niveles
+                ignore: 'pid,hostname,time,level,v',
                 messageKey: 'message',
-                singleLine: false,
-                levelFirst: false,
-                messageFormat: '[{context}] {msg}',
+                singleLine: true, // Una línea por log para evitar separación visual
+                hideObject: false, // Mostrar objetos solo si tienen info útil
+                messageFormat: (log: any, messageKey: string) => {
+                  const msg = log[messageKey];
+                  const context = log.context;
+                  
+                  // Filtrar logs vacíos o sin mensaje útil
+                  if (!msg && !context) return '';
+                  
+                  // Para logs HTTP (tienen req y res)
+                  if (log.req) {
+                    const method = log.req.method || '';
+                    const url = log.req.url || '';
+                    const status = log.res?.statusCode || '';
+                    const time = log.responseTime ? `${log.responseTime}ms` : '';
+                    
+                    // Emoji según status code
+                    const statusEmoji = status >= 500 ? '❌' : 
+                                       status >= 400 ? '⚠️' : 
+                                       status >= 300 ? '↪️' : '✅';
+                    
+                    // Color para el tiempo de respuesta
+                    const timeColor = !time ? '' :
+                                     log.responseTime > 1000 ? '🐌' :
+                                     log.responseTime > 500 ? '⏱️' : '⚡';
+                    
+                    return `${statusEmoji} ${method} ${url} → ${status} ${timeColor}${time}`;
+                  }
+                  
+                  // Para logs con contexto
+                  if (context && msg) {
+                    // Contextos que queremos agrupar visualmente
+                    const quietContexts = ['InstanceLoader', 'RouterExplorer'];
+                    
+                    if (quietContexts.includes(context)) {
+                      return `   ${getContextEmoji(context)} ${msg}`; // Indentado para agrupar
+                    }
+                    
+                    return `${getContextEmoji(context)} [${context}] ${msg}`;
+                  }
+                  
+                  // Logs solo con mensaje
+                  return msg || '';
+                },
               },
             }
           : undefined,

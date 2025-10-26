@@ -11,12 +11,19 @@ Se ha mejorado significativamente la configuración del logger basado en Pino, i
    - Configurado mediante `timestamp: false` y `base: null` en la configuración de Pino
    - Los logs ahora son más limpios y enfocados en el contenido relevante
 
-### 2. **Mejora de visualización en desarrollo**
+### 2. **Mejora de visualización en desarrollo** ⭐ NEW
    - ✅ Implementado formato colorizado usando `pino-pretty`
-   - ✅ Formato de mensaje mejorado: `[{context}] {msg}`
-   - ✅ Hora simplificada: solo `HH:MM:ss` (sin fecha completa)
-   - ✅ Estructura más lógica y legible, similar a NestJS por defecto
-   - Los logs ahora son más fáciles de leer durante el desarrollo
+   - ✅ **Logs HTTP unificados**: Un solo mensaje con status code y tiempo de respuesta
+   - ✅ **Emojis contextuales**: Diferentes emojis según el contexto y status code
+     - ✅ Success (2xx): emoji verde
+     - ⚠️ Client error (4xx): emoji amarillo
+     - ❌ Server error (5xx): emoji rojo
+     - ⚡ Respuesta rápida (<500ms): emoji rayo
+     - ⏱️ Respuesta media (500-1000ms): emoji reloj
+     - 🐌 Respuesta lenta (>1000ms): emoji caracol
+   - ✅ **Agrupación visual**: Logs repetitivos (InstanceLoader, RouterExplorer) indentados
+   - ✅ **Filtrado de logs vacíos**: No se muestran logs sin información útil
+   - ✅ Sin timestamp en desarrollo (se asume que es "ahora")
 
 ### 3. **Rotación de logs en producción**
    - ✅ Implementada rotación automática de archivos usando `rotating-file-stream`

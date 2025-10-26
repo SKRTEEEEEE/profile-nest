@@ -43,7 +43,7 @@ export class ResponseInterceptor<T> implements NestInterceptor<T, ResFlow<T>> {
       // })),
       map((data: any) => {
         const message = data?.message || meta?.message;
-        this.logger.debug({ responseType: meta?.type }, 'Response type logged');
+        // Removido log redundante - el HTTP logger ya maneja esto
         const response = {
           success: true,
           type: meta?.type ?? ResCodes.OPERATION_SUCCESS,
