@@ -79,10 +79,15 @@ const getProductionStream = () => {
           correlationId: req[CORRELATION_ID_HEADER],
         }),
         customSuccessMessage: (req: any, res: any) => {
-          return `${req.method} ${req.url} completed with status ${res.statusCode}`;
+          const status = res.statusCode;
+          const emoji = status >= 300 ? '↪️' : '✅';
+          // El responseTime se agrega automáticamente por pino-http
+          return `${emoji} ${req.method} ${req.url} → ${status}`;
         },
         customErrorMessage: (req: any, res: any, err: any) => {
-          return `${req.method} ${req.url} failed with status ${res.statusCode}: ${err.message}`;
+          const status = res.statusCode;
+          const emoji = status >= 500 ? '❌' : '⚠️';
+          return `${emoji} ${req.method} ${req.url} → ${status} [${err.message}]`;
         },
         customLogLevel: (req: any, res: any, err: any) => {
           if (res.statusCode >= 400 && res.statusCode < 500) {
@@ -117,53 +122,12 @@ const getProductionStream = () => {
               target: 'pino-pretty',
               options: {
                 colorize: true,
-                translateTime: false, // No mostrar tiempo, solo usar colores para diferenciar niveles
+                translateTime: false,
                 ignore: 'pid,hostname,time,level,v',
                 messageKey: 'message',
-                singleLine: true, // Una línea por log para evitar separación visual
-                hideObject: false, // Mostrar objetos solo si tienen info útil
-                messageFormat: (log: any, messageKey: string) => {
-                  const msg = log[messageKey];
-                  const context = log.context;
-                  
-                  // Filtrar logs vacíos o sin mensaje útil
-                  if (!msg && !context) return '';
-                  
-                  // Para logs HTTP (tienen req y res)
-                  if (log.req) {
-                    const method = log.req.method || '';
-                    const url = log.req.url || '';
-                    const status = log.res?.statusCode || '';
-                    const time = log.responseTime ? `${log.responseTime}ms` : '';
-                    
-                    // Emoji según status code
-                    const statusEmoji = status >= 500 ? '❌' : 
-                                       status >= 400 ? '⚠️' : 
-                                       status >= 300 ? '↪️' : '✅';
-                    
-                    // Color para el tiempo de respuesta
-                    const timeColor = !time ? '' :
-                                     log.responseTime > 1000 ? '🐌' :
-                                     log.responseTime > 500 ? '⏱️' : '⚡';
-                    
-                    return `${statusEmoji} ${method} ${url} → ${status} ${timeColor}${time}`;
-                  }
-                  
-                  // Para logs con contexto
-                  if (context && msg) {
-                    // Contextos que queremos agrupar visualmente
-                    const quietContexts = ['InstanceLoader', 'RouterExplorer'];
-                    
-                    if (quietContexts.includes(context)) {
-                      return `   ${getContextEmoji(context)} ${msg}`; // Indentado para agrupar
-                    }
-                    
-                    return `${getContextEmoji(context)} [${context}] ${msg}`;
-                  }
-                  
-                  // Logs solo con mensaje
-                  return msg || '';
-                },
+                singleLine: false,
+                // Formato simple que no requiere serialización
+                messageFormat: '{context} - {msg}',
               },
             }
           : undefined,
