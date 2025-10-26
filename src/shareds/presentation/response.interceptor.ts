@@ -11,13 +11,19 @@ import { map } from 'rxjs/operators';
 import { ResCodes, ResFlow } from 'src/domain/flows/res.type';
 import { Reflector } from '@nestjs/core';
 import { API_RESPONSE_META } from './api-success.decorator';
+import { PinoLogger } from 'nestjs-pino';
 
 /**
  * Encargado de modificar la respuesta al formato
  */
 @Injectable()
 export class ResponseInterceptor<T> implements NestInterceptor<T, ResFlow<T>> {
-  constructor(private readonly reflector: Reflector) {}
+  constructor(
+    private readonly reflector: Reflector,
+    private readonly logger: PinoLogger,
+  ) {
+    this.logger.setContext(ResponseInterceptor.name);
+  }
 
   intercept(
     context: ExecutionContext,
@@ -37,7 +43,7 @@ export class ResponseInterceptor<T> implements NestInterceptor<T, ResFlow<T>> {
       // })),
       map((data: any) => {
         const message = data?.message || meta?.message;
-        console.log(meta?.type);
+        this.logger.debug({ responseType: meta?.type }, 'Response type logged');
         const response = {
           success: true,
           type: meta?.type ?? ResCodes.OPERATION_SUCCESS,
