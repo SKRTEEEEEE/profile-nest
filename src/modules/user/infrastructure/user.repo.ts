@@ -4,7 +4,8 @@ import { Document, Model, ModifyResult } from 'mongoose';
 import { MongooseCRUImpl } from 'src/shareds/pattern/infrastructure/implementations/cru.impl';
 import {
   DBBase,
-} from 'src/dynamic.types';;
+} from 'src/dynamic.types';
+import { PinoLogger } from 'nestjs-pino';;
 import { UserInterface } from '../application/user.interface';
 import { createDomainError } from 'src/domain/flows/error.registry';
 import { ErrorCodes } from 'src/domain/flows/error.type';
@@ -19,8 +20,10 @@ export class MongooseUserRepo
   constructor(
     @InjectModel('User')
     private readonly userModel: Model<UserBase>,
+    private readonly logger: PinoLogger,
   ) {
     super(userModel);
+    this.logger.setContext(MongooseUserRepo.name);
   }
   async readOne(
     filter: Record<string, any>,
@@ -57,7 +60,7 @@ export class MongooseUserRepo
         updatedDocument?.value as UserBase & MongooseDocument,
       ) as UserBase & DBBase;
     } catch (error) {
-      console.error('Error al actualizar el documento:', error);
+      this.logger.error({ error }, 'Error al actualizar el documento');
       throw createDomainError(
         ErrorCodes.DATABASE_ACTION,
         MongooseUserRepo,

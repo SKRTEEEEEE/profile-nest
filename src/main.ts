@@ -35,11 +35,11 @@ const getBearerAuthConfig = (jwtType: string) => {
     };
 };
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
-  // const logger = app.get(Logger);
+  const app = await NestFactory.create(AppModule, { bufferLogs: true });
+  const logger = app.get(Logger);
   // app.useGlobalFilters(new DomainErrorFilter(logger)); -> ver en app.modules, esta configurado ahi 😎
   app.useGlobalPipes(new GlobalValidationPipe());
-  app.useLogger(app.get(Logger));
+  app.useLogger(logger);
   const cfg = SWAGGER_CONFIGS.ADMIN;
 
   const config = new DocumentBuilder()
@@ -75,7 +75,7 @@ async function bootstrap() {
       if (title) schema.title = title;
       if (group) schema['x-group'] = group;
     } else {
-      console.warn(
+      logger.warn(
         `No constructor found in registry for schema: ${schemaName}`,
       ); //⚠️//🏗️ -> mirar que hacia esta parte
     }
@@ -95,12 +95,12 @@ async function bootstrap() {
         }
       });
     } else {
-      console.warn('No schemas found in document components.');
+      logger.warn('No schemas found in document components.');
     }
     // console.debug(components.schemas?.TechFormDto)
     // console.debug(components.schemas?.TechFormCategory)
   } else {
-    console.warn('No components found in Swagger document.');
+    logger.warn('No components found in Swagger document.');
   }
 
   // Setup Swagger UI
