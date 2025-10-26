@@ -114,9 +114,19 @@ const isDev =
 
 ### Después (salida mejorada)
 
-#### Desarrollo
+#### Desarrollo - Logs de inicio (compactos y agrupados)
 ```bash
-[RouterExplorer] Mapped {/project/:id, GET} route
+🏭 [NestFactory] Starting Nest application...
+   📦 MongooseModule dependencies initialized
+   📦 TopicCalculatorModule dependencies initialized
+🚀 [NestApplication] Nest application successfully started
+```
+
+#### Desarrollo - Logs HTTP (unificados)
+```bash
+✅ GET /pre-tech?q=hello → 200 ⚡230ms
+⚠️ GET /invalid-route → 404 ⚡50ms
+❌ POST /user → 500 🐌1200ms
 ```
 
 #### Producción (JSON sin campos innecesarios)
