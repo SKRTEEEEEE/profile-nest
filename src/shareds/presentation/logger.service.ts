@@ -16,14 +16,13 @@ export interface LogEntry {
 @Injectable()
 export class CustomLoggerService implements NestLoggerService {
   private readonly logDir = path.join(process.cwd(), 'logs');
-  private readonly errorLogFile = path.join(this.logDir, 'errors.log');
-  private readonly errorCountFile = path.join(this.logDir, 'error-count.json');
+  private readonly errorStatsFile = path.join(this.logDir, 'error-stats.json');
   private readonly isProduction = process.env.NODE_ENV === 'production';
 
   constructor(private readonly logger: PinoLogger) {
     if (this.isProduction) {
       this.ensureLogDirectory();
-      this.cleanOldErrorLogs();
+      this.cleanOldErrorStats();
     }
   }
 
@@ -33,38 +32,15 @@ export class CustomLoggerService implements NestLoggerService {
     }
   }
 
-  private cleanOldErrorLogs() {
+  private cleanOldErrorStats() {
     try {
-      // Clean error logs older than 3 days
-      const threeDaysAgo = Date.now() - 3 * 24 * 60 * 60 * 1000;
-
-      if (fs.existsSync(this.errorLogFile)) {
-        const content = fs.readFileSync(this.errorLogFile, 'utf-8');
-        const logs = content
-          .split('\n')
-          .filter((line) => line.trim())
-          .map((line) => {
-            try {
-              return JSON.parse(line);
-            } catch {
-              return null;
-            }
-          })
-          .filter((log) => log && log.timestamp > threeDaysAgo);
-
-        fs.writeFileSync(
-          this.errorLogFile,
-          logs.map((log) => JSON.stringify(log)).join('\n'),
-        );
-      }
-
-      // Clean error count older than 1 month
+      // Clean error stats older than 1 month
       const oneMonthAgo = Date.now() - 30 * 24 * 60 * 60 * 1000;
-      if (fs.existsSync(this.errorCountFile)) {
-        const counts = JSON.parse(
-          fs.readFileSync(this.errorCountFile, 'utf-8'),
+      if (fs.existsSync(this.errorStatsFile)) {
+        const stats = JSON.parse(
+          fs.readFileSync(this.errorStatsFile, 'utf-8'),
         );
-        const filteredCounts = Object.entries(counts)
+        const filteredStats = Object.entries(stats)
           .filter(([timestamp]) => parseInt(timestamp) > oneMonthAgo)
           .reduce(
             (acc, [key, value]) => {
@@ -74,36 +50,32 @@ export class CustomLoggerService implements NestLoggerService {
             {} as Record<string, number>,
           );
         fs.writeFileSync(
-          this.errorCountFile,
-          JSON.stringify(filteredCounts, null, 2),
+          this.errorStatsFile,
+          JSON.stringify(filteredStats, null, 2),
         );
       }
     } catch (error) {
       // Silently fail if cleanup fails
-      console.error('Error cleaning old logs:', error);
+      console.error('Error cleaning old stats:', error);
     }
   }
 
-  private saveErrorLog(entry: LogEntry) {
+  private updateErrorStats() {
     if (!this.isProduction) return;
 
     try {
-      // Save error to file
-      fs.appendFileSync(this.errorLogFile, JSON.stringify(entry) + '\n');
+      const dateKey = new Date().toISOString().split('T')[0];
+      let stats: Record<string, number> = {};
 
-      // Update error count
-      const dateKey = new Date(entry.timestamp).toISOString().split('T')[0];
-      let counts: Record<string, number> = {};
-
-      if (fs.existsSync(this.errorCountFile)) {
-        counts = JSON.parse(fs.readFileSync(this.errorCountFile, 'utf-8'));
+      if (fs.existsSync(this.errorStatsFile)) {
+        stats = JSON.parse(fs.readFileSync(this.errorStatsFile, 'utf-8'));
       }
 
-      counts[dateKey] = (counts[dateKey] || 0) + 1;
-      fs.writeFileSync(this.errorCountFile, JSON.stringify(counts, null, 2));
+      stats[dateKey] = (stats[dateKey] || 0) + 1;
+      fs.writeFileSync(this.errorStatsFile, JSON.stringify(stats, null, 2));
     } catch (error) {
       // Silently fail if save fails
-      console.error('Error saving error log:', error);
+      console.error('Error updating error stats:', error);
     }
   }
 
@@ -116,15 +88,8 @@ export class CustomLoggerService implements NestLoggerService {
     const errorMessage = typeof message === 'string' ? message : message.message;
     this.logger.error({ context, stack }, errorMessage);
 
-    // Save error to file in production
-    const entry: LogEntry = {
-      timestamp: Date.now(),
-      level: 'error',
-      message: errorMessage,
-      context,
-      stack,
-    };
-    this.saveErrorLog(entry);
+    // Update error statistics in production
+    this.updateErrorStats();
   }
 
   warn(message: any, context?: string) {
@@ -144,27 +109,18 @@ export class CustomLoggerService implements NestLoggerService {
     this.logger.trace({ context }, verboseMessage);
   }
 
-  getErrorStats(): { dailyCount: Record<string, number>; recentErrors: LogEntry[] } {
-    if (!this.isProduction || !fs.existsSync(this.errorCountFile)) {
-      return { dailyCount: {}, recentErrors: [] };
+  getErrorStats(): { dailyCount: Record<string, number> } {
+    if (!this.isProduction || !fs.existsSync(this.errorStatsFile)) {
+      return { dailyCount: {} };
     }
 
     try {
       const dailyCount = JSON.parse(
-        fs.readFileSync(this.errorCountFile, 'utf-8'),
+        fs.readFileSync(this.errorStatsFile, 'utf-8'),
       );
-      const recentErrors = fs.existsSync(this.errorLogFile)
-        ? fs
-            .readFileSync(this.errorLogFile, 'utf-8')
-            .split('\n')
-            .filter((line) => line.trim())
-            .map((line) => JSON.parse(line))
-            .slice(-100) // Last 100 errors
-        : [];
-
-      return { dailyCount, recentErrors };
+      return { dailyCount };
     } catch {
-      return { dailyCount: {}, recentErrors: [] };
+      return { dailyCount: {} };
     }
   }
 }
