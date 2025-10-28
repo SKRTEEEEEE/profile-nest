@@ -38,7 +38,7 @@ function getContextEmoji(context: string): string {
 
 // Configure log rotation for production
 const getProductionStream = () => {
-  const logDir = path.join(process.cwd(), 'logs');
+  const logDir = path.join(process.cwd(), 'docs/logs');
   
   // Create rotating stream for general logs
   const generalStream = createStream('application.log', {
