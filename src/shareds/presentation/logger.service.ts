@@ -85,8 +85,56 @@ export class CustomLoggerService implements NestLoggerService {
   }
 
   error(message: any, stack?: string, context?: string) {
-    const errorMessage = typeof message === 'string' ? message : message.message;
-    this.logger.error({ context, stack }, errorMessage);
+    // Extract useful error information
+    let errorMessage: string;
+    let errorStack: string | undefined = stack;
+    let errorDetails: any = {};
+
+    if (typeof message === 'string') {
+      errorMessage = message;
+    } else if (message instanceof Error) {
+      errorMessage = message.message;
+      errorStack = errorStack || message.stack;
+      // Include additional error properties if they exist
+      errorDetails = {
+        name: message.name,
+        ...Object.getOwnPropertyNames(message).reduce((acc, key) => {
+          if (!['message', 'stack', 'name'].includes(key)) {
+            acc[key] = (message as any)[key];
+          }
+          return acc;
+        }, {} as any),
+      };
+    } else if (message?.message) {
+      errorMessage = message.message;
+      errorDetails = { ...message };
+      delete errorDetails.message;
+    } else {
+      errorMessage = JSON.stringify(message);
+    }
+
+    // Log with full context and stack trace in development
+    const isDev = process.env.NODE_ENV !== 'production';
+    if (isDev) {
+      this.logger.error(
+        { 
+          context, 
+          stack: errorStack,
+          ...(Object.keys(errorDetails).length > 0 ? { details: errorDetails } : {})
+        }, 
+        errorMessage
+      );
+    } else {
+      // In production, log everything but it will be written to files
+      this.logger.error(
+        { 
+          context, 
+          stack: errorStack,
+          details: errorDetails
+        }, 
+        errorMessage
+      );
+    }
 
     // Update error statistics in production
     this.updateErrorStats();

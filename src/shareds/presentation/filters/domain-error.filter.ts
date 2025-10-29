@@ -55,13 +55,19 @@ export class DomainErrorFilter implements ExceptionFilter {
       ? exception.friendlyDesc.en
       : errorCodeMeta.friendlyDesc;
 
-    this.logger.error({
-      correlationId: request[CORRELATION_ID_HEADER],
-      ...exception,
-      family: errorCodeMeta.family,
-      friendlyDesc,
-      code: errorCodeMeta.code,
-    });
+    // Log error with proper context and stack trace
+    this.logger.error(
+      {
+        context: 'DomainErrorFilter',
+        correlationId: request[CORRELATION_ID_HEADER],
+        errorType: exception.type,
+        family: errorCodeMeta.family,
+        code: errorCodeMeta.code,
+        meta: exception.meta,
+        stack: exception.stack,
+      },
+      `${errorCodeMeta.desc}: ${friendlyDesc}`
+    );
     response.status(status).json({
       success: false,
       type: exception.type,

@@ -17,25 +17,6 @@ const isDev =
 
 const isProduction = process.env.NODE_ENV === 'production';
 
-// Helper para obtener emojis según contexto
-function getContextEmoji(context: string): string {
-  const emojiMap: Record<string, string> = {
-    'NestFactory': '🏭',
-    'InstanceLoader': '📦',
-    'RoutesResolver': '🛣️',
-    'RouterExplorer': '🗺️',
-    'NestApplication': '🚀',
-    'ResponseInterceptor': '🔄',
-    'DomainErrorFilter': '❌',
-    'MongooseModule': '🍃',
-    'ConfigService': '⚙️',
-    'AuthGuard': '🔐',
-    'ValidationPipe': '✅',
-  };
-  
-  return emojiMap[context] || '📌';
-}
-
 // Configure log rotation for production
 const getProductionStream = () => {
   const logDir = path.join(process.cwd(), 'docs/logs');
@@ -67,12 +48,19 @@ const getProductionStream = () => {
   imports: [
     PinoLoggerModule.forRoot({
       pinoHttp: {
-        autoLogging: true,
+        autoLogging: {
+          ignore: (req: any) => {
+            // Don't log health checks or other noise
+            return req.url?.includes('/health') || req.url?.includes('/metrics');
+          }
+        },
         messageKey: 'message',
         level: isDev ? 'debug' : 'info',
         
-        // Remove timestamp, level, pid, hostname from logs
-        timestamp: false,
+        // Timestamp configuration
+        // Development: formatted for pino-pretty
+        // Production: standard pino timestamp for structured JSON logs
+        timestamp: isDev ? () => `,"time":"${new Date().toISOString()}"` : true,
         base: null, // This removes pid and hostname
         
         customProps: (req: any) => ({
@@ -81,13 +69,19 @@ const getProductionStream = () => {
         customSuccessMessage: (req: any, res: any) => {
           const status = res.statusCode;
           const emoji = status >= 300 ? '↪️' : '✅';
-          // El responseTime se agrega automáticamente por pino-http
-          return `${emoji} ${req.method} ${req.url} → ${status}`;
+          const method = req.method.padEnd(6);
+          const responseTime = res.responseTime || res.getHeader?.('X-Response-Time');
+          const time = responseTime ? ` +${Math.round(responseTime)}ms` : '';
+          return `${emoji} ${method} ${req.url} → ${status}${time}`;
         },
         customErrorMessage: (req: any, res: any, err: any) => {
           const status = res.statusCode;
           const emoji = status >= 500 ? '❌' : '⚠️';
-          return `${emoji} ${req.method} ${req.url} → ${status} [${err.message}]`;
+          const method = req.method.padEnd(6);
+          const responseTime = res.responseTime || res.getHeader?.('X-Response-Time');
+          const time = responseTime ? ` +${Math.round(responseTime)}ms` : '';
+          const errMsg = err?.message ? ` - ${err.message}` : '';
+          return `${emoji} ${method} ${req.url} → ${status}${time}${errMsg}`;
         },
         customLogLevel: (req: any, res: any, err: any) => {
           if (res.statusCode >= 400 && res.statusCode < 500) {
@@ -100,34 +94,63 @@ const getProductionStream = () => {
           return 'info';
         },
         serializers: {
-          req: (req: any) => ({
-            method: req.method,
-            url: req.url,
-            correlationId: req[CORRELATION_ID_HEADER],
-            userAgent: req.headers['user-agent'],
-          }),
-          res: (res: any) => ({
-            statusCode: res.statusCode,
-          }),
+          req: (req: any) => {
+            // Production: Include more details for structured logging
+            if (isProduction) {
+              return {
+                id: req.id,
+                method: req.method,
+                url: req.url,
+                query: req.query,
+                params: req.params,
+                headers: {
+                  host: req.headers?.host,
+                  'user-agent': req.headers?.['user-agent'],
+                  'content-type': req.headers?.['content-type'],
+                },
+                remoteAddress: req.ip || req.connection?.remoteAddress,
+                correlationId: req[CORRELATION_ID_HEADER],
+              };
+            }
+            // Development: Keep it simple for readability
+            return {
+              method: req.method,
+              url: req.url,
+            };
+          },
+          res: (res: any) => {
+            if (isProduction) {
+              return {
+                statusCode: res.statusCode,
+                headers: {
+                  'content-type': res.getHeader?.('content-type'),
+                  'content-length': res.getHeader?.('content-length'),
+                },
+              };
+            }
+            return {
+              statusCode: res.statusCode,
+            };
+          },
           err: (err: any) => ({
             type: err.type,
             message: err.message,
-            stack: err.stack,
+            stack: err.stack, // Always include stack trace in logs (file or console)
+            ...(err.code && { code: err.code }),
+            ...(err.errno && { errno: err.errno }),
           }),
         },
 
-        // Development: Pretty printed logs with colors
+        // Development: Pretty printed logs with colors (compact format)
         transport: isDev
           ? {
               target: 'pino-pretty',
               options: {
                 colorize: true,
-                translateTime: false,
-                ignore: 'pid,hostname,time,level,v',
-                messageKey: 'message',
-                singleLine: false,
-                // Formato simple que no requiere serialización
-                messageFormat: '{context} - {msg}',
+                translateTime: 'HH:MM:ss',
+                ignore: 'pid,hostname',
+                singleLine: true,
+                messageFormat: '{if context}[{context}]{end} {msg}',
               },
             }
           : undefined,
