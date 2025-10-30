@@ -1,14 +1,17 @@
 import { CorrelationIdMiddleware } from '../../src/shareds/presentation/correlation-id.middleware';
+import { NativeLoggerService } from '../../src/shareds/presentation/native-logger.service';
 import { Request, Response, NextFunction } from 'express';
 
 describe('CorrelationIdMiddleware', () => {
   let middleware: CorrelationIdMiddleware;
+  let mockLogger: NativeLoggerService;
   let mockRequest: Partial<Request>;
   let mockResponse: Partial<Response>;
   let mockNext: NextFunction;
 
   beforeEach(() => {
-    middleware = new CorrelationIdMiddleware();
+    mockLogger = new NativeLoggerService();
+    middleware = new CorrelationIdMiddleware(mockLogger);
     mockRequest = {} as any;
     mockResponse = {
       set: jest.fn(),

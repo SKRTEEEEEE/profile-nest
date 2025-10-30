@@ -11,7 +11,7 @@ import { map } from 'rxjs/operators';
 import { ResCodes, ResFlow } from 'src/domain/flows/res.type';
 import { Reflector } from '@nestjs/core';
 import { API_RESPONSE_META } from './api-success.decorator';
-import { PinoLogger } from 'nestjs-pino';
+import { NativeLoggerService } from './native-logger.service';
 
 /**
  * Encargado de modificar la respuesta al formato
@@ -20,10 +20,8 @@ import { PinoLogger } from 'nestjs-pino';
 export class ResponseInterceptor<T> implements NestInterceptor<T, ResFlow<T>> {
   constructor(
     private readonly reflector: Reflector,
-    private readonly logger: PinoLogger,
-  ) {
-    this.logger.setContext(ResponseInterceptor.name);
-  }
+    private readonly logger: NativeLoggerService,
+  ) {}
 
   intercept(
     context: ExecutionContext,

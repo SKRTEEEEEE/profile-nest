@@ -6,7 +6,7 @@ import {
   Inject,
 } from '@nestjs/common';
 import { Request, Response } from 'express';
-import { Logger } from 'nestjs-pino';
+import { NativeLoggerService } from '../native-logger.service';
 import { DomainError } from 'src/domain/flows/domain.error';
 import {
   ERROR_CODES_METADATA,
@@ -36,7 +36,7 @@ function friendlyErrorType(type: ErrorCodes): string {
 }
 @Catch(DomainError)
 export class DomainErrorFilter implements ExceptionFilter {
-  constructor(@Inject(Logger) private readonly logger: Logger) {}
+  constructor(@Inject(NativeLoggerService) private readonly logger: NativeLoggerService) {}
   catch(exception: DomainError, host: ArgumentsHost) {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse<Response>();
@@ -56,18 +56,21 @@ export class DomainErrorFilter implements ExceptionFilter {
       : errorCodeMeta.friendlyDesc;
 
     // Log error with proper context and stack trace
+    const errorMessage = `${errorCodeMeta.desc}: ${friendlyDesc}`;
+    const errorDetails = {
+      correlationId: request[CORRELATION_ID_HEADER],
+      errorType: exception.type,
+      family: errorCodeMeta.family,
+      code: errorCodeMeta.code,
+      meta: exception.meta,
+    };
+    
     this.logger.error(
-      {
-        context: 'DomainErrorFilter',
-        correlationId: request[CORRELATION_ID_HEADER],
-        errorType: exception.type,
-        family: errorCodeMeta.family,
-        code: errorCodeMeta.code,
-        meta: exception.meta,
-        stack: exception.stack,
-      },
-      `${errorCodeMeta.desc}: ${friendlyDesc}`
+      { message: errorMessage, ...errorDetails },
+      exception.stack,
+      'DomainErrorFilter'
     );
+    
     response.status(status).json({
       success: false,
       type: exception.type,
