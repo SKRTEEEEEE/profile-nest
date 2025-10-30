@@ -4,7 +4,7 @@ import { ProjectInterface } from 'src/modules/project/application/project.interf
 import { PROJECT_REPOSITORY } from 'src/modules/tokens';
 import { ProjectBase } from 'src/domain/entities/project';
 import { DBBase } from 'src/dynamic.types';
-import { PinoLogger } from 'nestjs-pino';
+import { NativeLoggerService } from 'src/shareds/presentation/native-logger.service';
 
 describe('ProjectReadByIdUseCase', () => {
   let useCase: ProjectReadByIdUseCase;
@@ -36,18 +36,19 @@ describe('ProjectReadByIdUseCase', () => {
     } as any;
 
     const mockLogger = {
-      setContext: jest.fn(),
       warn: jest.fn(),
       error: jest.fn(),
       log: jest.fn(),
       debug: jest.fn(),
+      verbose: jest.fn(),
+      setCorrelationId: jest.fn(),
     };
 
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         ProjectReadByIdUseCase,
         { provide: PROJECT_REPOSITORY, useValue: repository },
-        { provide: PinoLogger, useValue: mockLogger },
+        { provide: NativeLoggerService, useValue: mockLogger },
       ],
     }).compile();
 
@@ -94,18 +95,19 @@ describe('ProjectReadEjemploUseCase', () => {
     } as any;
 
     const mockLogger = {
-      setContext: jest.fn(),
       warn: jest.fn(),
       error: jest.fn(),
       log: jest.fn(),
       debug: jest.fn(),
+      verbose: jest.fn(),
+      setCorrelationId: jest.fn(),
     };
 
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         ProjectReadEjemploUseCase,
         { provide: PROJECT_REPOSITORY, useValue: repository },
-        { provide: PinoLogger, useValue: mockLogger },
+        { provide: NativeLoggerService, useValue: mockLogger },
       ],
     }).compile();
 

@@ -5,7 +5,7 @@ import { MongooseCRUImpl } from 'src/shareds/pattern/infrastructure/implementati
 import {
   DBBase,
 } from 'src/dynamic.types';
-import { PinoLogger } from 'nestjs-pino';;
+import { NativeLoggerService } from 'src/shareds/presentation/native-logger.service';
 import { UserInterface } from '../application/user.interface';
 import { createDomainError } from 'src/domain/flows/error.registry';
 import { ErrorCodes } from 'src/domain/flows/error.type';
@@ -20,10 +20,9 @@ export class MongooseUserRepo
   constructor(
     @InjectModel('User')
     private readonly userModel: Model<UserBase>,
-    private readonly logger: PinoLogger,
+    private readonly logger: NativeLoggerService,
   ) {
     super(userModel);
-    this.logger.setContext(MongooseUserRepo.name);
   }
   async readOne(
     filter: Record<string, any>,
@@ -60,7 +59,11 @@ export class MongooseUserRepo
         updatedDocument?.value as UserBase & MongooseDocument,
       ) as UserBase & DBBase;
     } catch (error) {
-      this.logger.error({ error }, 'Error al actualizar el documento');
+      this.logger.error(
+        'Error al actualizar el documento',
+        error instanceof Error ? error.stack : undefined,
+        MongooseUserRepo.name
+      );
       throw createDomainError(
         ErrorCodes.DATABASE_ACTION,
         MongooseUserRepo,
