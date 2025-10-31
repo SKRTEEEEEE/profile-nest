@@ -20,13 +20,14 @@ import { ThrottlerModule } from '@nestjs/throttler';
 import { CorrelationIdMiddleware } from './shareds/presentation/correlation-id.middleware';
 import { Request } from 'express';
 import { DomainErrorFilter } from './shareds/presentation/filters/domain-error.filter';
-import { NativeLoggerService } from './shareds/presentation/native-logger.service';
+import { NativeLoggerModule } from './shareds/presentation/native-logger.module';
 import { ProjectModule } from './modules/project/presentation/project.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot(), // 👈 aquí le pasamos la conexión a dotenv
     MongooseModule.forRoot(process.env.MONGODB_URI!), // 👈 aquí le pasamos la conexión a la uri para que mongoose tenga acceso
+    NativeLoggerModule, // 👈 Global module that exports NativeLoggerService
     PreTechModule,
     TechModule,
     UserModule,
@@ -59,7 +60,7 @@ import { ProjectModule } from './modules/project/presentation/project.module';
   ],
   controllers: [],
   providers: [
-    NativeLoggerService,
+    // NativeLoggerService is now provided by NativeLoggerModule (global)
     // Aplicar el JwtAuthGuard globalmente (todas las rutas requieren autenticación por defecto) - se utiliza aquí porque requiere de reflector y no necesita new ...
     {
       provide: APP_GUARD,
