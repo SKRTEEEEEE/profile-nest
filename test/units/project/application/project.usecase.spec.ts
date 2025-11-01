@@ -1,5 +1,9 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { ProjectReadByIdUseCase, ProjectReadEjemploUseCase } from 'src/modules/project/application/project.usecase';
+import { 
+  ProjectReadByIdUseCase, 
+  ProjectReadEjemploUseCase,
+  ProjectPopulateUseCase 
+} from 'src/modules/project/application/project.usecase';
 import { ProjectInterface } from 'src/modules/project/application/project.interface';
 import { PROJECT_REPOSITORY } from 'src/modules/tokens';
 import { ProjectBase } from 'src/domain/entities/project';
@@ -86,6 +90,7 @@ describe('ProjectReadByIdUseCase', () => {
 describe('ProjectReadEjemploUseCase', () => {
   let useCase: ProjectReadEjemploUseCase;
   let repository: jest.Mocked<ProjectInterface>;
+  let mockLogger: any;
 
   beforeEach(async () => {
     repository = {
@@ -94,7 +99,7 @@ describe('ProjectReadEjemploUseCase', () => {
       readById: jest.fn(),
     } as any;
 
-    const mockLogger = {
+    mockLogger = {
       warn: jest.fn(),
       error: jest.fn(),
       log: jest.fn(),
@@ -126,5 +131,67 @@ describe('ProjectReadEjemploUseCase', () => {
 
     expect(result).toEqual(mockProjects);
     expect(repository.readEjemplo).toHaveBeenCalledTimes(1);
+    expect(mockLogger.warn).not.toHaveBeenCalled();
+  });
+
+  it('should warn when no projects found', async () => {
+    repository.readEjemplo.mockResolvedValue([]);
+
+    const result = await useCase.execute();
+
+    expect(result).toEqual([]);
+    expect(mockLogger.warn).toHaveBeenCalledWith(
+      'No se encontraron proyectos en la DB',
+      ProjectReadEjemploUseCase.name,
+    );
+  });
+});
+
+describe('ProjectPopulateUseCase', () => {
+  let useCase: ProjectPopulateUseCase;
+  let repository: jest.Mocked<ProjectInterface>;
+
+  beforeEach(async () => {
+    repository = {
+      populate: jest.fn(),
+      readEjemplo: jest.fn(),
+      readById: jest.fn(),
+    } as any;
+
+    const module: TestingModule = await Test.createTestingModule({
+      providers: [
+        ProjectPopulateUseCase,
+        { provide: PROJECT_REPOSITORY, useValue: repository },
+      ],
+    }).compile();
+
+    useCase = module.get<ProjectPopulateUseCase>(ProjectPopulateUseCase);
+  });
+
+  it('should be defined', () => {
+    expect(useCase).toBeDefined();
+  });
+
+  it('should populate projects', async () => {
+    const projectsData = [
+      { nameId: 'test', name: 'Test Project' },
+    ] as any;
+    const populatedProjects = [{ id: '1', nameId: 'test' }] as any;
+    
+    repository.populate.mockResolvedValue(populatedProjects);
+
+    const result = await useCase.execute(projectsData);
+
+    expect(result).toEqual(populatedProjects);
+    expect(repository.populate).toHaveBeenCalledWith(projectsData);
+  });
+
+  it('should handle empty projects array', async () => {
+    repository.populate.mockResolvedValue([]);
+
+    const result = await useCase.execute([]);
+
+    expect(result).toEqual([]);
+    expect(repository.populate).toHaveBeenCalledWith([]);
   });
 });
