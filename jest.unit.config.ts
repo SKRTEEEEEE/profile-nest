@@ -1,25 +1,26 @@
 /** @type {import('jest').Config} */
 const config = {
   moduleFileExtensions: ['js', 'json', 'ts'],
-  rootDir: 'test/units',
-  testRegex: '.*\\.spec\\.ts$',
+  rootDir: '.',
+  testRegex: 'test/units/.*\\.spec\\.ts$',
   transform: {
     '^.+\\.(t|j)s$': 'ts-jest',
   },
   moduleNameMapper: {
-    '^src/(.*)$': '<rootDir>/../../src/$1',
+    '^src/(.*)$': '<rootDir>/src/$1',
   },
   collectCoverageFrom: [
-    '../../src/**/*.ts',
-    '!../../src/**/*.interface.ts',
-    '!../../src/**/*.dto.ts',
-    '!../../src/**/*.entity.ts',
-    '!../../src/**/*.type.ts',
-    '!../../src/**/*.types.ts',
-    '!../../src/**/index.ts',
-    '!../../src/main.ts',
+    'src/**/*.ts',
+    '!src/**/*.interface.ts',
+    '!src/**/*.dto.ts',
+    '!src/**/*.entity.ts',
+    '!src/**/*.type.ts',
+    '!src/**/*.types.ts',
+    '!src/**/index.ts',
+    '!src/main.ts',
   ],
   coverageDirectory: 'coverage/unit',
+  coverageReporters: ['text', 'lcov', 'json-summary'],
   testEnvironment: 'node',
   coverageThreshold: {
     global: {

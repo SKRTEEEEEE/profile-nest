@@ -58,9 +58,36 @@ Los badges utilizan el endpoint de shields.io y apuntan a los archivos JSON gene
 - Se utiliza `[skip ci]` en el commit de badges para evitar triggers infinitos del workflow
 - El workflow requiere permisos de escritura para pushear los badges (configurado con `GITHUB_TOKEN`)
 
+### Corrección aplicada (Iteración 2)
+
+Se detectó y corrigió un problema en la configuración de Jest que impedía la generación correcta del coverage:
+
+**Problema:** 
+- Coverage mostraba 0% en todas las métricas
+- No se generaba el archivo `coverage-summary.json`
+- El workflow fallaba al intentar extraer las métricas
+
+**Solución aplicada en `jest.unit.config.ts`:**
+1. Cambio de `rootDir: 'test/units'` a `rootDir: '.'`
+2. Actualización de `testRegex` para incluir path completo
+3. Corrección de `moduleNameMapper` para paths desde root
+4. Actualización de paths en `collectCoverageFrom`
+5. **Agregado explícito:** `coverageReporters: ['text', 'lcov', 'json-summary']`
+
+Este último cambio es crítico ya que garantiza que Jest genere el archivo `coverage-summary.json` que el workflow necesita para crear los badges.
+
 ### Próximos pasos recomendados
 
 Una vez mergeado a main, los badges se mostrarán correctamente. En el primer push a main después del merge:
 1. El workflow generará los archivos JSON de badges
 2. Los badges en el README mostrarán las métricas actuales de coverage
 3. En cada push subsecuente, los badges se actualizarán automáticamente
+
+### Archivos modificados
+
+**Primera iteración:**
+- `.github/workflows/node.yml` - Workflow con badges
+- `README.md` - Badges añadidos
+
+**Segunda iteración (corrección):**
+- `jest.unit.config.ts` - Configuración de Jest corregida
