@@ -34,5 +34,87 @@ jobs:
         run: npm run build && find dist/src/main.js
       - name: Lint code 💅
         run: npm run lint
-      - name: Run tests ✅
-        run: npm run test
+      - name: Run tests with coverage ✅
+        run: npm run test:cov
+      - name: Extract coverage metrics 📊
+        id: coverage
+        run: |
+          # Extract coverage percentages from coverage-summary.json
+          STATEMENTS=$(jq '.total.statements.pct' coverage/unit/coverage-summary.json)
+          BRANCHES=$(jq '.total.branches.pct' coverage/unit/coverage-summary.json)
+          FUNCTIONS=$(jq '.total.functions.pct' coverage/unit/coverage-summary.json)
+          LINES=$(jq '.total.lines.pct' coverage/unit/coverage-summary.json)
+          
+          echo "statements=$STATEMENTS" >> $GITHUB_OUTPUT
+          echo "branches=$BRANCHES" >> $GITHUB_OUTPUT
+          echo "functions=$FUNCTIONS" >> $GITHUB_OUTPUT
+          echo "lines=$LINES" >> $GITHUB_OUTPUT
+          
+          # Calculate average coverage
+          TOTAL=$(echo "scale=2; ($STATEMENTS + $BRANCHES + $FUNCTIONS + $LINES) / 4" | bc)
+          echo "total=$TOTAL" >> $GITHUB_OUTPUT
+          
+          echo "Coverage - Statements: $STATEMENTS%, Branches: $BRANCHES%, Functions: $FUNCTIONS%, Lines: $LINES%, Total: $TOTAL%"
+      - name: Create coverage badges 🏅
+        if: github.ref == 'refs/heads/main'
+        run: |
+          mkdir -p .github/badges
+          
+          # Create JSON files for shields.io endpoint badges
+          cat > .github/badges/coverage-total.json << EOF
+          {
+            "schemaVersion": 1,
+            "label": "coverage",
+            "message": "${{ steps.coverage.outputs.total }}%",
+            "color": "$(if (( $(echo "${{ steps.coverage.outputs.total }} >= 80" | bc -l) )); then echo "brightgreen"; elif (( $(echo "${{ steps.coverage.outputs.total }} >= 60" | bc -l) )); then echo "yellow"; else echo "red"; fi)"
+          }
+          EOF
+          
+          cat > .github/badges/coverage-statements.json << EOF
+          {
+            "schemaVersion": 1,
+            "label": "statements",
+            "message": "${{ steps.coverage.outputs.statements }}%",
+            "color": "$(if (( $(echo "${{ steps.coverage.outputs.statements }} >= 80" | bc -l) )); then echo "brightgreen"; elif (( $(echo "${{ steps.coverage.outputs.statements }} >= 60" | bc -l) )); then echo "yellow"; else echo "red"; fi)"
+          }
+          EOF
+          
+          cat > .github/badges/coverage-branches.json << EOF
+          {
+            "schemaVersion": 1,
+            "label": "branches",
+            "message": "${{ steps.coverage.outputs.branches }}%",
+            "color": "$(if (( $(echo "${{ steps.coverage.outputs.branches }} >= 80" | bc -l) )); then echo "brightgreen"; elif (( $(echo "${{ steps.coverage.outputs.branches }} >= 60" | bc -l) )); then echo "yellow"; else echo "red"; fi)"
+          }
+          EOF
+          
+          cat > .github/badges/coverage-functions.json << EOF
+          {
+            "schemaVersion": 1,
+            "label": "functions",
+            "message": "${{ steps.coverage.outputs.functions }}%",
+            "color": "$(if (( $(echo "${{ steps.coverage.outputs.functions }} >= 80" | bc -l) )); then echo "brightgreen"; elif (( $(echo "${{ steps.coverage.outputs.functions }} >= 60" | bc -l) )); then echo "yellow"; else echo "red"; fi)"
+          }
+          EOF
+          
+          cat > .github/badges/coverage-lines.json << EOF
+          {
+            "schemaVersion": 1,
+            "label": "lines",
+            "message": "${{ steps.coverage.outputs.lines }}%",
+            "color": "$(if (( $(echo "${{ steps.coverage.outputs.lines }} >= 80" | bc -l) )); then echo "brightgreen"; elif (( $(echo "${{ steps.coverage.outputs.lines }} >= 60" | bc -l) )); then echo "yellow"; else echo "red"; fi)"
+          }
+          EOF
+      - name: Commit badge files 💾
+        if: github.ref == 'refs/heads/main'
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add .github/badges/
+          git diff --quiet && git diff --staged --quiet || git commit -m "chore: update coverage badges [skip ci]"
+      - name: Push changes 🚀
+        if: github.ref == 'refs/heads/main'
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: ${{ github.ref }}

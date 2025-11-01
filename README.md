@@ -9,6 +9,18 @@
 </div>
 </a>
 
+<div align="center">
+
+### Test Coverage
+
+![Coverage Total](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/SKRTEEEEEE/profile-nest/main/.github/badges/coverage-total.json)
+![Coverage Statements](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/SKRTEEEEEE/profile-nest/main/.github/badges/coverage-statements.json)
+![Coverage Branches](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/SKRTEEEEEE/profile-nest/main/.github/badges/coverage-branches.json)
+![Coverage Functions](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/SKRTEEEEEE/profile-nest/main/.github/badges/coverage-functions.json)
+![Coverage Lines](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/SKRTEEEEEE/profile-nest/main/.github/badges/coverage-lines.json)
+
+</div>
+
 ## Información
 
 Backend desarrollado con **Clean Architecture** para mi página de perfil.  
