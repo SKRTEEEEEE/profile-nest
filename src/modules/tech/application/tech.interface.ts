@@ -5,6 +5,8 @@ import { CRUI } from 'src/shareds/pattern/application/interfaces/cru';
 import { DeleteProps } from 'src/shareds/pattern/application/interfaces/delete';
 import { FullTechData, LengBase, LibBase, TechBase, TechForm } from 'src/domain/entities/tech';
 
+export type { LengBase, LibBase, TechBase, FullTechData, TechForm };
+
 export type Fw = TechBase & DBBase & {
   librerias?: (LibBase&DBBase)[];
 }

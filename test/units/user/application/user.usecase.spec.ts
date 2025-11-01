@@ -55,12 +55,10 @@ describe('User UseCases', () => {
     });
 
     it('should create a user successfully', async () => {
-      const createData = {
-        data: {
-          address: '0x123',
-          nick: 'Test User',
-          email: 'test@example.com',
-        },
+      const createData: Partial<UserBase> = {
+        address: '0x123',
+        nick: 'Test User',
+        email: 'test@example.com',
       };
       mockUserRepository.create.mockResolvedValue(mockUser);
 

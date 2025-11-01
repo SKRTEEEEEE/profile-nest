@@ -6,19 +6,15 @@ import {
   TechUpdateByIdUseCase,
   TechDeleteUseCase,
 } from '../../../../src/modules/tech/application/tech.usecase';
-import { TechRepository } from '../../../../src/modules/tech/application/tech.interface';
-import { LengBase, Leng } from '../../../../src/modules/tech/application/tech.interface';
+import { TechRepository, Leng, LengBase } from '../../../../src/modules/tech/application/tech.interface';
 import { DBBase } from '../../../../src/dynamic.types';
 
 describe('Tech UseCases', () => {
   let mockTechRepository: jest.Mocked<TechRepository>;
-  const mockTech: LengBase & DBBase = {
+  const mockTech: Leng = {
     nameId: 'typescript',
-    name: 'TypeScript',
     nameBadge: 'TypeScript',
-    icon: 'typescript-icon.png',
     img: 'typescript.png',
-    type: 'language',
     color: '#3178c6',
     web: 'https://typescriptlang.org',
     preferencia: 90,
@@ -57,11 +53,8 @@ describe('Tech UseCases', () => {
     it('should create a tech successfully', async () => {
       const createData: Omit<LengBase, 'id'> = {
         nameId: 'typescript',
-        name: 'TypeScript',
         nameBadge: 'TypeScript',
-        icon: 'typescript-icon.png',
         img: 'typescript.png',
-        type: 'language',
         color: '#3178c6',
         web: 'https://typescriptlang.org',
         preferencia: 90,
@@ -178,7 +171,7 @@ describe('Tech UseCases', () => {
     it('should update tech by id', async () => {
       const updateProps = {
         id: 'tech-id-123',
-        updateData: { nameBadge: 'TypeScript Updated' } as Partial<LengBase>,
+        updateData: { nameBadge: 'TypeScript Updated' } as Partial<Leng>,
       };
       const updatedTech = { ...mockTech, nameBadge: 'TypeScript Updated' };
       mockTechRepository.updateById.mockResolvedValue(updatedTech);

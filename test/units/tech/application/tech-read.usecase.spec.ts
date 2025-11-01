@@ -1,19 +1,15 @@
 import { TechReadUseCase } from '../../../../src/modules/tech/application/tech-read.usecase';
-import { TechRepository } from '../../../../src/modules/tech/application/tech.interface';
-import { LengBase } from '../../../../src/domain/entities/tech';
+import { TechRepository, Leng, Fw } from '../../../../src/modules/tech/application/tech.interface';
 import { DBBase } from '../../../../src/dynamic.types';
 
 describe('TechReadUseCase', () => {
   let useCase: TechReadUseCase;
   let mockTechRepository: jest.Mocked<TechRepository>;
 
-  const mockTechWithFrameworks: LengBase & DBBase = {
+  const mockTechWithFrameworks: Leng = {
     nameId: 'typescript',
-    name: 'TypeScript',
     nameBadge: 'TypeScript',
-    icon: 'typescript-icon.png',
     img: 'typescript.png',
-    type: 'language',
     afinidad: 85,
     experiencia: 90,
     color: '#3178c6',
@@ -24,11 +20,8 @@ describe('TechReadUseCase', () => {
     frameworks: [
       {
         nameId: 'nestjs',
-        name: 'NestJS',
         nameBadge: 'NestJS',
-        icon: 'nestjs-icon.png',
         img: 'nestjs.png',
-        type: 'framework',
         afinidad: 80,
         experiencia: 85,
         color: '#e0234e',
@@ -36,14 +29,14 @@ describe('TechReadUseCase', () => {
         web: 'https://nestjs.com',
         desc: { es: 'Framework de Node.js', en: 'Node.js Framework', ca: 'Framework de Node.js', de: 'Node.js Framework' },
         usoGithub: 4.5,
+        id: 'fw-id-123',
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
         librerias: [
           {
             nameId: 'typeorm',
-            name: 'TypeORM',
             nameBadge: 'TypeORM',
-            icon: 'typeorm-icon.png',
             img: 'typeorm.png',
-            type: 'library',
             afinidad: 70,
             experiencia: 75,
             color: '#fe0902',
@@ -51,6 +44,9 @@ describe('TechReadUseCase', () => {
             web: 'https://typeorm.io',
             desc: { es: 'ORM para TypeScript', en: 'ORM for TypeScript', ca: 'ORM per TypeScript', de: 'ORM für TypeScript' },
             usoGithub: 3.2,
+            id: 'lib-id-123',
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString(),
           },
         ],
       },
@@ -60,13 +56,10 @@ describe('TechReadUseCase', () => {
     updatedAt: new Date().toISOString(),
   };
 
-  const mockTechWithoutFrameworks: LengBase & DBBase = {
+  const mockTechWithoutFrameworks: Leng = {
     nameId: 'python',
-    name: 'Python',
     nameBadge: 'Python',
-    icon: 'python-icon.png',
     img: 'python.png',
-    type: 'language',
     afinidad: 65,
     experiencia: 70,
     color: '#3776ab',
