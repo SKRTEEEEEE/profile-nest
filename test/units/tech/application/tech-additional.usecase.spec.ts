@@ -14,15 +14,23 @@ describe('Tech Use Cases', () => {
   let mockTechRepository: jest.Mocked<TechRepository>;
 
   const mockTechBase: TechBase = {
-    id: 'tech-123',
     nameId: 'javascript',
-    name: 'JavaScript',
-    category: 'programming',
+    nameBadge: 'JavaScript',
+    color: '#F7DF1E',
+    web: 'https://javascript.com',
+    preferencia: 5,
+    experiencia: 4,
+    afinidad: 5,
+    img: 'javascript.png',
+    desc: { es: 'Lenguaje de programación', en: 'Programming language', ca: 'Llenguatge de programació', de: 'Programmiersprache' },
+    usoGithub: 10,
   };
 
   const mockLengBase: LengBase & DBBase = {
     ...mockTechBase,
-    _id: 'tech-123',
+    id: 'tech-123',
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
   };
 
   beforeEach(() => {
@@ -50,10 +58,17 @@ describe('Tech Use Cases', () => {
     });
 
     it('should create a tech successfully', async () => {
-      const techData: Omit<TechBase, 'id'> = {
+      const techData: TechBase = {
         nameId: 'typescript',
-        name: 'TypeScript',
-        category: 'programming',
+        nameBadge: 'TypeScript',
+        color: '#3178C6',
+        web: 'https://typescriptlang.org',
+        preferencia: 5,
+        experiencia: 4,
+        afinidad: 5,
+        img: 'typescript.png',
+        desc: { es: 'Superset de JavaScript', en: 'JavaScript superset', ca: 'Superset de JavaScript', de: 'JavaScript-Obermenge' },
+        usoGithub: 8,
       };
 
       mockTechRepository.create.mockResolvedValue(mockLengBase);
@@ -65,10 +80,17 @@ describe('Tech Use Cases', () => {
     });
 
     it('should handle repository errors', async () => {
-      const techData: Omit<TechBase, 'id'> = {
+      const techData: TechBase = {
         nameId: 'react',
-        name: 'React',
-        category: 'framework',
+        nameBadge: 'React',
+        color: '#61DAFB',
+        web: 'https://react.dev',
+        preferencia: 5,
+        experiencia: 3,
+        afinidad: 4,
+        img: 'react.png',
+        desc: { es: 'Biblioteca JavaScript', en: 'JavaScript library', ca: 'Biblioteca JavaScript', de: 'JavaScript-Bibliothek' },
+        usoGithub: 9,
       };
 
       const error = new Error('Create failed');
@@ -129,7 +151,7 @@ describe('Tech Use Cases', () => {
 
     it('should handle empty results', async () => {
       const filter = { nameId: 'nonexistent' };
-      mockTechRepository.readOne.mockResolvedValue(undefined);
+      mockTechRepository.readOne.mockResolvedValue(undefined as any);
 
       const result = await useCase.readOne(filter);
 
@@ -152,7 +174,7 @@ describe('Tech Use Cases', () => {
     it('should update by form successfully', async () => {
       const formData: Partial<TechForm> = {
         nameId: 'javascript',
-        name: 'JavaScript ES2023',
+        nameBadge: 'JavaScript ES2023',
       };
 
       mockTechRepository.updateByForm.mockResolvedValue(mockLengBase);
@@ -165,8 +187,8 @@ describe('Tech Use Cases', () => {
 
     it('should update by nameId successfully', async () => {
       const updateData: Partial<LengBase> = {
-        name: 'JavaScript Updated',
-        category: 'language',
+        nameBadge: 'JavaScript Updated',
+        preferencia: 5,
       };
 
       mockTechRepository.updateByNameId.mockResolvedValue(mockLengBase);
@@ -207,7 +229,7 @@ describe('Tech Use Cases', () => {
     it('should update tech by id successfully', async () => {
       const updateProps = {
         id: 'tech-123',
-        data: { name: 'JavaScript Updated' },
+        updateData: { nameBadge: 'JavaScript Updated' },
       };
 
       mockTechRepository.updateById.mockResolvedValue(mockLengBase);
@@ -221,7 +243,7 @@ describe('Tech Use Cases', () => {
     it('should handle repository errors', async () => {
       const updateProps = {
         id: 'nonexistent',
-        data: { name: 'Updated' },
+        updateData: { nameBadge: 'Updated' },
       };
       const error = new Error('Update failed');
       mockTechRepository.updateById.mockRejectedValue(error);

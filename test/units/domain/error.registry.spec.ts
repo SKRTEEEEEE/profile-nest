@@ -51,7 +51,7 @@ describe('Error Registry', () => {
     });
 
     it('should create error with custom friendly description', () => {
-      const friendlyDesc = { es: 'Error personalizado', en: 'Custom error' };
+      const friendlyDesc = { es: 'Error personalizado', en: 'Custom error', ca: 'Error personalitzat', de: 'Benutzerdefinierter Fehler' };
       const error = createDomainError(ErrorCodes.INPUT_PARSE, mockLocation, mockFunction, friendlyDesc);
       
       expect(error.friendlyDesc).toEqual(friendlyDesc);
@@ -121,7 +121,7 @@ describe('Error Registry', () => {
     });
 
     it('should handle "ups" friendly header', () => {
-      const customFriendlyDesc = { es: 'Descripción personalizada', en: 'Custom description' };
+      const customFriendlyDesc = { es: 'Descripción personalizada', en: 'Custom description', ca: 'Descripció personalitzada', de: 'Benutzerdefinierte Beschreibung' };
       const error = createDomainError(
         ErrorCodes.SHARED_ACTION,
         mockLocation,

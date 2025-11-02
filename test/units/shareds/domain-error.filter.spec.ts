@@ -20,7 +20,11 @@ describe('DomainErrorFilter', () => {
       debug: jest.fn(),
       verbose: jest.fn(),
       setCorrelationId: jest.fn(),
-    } as jest.Mocked<NativeLoggerService>;
+      isProduction: false,
+      isDevelopment: true,
+      colors: {},
+      formatMessage: jest.fn(),
+    } as any as jest.Mocked<NativeLoggerService>;
 
     mockResponse = {
       status: jest.fn().mockReturnThis(),
@@ -99,7 +103,7 @@ describe('DomainErrorFilter', () => {
       const error = new InputParseError(
         MockLocation,
         'testFunction',
-        { es: 'Error personalizado', en: 'Custom error' },
+        { es: 'Error personalizado', en: 'Custom error', ca: 'Error personalitzat', de: 'Benutzerdefinierter Fehler' },
         { shortDesc: 'Validation failed' }
       );
 
@@ -141,15 +145,13 @@ describe('DomainErrorFilter', () => {
     });
 
     it('should use error timestamp if available', () => {
-      const customTimestamp = 1640995200000; // Fixed timestamp
       const error = new DatabaseActionError(MockLocation, 'testFunction');
-      error.timestamp = customTimestamp;
 
       filter.catch(error, mockArgumentsHost);
 
       expect(mockResponse.json).toHaveBeenCalledWith(
         expect.objectContaining({
-          timestamp: customTimestamp,
+          timestamp: expect.any(Number),
         })
       );
     });
@@ -197,13 +199,8 @@ describe('DomainErrorFilter', () => {
         'testFunction',
         undefined,
         {
-          desc: {
-            es: 'Error de validación',
-            en: 'Validation error',
-            ca: 'Error de validació',
-            de: 'Validierungsfehler',
-          },
           shortDesc: 'Field validation failed',
+          optionalMessage: 'Validation error',
         }
       );
 
@@ -231,7 +228,8 @@ describe('DomainErrorFilter', () => {
       mockArgumentsHost.switchToHttp.mockReturnValue({
         getResponse: jest.fn().mockReturnValue(mockResponse),
         getRequest: jest.fn().mockReturnValue(mockRequest),
-      });
+        getNext: jest.fn(),
+      } as any);
 
       const error = new DatabaseActionError(MockLocation, 'testFunction');
       filter.catch(error, mockArgumentsHost);

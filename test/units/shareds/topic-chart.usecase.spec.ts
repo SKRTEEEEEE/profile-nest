@@ -10,20 +10,16 @@ describe('TopicChartUseCase', () => {
   let mockTopicCalculatorUseCase: jest.Mocked<TopicCalculatorUseCase>;
   let mockTopicChartRepository: jest.Mocked<TopicChartInterface>;
 
-  const mockRepoDetails: RepoDetailsRes = {
-    repos: [
-      {
-        name: 'test-repo',
-        description: 'Test repository',
-        topics: ['javascript', 'nodejs', 'react'],
-        size: 1000,
-        language: 'JavaScript',
-        createdAt: '2023-01-01',
-        updatedAt: '2023-12-01',
-        url: 'https://github.com/test/repo',
-      },
-    ],
-  };
+  const mockRepoDetails: RepoDetailsRes = [
+    {
+      name: 'test-repo',
+      description: 'Test repository',
+      topics: ['javascript', 'nodejs', 'react'],
+      size: 1000,
+      languages: ['JavaScript'],
+      html_url: 'https://github.com/test/repo',
+    },
+  ];
 
   const mockBuffer = Buffer.from('test-chart-data');
 
@@ -31,6 +27,7 @@ describe('TopicChartUseCase', () => {
     mockTopicCalculatorUseCase = {
       calculateAllTopicSizePercentages: jest.fn(),
       calculateAllTopicsRepoPercentages: jest.fn(),
+      calculateTopicGithubData: jest.fn(),
     } as jest.Mocked<TopicCalculatorUseCase>;
 
     mockTopicChartRepository = {
@@ -58,9 +55,9 @@ describe('TopicChartUseCase', () => {
       ];
       
       const mockRepoPercentages = [
-        { name: 'javascript', topicRepoPer: 80, topicRepoFrac: 0.8 },
-        { name: 'react', topicRepoPer: 60, topicRepoFrac: 0.6 },
-        { name: 'nodejs', topicRepoPer: 40, topicRepoFrac: 0.4 },
+        { name: 'javascript', topicRepoPer: 80, topicRepoFrac: '8/10' },
+        { name: 'react', topicRepoPer: 60, topicRepoFrac: '6/10' },
+        { name: 'nodejs', topicRepoPer: 40, topicRepoFrac: '4/10' },
       ];
 
       mockTopicCalculatorUseCase.calculateAllTopicSizePercentages.mockReturnValue(mockSizePercentages);
@@ -112,7 +109,7 @@ describe('TopicChartUseCase', () => {
       ];
       
       const mockRepoPercentages = [
-        { name: 'react', topicRepoPer: 60, topicRepoFrac: 0.6 }, // Different topic
+        { name: 'react', topicRepoPer: 60, topicRepoFrac: '6/10' }, // Different topic
       ];
 
       const consoleSpy = jest.spyOn(console, 'warn').mockImplementation();
@@ -131,7 +128,7 @@ describe('TopicChartUseCase', () => {
 
   describe('renderTopicAlphaTriple', () => {
     it('should render alpha triple chart', async () => {
-      const props: renderTopicAlphaTripleProps = {
+      const props = {
         owner: 'test-owner',
         labels: ['javascript', 'react'],
         topicsSizePer: [40, 30],
@@ -165,10 +162,10 @@ describe('TopicChartUseCase', () => {
 
   describe('renderTopicAlphaSimple', () => {
     it('should render alpha simple chart', async () => {
-      const props: RenderAlphaSimpleProps = {
+      const props = {
         owner: 'test-owner',
         labels: ['javascript', 'react'],
-        data: [40, 30],
+        topicsSizePer: [40, 30],
       };
 
       mockTopicChartRepository.renderTopicAlphaSimple.mockResolvedValue(mockBuffer);
@@ -180,10 +177,10 @@ describe('TopicChartUseCase', () => {
     });
 
     it('should handle repository errors', async () => {
-      const props: RenderAlphaSimpleProps = {
+      const props = {
         owner: 'test-owner',
         labels: ['javascript'],
-        data: [100],
+        topicsSizePer: [100],
       };
 
       const error = new Error('Simple chart generation failed');
