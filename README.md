@@ -98,6 +98,52 @@ Posibilidad de iniciar la aplicación como mock, en la cual el Jwt no va encript
 - [Docker](https://www.docker.com/)
 - [Thirdweb](https://thirdweb.com/)
 - [Nodemailer](https://nodemailer.com/)
+- [Jest](https://jestjs.io/) - Testing framework
+- [TypeScript](https://www.typescriptlang.org/)
+- [MongoDB](https://www.mongodb.com/) con Mongoose
+
+## 🧪 Testing
+
+Este proyecto mantiene una cobertura de tests del **80%** o superior en todas las métricas (statements, branches, functions, lines).
+
+### Ejecutar Tests Localmente
+
+#### Con npm (requiere Node.js 22.5+)
+
+```bash
+# Tests unitarios
+npm run test
+
+# Tests con cobertura
+npm run test:cov
+
+# Tests en modo watch
+npm run test:watch
+```
+
+#### Con Docker 🐳
+
+```bash
+# En Linux/Mac
+./scripts/run-tests-docker.sh
+
+# En Windows
+scripts\run-tests-docker.bat
+
+# O directamente con docker-compose
+docker-compose -f docker-compose.test.yml up --abort-on-container-exit
+```
+
+### Ver Reporte de Cobertura
+
+Después de ejecutar `npm run test:cov`, puedes ver el reporte detallado abriendo:
+```
+coverage/unit/lcov-report/index.html
+```
+
+### CI/CD
+
+Los tests se ejecutan automáticamente en cada push mediante GitHub Actions. Los badges de cobertura se actualizan automáticamente en la rama `main`.
 
 ## Estructura de carpetas
 
