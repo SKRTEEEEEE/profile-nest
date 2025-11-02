@@ -1,9 +1,11 @@
 import { ApiSuccessResponse } from '../../../src/shareds/presentation/api-success.decorator';
+import { ResCodes } from '../../../src/domain/flows/res.type';
 import { applyDecorators } from '@nestjs/common';
 
 // Mock applyDecorators
 jest.mock('@nestjs/common', () => ({
   applyDecorators: jest.fn(),
+  SetMetadata: jest.fn(),
 }));
 
 describe('ApiSuccessResponse', () => {
@@ -13,7 +15,7 @@ describe('ApiSuccessResponse', () => {
 
   it('should call applyDecorators when used', () => {
     const mockClass = class TestClass {};
-    const responseCode = 200;
+    const responseCode = ResCodes.ENTITY_FOUND;
     const isArray = false;
 
     ApiSuccessResponse(mockClass, responseCode, isArray);
@@ -23,7 +25,7 @@ describe('ApiSuccessResponse', () => {
 
   it('should handle array responses', () => {
     const mockClass = class TestClass {};
-    const responseCode = 200;
+    const responseCode = ResCodes.ENTITY_FOUND;
     const isArray = true;
 
     ApiSuccessResponse(mockClass, responseCode, isArray);

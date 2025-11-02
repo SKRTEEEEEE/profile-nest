@@ -14,6 +14,6 @@ describe('PublicRoute', () => {
   it('should call SetMetadata with correct parameters', () => {
     PublicRoute();
 
-    expect(SetMetadata).toHaveBeenCalledWith('isPublic', true);
+    expect(SetMetadata).toHaveBeenCalledWith('publicRoute', true);
   });
 });

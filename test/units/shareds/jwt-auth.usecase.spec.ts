@@ -22,7 +22,16 @@ describe('JwtAuthUseCase', () => {
       const token = 'valid-jwt-token';
       const expectedResult = { 
         valid: true, 
-        payload: { userId: '123', address: '0xabc...' } 
+        parsedJWT: { 
+          iss: 'test-issuer',
+          sub: '123',
+          aud: 'test-audience',
+          exp: Date.now() + 3600000,
+          nbf: Date.now(),
+          iat: Date.now(),
+          jti: 'test-jti',
+          ctx: { userId: '123', address: '0xabc...' }
+        } 
       };
 
       mockJwtAuthRepository.verifyJWT.mockResolvedValue(expectedResult);
@@ -35,13 +44,12 @@ describe('JwtAuthUseCase', () => {
 
     it('should handle invalid JWT token', async () => {
       const token = 'invalid-jwt-token';
-      const expectedResult = { valid: false, error: 'Invalid token' };
 
-      mockJwtAuthRepository.verifyJWT.mockResolvedValue(expectedResult);
+      mockJwtAuthRepository.verifyJWT.mockResolvedValue(null);
 
       const result = await useCase.verifyJWT(token);
 
-      expect(result).toEqual(expectedResult);
+      expect(result).toBeNull();
       expect(mockJwtAuthRepository.verifyJWT).toHaveBeenCalledWith(token);
     });
 
@@ -57,13 +65,12 @@ describe('JwtAuthUseCase', () => {
 
     it('should handle empty token', async () => {
       const token = '';
-      const expectedResult = { valid: false, error: 'Token is required' };
 
-      mockJwtAuthRepository.verifyJWT.mockResolvedValue(expectedResult);
+      mockJwtAuthRepository.verifyJWT.mockResolvedValue(undefined);
 
       const result = await useCase.verifyJWT(token);
 
-      expect(result).toEqual(expectedResult);
+      expect(result).toBeUndefined();
       expect(mockJwtAuthRepository.verifyJWT).toHaveBeenCalledWith(token);
     });
   });

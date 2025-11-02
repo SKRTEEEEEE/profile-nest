@@ -12,27 +12,23 @@ import { UserInterface } from '../../../../src/modules/user/application/user.int
 import { DBBase } from '../../../../src/dynamic.types';
 import { DatabaseFindError, UnauthorizedError, DatabaseActionError } from '../../../../src/domain/flows/domain.error';
 
-// Mock UserBase type since it's not exported
-type UserBase = {
-  id: string;
-  address: string;
-  email?: string;
-  isVerified?: boolean;
-  verifyToken?: string;
-  verifyTokenExpire?: Date;
-};
-
 describe('User Use Cases', () => {
   let mockUserRepository: jest.Mocked<UserInterface>;
 
   const mockUser: UserBase & DBBase = {
-    id: 'user-123',
-    _id: 'user-123',
+    nick: 'testuser',
+    img: 'http://example.com/avatar.jpg',
     address: '0x123...abc',
+    roleId: null,
+    role: null,
+    solicitud: null,
     email: 'test@example.com',
     isVerified: false,
     verifyToken: 'token123',
-    verifyTokenExpire: new Date(Date.now() + 3600000), // 1 hour from now
+    verifyTokenExpire: new Date(Date.now() + 3600000).toISOString(), // 1 hour from now
+    id: 'user-123',
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
   };
 
   beforeEach(() => {
@@ -41,6 +37,7 @@ describe('User Use Cases', () => {
       readOne: jest.fn(),
       read: jest.fn(),
       readById: jest.fn(),
+      readByAddress: jest.fn(),
       update: jest.fn(),
       updateById: jest.fn(),
       deleteById: jest.fn(),
@@ -59,11 +56,11 @@ describe('User Use Cases', () => {
     });
 
     it('should create a user successfully', async () => {
-      const createProps = {
-        data: {
-          address: '0x456...def',
-          email: 'new@example.com',
-        },
+      const createProps: Partial<UserBase> = {
+        address: '0x456...def',
+        email: 'new@example.com',
+        nick: 'newuser',
+        img: null,
       };
 
       mockUserRepository.create.mockResolvedValue(mockUser);
@@ -75,7 +72,11 @@ describe('User Use Cases', () => {
     });
 
     it('should handle create errors', async () => {
-      const createProps = { data: { address: '0x456...def' } };
+      const createProps: Partial<UserBase> = { 
+        address: '0x456...def',
+        nick: 'erroruser',
+        img: null,
+      };
       const error = new Error('Create failed');
       mockUserRepository.create.mockRejectedValue(error);
 
@@ -114,7 +115,7 @@ describe('User Use Cases', () => {
     });
 
     it('should handle readOne returning null', async () => {
-      mockUserRepository.readOne.mockResolvedValue(null);
+      mockUserRepository.readOne.mockResolvedValue(null as any);
 
       const result = await useCase.readOne({ address: 'nonexistent' });
 
@@ -282,7 +283,7 @@ describe('User Use Cases', () => {
     it('should throw DatabaseFindError if user not found', async () => {
       const props = { id: 'nonexistent', verifyToken: 'token123' };
 
-      mockUserRepository.readById.mockResolvedValue(null);
+      mockUserRepository.readById.mockResolvedValue(null as any);
 
       await expect(useCase.verifyEmail(props)).rejects.toThrow(DatabaseFindError);
     });
@@ -298,7 +299,7 @@ describe('User Use Cases', () => {
     it('should throw UnauthorizedError for expired token', async () => {
       const expiredUser = { 
         ...mockUser, 
-        verifyTokenExpire: new Date(Date.now() - 3600000) // 1 hour ago
+        verifyTokenExpire: new Date(Date.now() - 3600000).toISOString() // 1 hour ago
       };
       const props = { id: 'user-123', verifyToken: 'token123' };
 
@@ -311,7 +312,7 @@ describe('User Use Cases', () => {
       const props = { id: 'user-123', verifyToken: 'token123' };
 
       mockUserRepository.readById.mockResolvedValue(mockUser);
-      mockUserRepository.updateById.mockResolvedValue(null);
+      mockUserRepository.updateById.mockResolvedValue(null as any);
 
       await expect(useCase.verifyEmail(props)).rejects.toThrow(DatabaseActionError);
     });

@@ -12,21 +12,9 @@ describe('AppModule', () => {
   let app: TestingModule;
 
   beforeAll(async () => {
-    // Mock MongooseModule.forRoot to avoid actual database connection
-    const mockMongooseModule = {
-      forRoot: jest.fn(() => ({
-        module: class MockMongooseModule {},
-        providers: [],
-        exports: [],
-      })),
-    };
-
     app = await Test.createTestingModule({
       imports: [AppModule],
-    })
-      .overrideModule(MongooseModule)
-      .useValue(mockMongooseModule)
-      .compile();
+    }).compile();
   });
 
   it('should be defined', () => {
