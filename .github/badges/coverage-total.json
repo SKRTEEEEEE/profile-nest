@@ -1,6 +1,7 @@
 {
   "schemaVersion": 1,
-  "label": "coverage",
+  "label": "total",
   "message": "35.73%",
-  "color": "red"
+  "color": "orange",
+  "style": "for-the-badge"
 }
