@@ -1,0 +1,16 @@
+version: '3.8'
+
+services:
+  test:
+    build:
+      context: .
+      dockerfile: Dockerfile.test
+    volumes:
+      - ./coverage:/app/coverage
+      - ./test:/app/test
+      - ./src:/app/src
+    environment:
+      - NODE_ENV=test
+    command: npm run test:cov
+    stdin_open: true
+    tty: true

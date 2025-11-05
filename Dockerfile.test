@@ -1,0 +1,32 @@
+# Dockerfile for running tests
+FROM node:22-bullseye-slim
+
+WORKDIR /app
+
+# Install git and build tools
+RUN apt-get update \
+  && apt-get install -y --no-install-recommends git build-essential python3 ca-certificates \
+  && rm -rf /var/lib/apt/lists/*
+
+# Copy package files
+COPY package*.json ./
+
+# Install all dependencies (including devDependencies for tests)
+RUN npm ci --prefer-offline --no-audit --progress=false
+
+# Copy project files
+COPY . .
+
+# Initialize submodules if .git exists
+RUN if [ -d .git ]; then git submodule update --init --recursive; fi
+
+# Fallback: clone submodules from .gitmodules if .git is not present
+RUN if [ ! -d .git ] && [ -f .gitmodules ]; then \
+      awk '/path =/ {p=$3} /url =/ {print $3 " " p}' .gitmodules | \
+      while read url path; do \
+        echo "Cloning $url into $path" && git clone "$url" "$path"; \
+      done; \
+    fi
+
+# Run tests with coverage
+CMD ["npm", "run", "test:cov"]
