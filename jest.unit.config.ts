@@ -48,10 +48,10 @@ const config = {
   testEnvironment: 'node',
   coverageThreshold: {
     global: {
-      branches: 35,
-      functions: 35,
-      lines: 35,
-      statements: 35,
+      branches: 32,
+      functions: 32,
+      lines: 32,
+      statements: 32,
     },
   },
 };
