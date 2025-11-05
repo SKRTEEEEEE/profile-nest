@@ -63,49 +63,55 @@ jobs:
         run: |
           mkdir -p .github/badges
           
-          # Create JSON files for shields.io endpoint badges
+          # Create JSON files for shields.io endpoint badges with custom colors
+          # Total badge - Orange color
           cat > .github/badges/coverage-total.json << EOF
           {
             "schemaVersion": 1,
-            "label": "coverage",
+            "label": "total",
             "message": "${{ steps.coverage.outputs.total }}%",
-            "color": "$(if (( $(echo "${{ steps.coverage.outputs.total }} >= 80" | bc -l) )); then echo "brightgreen"; elif (( $(echo "${{ steps.coverage.outputs.total }} >= 60" | bc -l) )); then echo "yellow"; else echo "red"; fi)"
+            "color": "orange",
+            "style": "for-the-badge"
           }
           EOF
           
+          # Statements badge - Blue color
           cat > .github/badges/coverage-statements.json << EOF
           {
             "schemaVersion": 1,
             "label": "statements",
             "message": "${{ steps.coverage.outputs.statements }}%",
-            "color": "$(if (( $(echo "${{ steps.coverage.outputs.statements }} >= 80" | bc -l) )); then echo "brightgreen"; elif (( $(echo "${{ steps.coverage.outputs.statements }} >= 60" | bc -l) )); then echo "yellow"; else echo "red"; fi)"
+            "color": "blue"
           }
           EOF
           
+          # Branches badge - Green color
           cat > .github/badges/coverage-branches.json << EOF
           {
             "schemaVersion": 1,
             "label": "branches",
             "message": "${{ steps.coverage.outputs.branches }}%",
-            "color": "$(if (( $(echo "${{ steps.coverage.outputs.branches }} >= 80" | bc -l) )); then echo "brightgreen"; elif (( $(echo "${{ steps.coverage.outputs.branches }} >= 60" | bc -l) )); then echo "yellow"; else echo "red"; fi)"
+            "color": "green"
           }
           EOF
           
+          # Functions badge - Purple color
           cat > .github/badges/coverage-functions.json << EOF
           {
             "schemaVersion": 1,
             "label": "functions",
             "message": "${{ steps.coverage.outputs.functions }}%",
-            "color": "$(if (( $(echo "${{ steps.coverage.outputs.functions }} >= 80" | bc -l) )); then echo "brightgreen"; elif (( $(echo "${{ steps.coverage.outputs.functions }} >= 60" | bc -l) )); then echo "yellow"; else echo "red"; fi)"
+            "color": "purple"
           }
           EOF
           
+          # Lines badge - Yellow color
           cat > .github/badges/coverage-lines.json << EOF
           {
             "schemaVersion": 1,
             "label": "lines",
             "message": "${{ steps.coverage.outputs.lines }}%",
-            "color": "$(if (( $(echo "${{ steps.coverage.outputs.lines }} >= 80" | bc -l) )); then echo "brightgreen"; elif (( $(echo "${{ steps.coverage.outputs.lines }} >= 60" | bc -l) )); then echo "yellow"; else echo "red"; fi)"
+            "color": "yellow"
           }
           EOF
       - name: Commit badge files 💾

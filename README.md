@@ -2,24 +2,23 @@
 
 # Profile Page NestJS Backend
 
-<a href="https://profile-skrt.vercel.app/">
 <div align="center">
-  <img src="./docs/img/profile-page.gif"
-       alt="banner" style="width: 100%"/>
-</div>
-</a>
-
-<div align="center">
-
-### Test Coverage
 
 ![Coverage Total](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/SKRTEEEEEE/profile-nest/main/.github/badges/coverage-total.json)
+
 ![Coverage Statements](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/SKRTEEEEEE/profile-nest/main/.github/badges/coverage-statements.json)
 ![Coverage Branches](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/SKRTEEEEEE/profile-nest/main/.github/badges/coverage-branches.json)
 ![Coverage Functions](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/SKRTEEEEEE/profile-nest/main/.github/badges/coverage-functions.json)
 ![Coverage Lines](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/SKRTEEEEEE/profile-nest/main/.github/badges/coverage-lines.json)
 
 </div>
+
+<a href="https://profile-skrt.vercel.app/">
+<div align="center">
+  <img src="./docs/img/profile-page.gif"
+       alt="banner" style="width: 100%"/>
+</div>
+</a>
 
 ## Información
 
