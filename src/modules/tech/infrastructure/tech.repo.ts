@@ -7,7 +7,7 @@ import { MongooseCRUImpl } from 'src/shareds/pattern/infrastructure/implementati
 import {
   DBBase,
 } from 'src/dynamic.types';;
-import { Fw,  Leng,  TechRepository } from '../application/tech.interface';
+import { Fw,  Leng,  TechInterface } from '../application/tech.interface';
 import { createDomainError } from 'src/domain/flows/error.registry';
 import { ErrorCodes } from 'src/domain/flows/error.type';
 import { MongooseDocument } from 'src/shareds/pattern/infrastructure/types/mongoose';
@@ -18,7 +18,7 @@ import { DeleteProps } from 'src/shareds/pattern/application/interfaces/delete';
 @Injectable()
 export class MongooseTechRepo
   extends MongooseCRUImpl<LengBase>
-  implements TechRepository
+  implements TechInterface
 {
   constructor(
     @InjectModel('Lenguaje')

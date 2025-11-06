@@ -1,7 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
 // import { ReadOneRepository } from "src/shareds/pattern/application/usecases/read-one.interface";
 import {  LengBase, TechBase, TechForm } from 'src/domain/entities/tech';
-import { Leng, TechRepository } from './tech.interface';
+import { Leng, TechInterface } from './tech.interface';
 import { TECH_REPOSITORY } from 'src/modules/tokens';
 import { DeleteI, DeleteProps } from 'src/shareds/pattern/application/interfaces/delete';
 import { DBBase } from 'src/dynamic.types';
@@ -12,7 +12,7 @@ import { UpdateByIdProps } from 'src/shareds/pattern/application/interfaces/cru'
 @Injectable()
 export class TechCreateUseCase {
   constructor(
-    @Inject(TECH_REPOSITORY) private readonly techRepo: TechRepository,
+    @Inject(TECH_REPOSITORY) private readonly techRepo: TechInterface,
   ) {}
 
   async create(data: Omit<TechBase, 'id'>) {
@@ -23,7 +23,7 @@ export class TechCreateUseCase {
 @Injectable()
 export class TechReadByIdUseCase {
   constructor(
-    @Inject(TECH_REPOSITORY) private readonly techRepo: TechRepository,
+    @Inject(TECH_REPOSITORY) private readonly techRepo: TechInterface,
   ) {}
 
   async readById(id: string): Promise<LengBase & DBBase> {
@@ -35,7 +35,7 @@ export class TechReadByIdUseCase {
 @Injectable()
 export class TechReadOneUseCase {
   constructor(
-    @Inject(TECH_REPOSITORY) private readonly techRepo: TechRepository,
+    @Inject(TECH_REPOSITORY) private readonly techRepo: TechInterface,
   ) {}
   async readOne(filter: Record<string, any>) {
     return await this.techRepo.readOne(filter);
@@ -45,7 +45,7 @@ export class TechReadOneUseCase {
 @Injectable()
 export class TechUpdateUseCase {
   constructor(
-    @Inject(TECH_REPOSITORY) private readonly techRepo: TechRepository,
+    @Inject(TECH_REPOSITORY) private readonly techRepo: TechInterface,
   ) {}
 
   async updateByForm(
@@ -64,7 +64,7 @@ export class TechUpdateUseCase {
 @Injectable()
 export class TechUpdateByIdUseCase {
   constructor(
-    @Inject(TECH_REPOSITORY) private readonly techRepo: TechRepository,
+    @Inject(TECH_REPOSITORY) private readonly techRepo: TechInterface,
   ) {}
 
   async updateById(props: UpdateByIdProps<Leng>): Promise<LengBase & DBBase> {
@@ -75,7 +75,7 @@ export class TechUpdateByIdUseCase {
 @Injectable()
 export class TechDeleteUseCase {
   constructor(
-    @Inject(TECH_REPOSITORY) private readonly techRepo: TechRepository,
+    @Inject(TECH_REPOSITORY) private readonly techRepo: TechInterface,
   ) {}
 
   async delete(props: DeleteProps<LengBase>): Promise<LengBase & DBBase> {

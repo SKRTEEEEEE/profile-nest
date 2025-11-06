@@ -6,11 +6,11 @@ import {
   TechUpdateByIdUseCase,
   TechDeleteUseCase,
 } from '../../../../src/modules/tech/application/tech.usecase';
-import { TechRepository, Leng, LengBase } from '../../../../src/modules/tech/application/tech.interface';
+import { TechInterface, Leng, LengBase } from '../../../../src/modules/tech/application/tech.interface';
 import { DBBase } from '../../../../src/dynamic.types';
 
 describe('Tech UseCases', () => {
-  let mockTechRepository: jest.Mocked<TechRepository>;
+  let mockTechRepository: jest.Mocked<TechInterface>;
   const mockTech: Leng = {
     nameId: 'typescript',
     nameBadge: 'TypeScript',

@@ -1,94 +1,67 @@
-import { Test, TestingModule } from '@nestjs/testing';
+import { ForbiddenException } from '@nestjs/common';
 import { RoleAuthUseCase } from '../../../src/shareds/role-auth/application/role-auth.usecase';
-import { MongooseRoleRepo } from '../../../src/modules/role/infrastructure/role.repo';
+import { RoleType } from '../../../src/domain/entities/role.type';
 
 describe('RoleAuthUseCase', () => {
   let useCase: RoleAuthUseCase;
-  let roleRepo: jest.Mocked<MongooseRoleRepo>;
 
-  const mockRole = {
-    id: 'role-123',
-    address: '0x123abc',
-    permissions: 'ADMIN',
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-  };
-
-  beforeEach(async () => {
-    const mockRoleRepo = {
-      readOne: jest.fn(),
-      isAdmin: jest.fn(),
-    };
-
-    const module: TestingModule = await Test.createTestingModule({
-      providers: [
-        RoleAuthUseCase,
-        {
-          provide: MongooseRoleRepo,
-          useValue: mockRoleRepo,
-        },
-      ],
-    }).compile();
-
-    useCase = module.get<RoleAuthUseCase>(RoleAuthUseCase);
-    roleRepo = module.get(MongooseRoleRepo);
+  beforeEach(() => {
+    useCase = new RoleAuthUseCase();
   });
 
-  it('should be defined', () => {
-    expect(useCase).toBeDefined();
+  it('should allow public routes even without roles', () => {
+    const canAccess = useCase.validateRoleAccess({
+      userRole: null,
+      requiredRoles: undefined,
+      isPublic: true,
+      contextName: 'Test',
+    });
+
+    expect(canAccess).toBe(true);
   });
 
-  describe('validateRole', () => {
-    it('should return role if user has valid role', async () => {
-      const address = '0x123abc';
-      const requiredRole = 'ADMIN';
-
-      roleRepo.readOne.mockResolvedValue(mockRole as any);
-
-      const result = await useCase.validateRole(address, requiredRole);
-
-      expect(result).toEqual(mockRole);
-      expect(roleRepo.readOne).toHaveBeenCalledWith({ 
-        address, 
-        permissions: requiredRole 
-      });
-    });
-
-    it('should return null if user does not have required role', async () => {
-      const address = '0x123abc';
-      const requiredRole = 'ADMIN';
-
-      roleRepo.readOne.mockResolvedValue(null);
-
-      const result = await useCase.validateRole(address, requiredRole);
-
-      expect(result).toBeNull();
-      expect(roleRepo.readOne).toHaveBeenCalledWith({ 
-        address, 
-        permissions: requiredRole 
-      });
-    });
+  it('should throw when user role missing for protected route', () => {
+    expect(() =>
+      useCase.validateRoleAccess({
+        userRole: null,
+        requiredRoles: [RoleType.ADMIN],
+        isPublic: false,
+      }),
+    ).toThrow(ForbiddenException);
   });
 
-  describe('isAdmin', () => {
-    it('should return true if user is admin', async () => {
-      const address = '0x123abc';
-      roleRepo.isAdmin.mockResolvedValue(true);
-
-      const result = await useCase.isAdmin(address);
-
-      expect(result).toBe(true);
-      expect(roleRepo.isAdmin).toHaveBeenCalledWith(address);
+  it('should allow when user role meets hierarchy requirements', () => {
+    const result = useCase.validateRoleAccess({
+      userRole: RoleType.ADMIN,
+      requiredRoles: [RoleType.STUDENT],
+      isPublic: false,
     });
 
-    it('should return false if user is not admin', async () => {
-      const address = '0x123abc';
-      roleRepo.isAdmin.mockResolvedValue(false);
+    expect(result).toBe(true);
+  });
 
-      const result = await useCase.isAdmin(address);
+  it('should reject when user lacks privileges', () => {
+    expect(() =>
+      useCase.validateRoleAccess({
+        userRole: RoleType.STUDENT,
+        requiredRoles: [RoleType.ADMIN],
+        isPublic: false,
+      }),
+    ).toThrow(ForbiddenException);
+  });
 
-      expect(result).toBe(false);
-      expect(roleRepo.isAdmin).toHaveBeenCalledWith(address);
+  it('should warn when multiple roles provided but still evaluate', () => {
+    const consoleSpy = jest.spyOn(console, 'warn').mockImplementation();
+
+    const result = useCase.validateRoleAccess({
+      userRole: RoleType.ADMIN,
+      requiredRoles: [RoleType.ADMIN, RoleType.STUDENT],
+      isPublic: false,
+      contextName: 'TestController.method',
     });
+
+    expect(result).toBe(true);
+    expect(consoleSpy).toHaveBeenCalled();
+    consoleSpy.mockRestore();
   });
 });

@@ -5,6 +5,7 @@ import { UserInterface } from './user.interface';
 import { USER_REPOSITORY } from 'src/modules/tokens';
 import { DBBase } from 'src/dynamic.types';
 import { CreateProps, UpdateByIdProps } from 'src/shareds/pattern/application/interfaces/cru';
+import { UserVerification } from '../domain/user-verification';
 
 @Injectable()
 export class UserCreateUseCase {
@@ -116,57 +117,24 @@ export class UserVerifyEmailUseCase {
         { shortDesc: 'verifyEmail' },
       );
     }
-    if (user.verifyToken !== props.verifyToken) {
-      throw createDomainError(
-        ErrorCodes.UNAUTHORIZED_ACTION,
-        UserVerifyEmailUseCase,
-        'verifyEmail',
-        'tryAgainOrContact',
-        {
-          desc: {
-            es: 'Error al validar el token de correo electrónico',
-            en: 'Error at validate email token',
-            ca: 'Error en validar el token de correu electrònic',
-            de: 'Fehler beim Überprüfen des E-Mail-Tokens',
-          },
-        },
-      );
-    }
-    if (
-      user.verifyTokenExpire &&
-      new Date(user.verifyTokenExpire) <= new Date()
-    ) {
-      throw createDomainError(
-        ErrorCodes.UNAUTHORIZED_ACTION,
-        UserVerifyEmailUseCase,
-        'verifyEmail',
-        'tryAgainOrContact',
-        {
-          shortDesc: 'Error with token time',
-          desc: {
-            es: 'El tiempo de verificación ha trascurrido',
-            en: 'Verification time has elapsed',
-            ca: 'El temps de verificació ha transcorregut',
-            de: 'Die Überprüfungszeit ist abgelaufen',
-          },
-        },
-      );
-    }
-    user.isVerified = true;
-    user.verifyToken = undefined;
-    user.verifyTokenExpire = undefined;
-    // ⚠️‼️ Esta parte en el futuro sera un botón de "subscripción"
 
+    // Delegate business logic validation to Domain layer
+    const verificationUpdates = UserVerification.verify(user, props.verifyToken);
+
+    // ⚠️‼️ Esta parte en el futuro sera un botón de "subscripción"
     const sUser = await this.userRepository.updateById({
-      id: (user as any).id,
-      updateData: user,
+      id: (user as UserBase & DBBase).id,
+      updateData: { ...user, ...verificationUpdates },
     });
-    if (!sUser)
+    
+    if (!sUser) {
       throw createDomainError(
         ErrorCodes.DATABASE_ACTION,
         UserVerifyEmailUseCase,
         'updateById',
       );
+    }
+    
     return sUser;
   }
 }

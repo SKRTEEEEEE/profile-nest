@@ -35,7 +35,7 @@ describe('MongooseTechRepo', () => {
       const mockLeng = {
         _id: '123',
         nameId: 'typescript',
-        name: 'TypeScript',
+        nameBadge: 'TypeScript',
         createdAt: new Date(),
         updatedAt: new Date(),
         toObject: jest.fn().mockReturnThis(),
@@ -68,7 +68,7 @@ describe('MongooseTechRepo', () => {
         {
           _id: '123',
           nameId: 'typescript',
-          name: 'TypeScript',
+          nameBadge: 'TypeScript',
           frameworks: [],
           createdAt: new Date(),
           updatedAt: new Date(),
@@ -92,7 +92,7 @@ describe('MongooseTechRepo', () => {
         {
           _id: '123',
           nameId: 'typescript',
-          name: 'TypeScript',
+          nameBadge: 'TypeScript',
           frameworks: [],
           createdAt: new Date(),
           updatedAt: new Date(),
@@ -123,7 +123,7 @@ describe('MongooseTechRepo', () => {
 
   describe('updateByNameId', () => {
     it('should update a language by nameId', async () => {
-      const updateData = { name: 'TypeScript Updated' };
+      const updateData = { nameBadge: 'TypeScript Updated' };
       const mockUpdatedLeng = {
         _id: '123',
         nameId: 'typescript',
@@ -141,7 +141,7 @@ describe('MongooseTechRepo', () => {
       mockModel.findOneAndUpdate.mockRejectedValue(new Error('Update failed'));
 
       await expect(
-        repo.updateByNameId('typescript', { name: 'Updated' }),
+        repo.updateByNameId('typescript', { nameBadge: 'Updated' }),
       ).rejects.toThrow();
     });
   });
@@ -151,7 +151,7 @@ describe('MongooseTechRepo', () => {
       const mockDeletedLeng = {
         _id: '123',
         nameId: 'typescript',
-        name: 'TypeScript',
+        nameBadge: 'TypeScript',
         createdAt: new Date(),
         updatedAt: new Date(),
         toObject: jest.fn().mockReturnThis(),

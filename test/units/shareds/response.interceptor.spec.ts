@@ -1,33 +1,44 @@
 import { ResponseInterceptor } from '../../../src/shareds/presentation/response.interceptor';
 import { ExecutionContext, CallHandler } from '@nestjs/common';
-import { of } from 'rxjs';
-import { take } from 'rxjs/operators';
+import { Reflector } from '@nestjs/core';
+import { NativeLoggerService } from '../../../src/shareds/presentation/native-logger.service';
+import { of, firstValueFrom } from 'rxjs';
+import { ResCodes } from '../../../src/domain/flows/res.type';
 
 describe('ResponseInterceptor', () => {
-  let interceptor: ResponseInterceptor;
+  let interceptor: ResponseInterceptor<any>;
   let mockExecutionContext: jest.Mocked<ExecutionContext>;
   let mockCallHandler: jest.Mocked<CallHandler>;
+  let reflector: jest.Mocked<Reflector>;
+  let logger: jest.Mocked<NativeLoggerService>;
 
   beforeEach(() => {
-    interceptor = new ResponseInterceptor();
-    
+    reflector = { get: jest.fn() } as unknown as jest.Mocked<Reflector>;
+    logger = {
+      log: jest.fn(),
+      warn: jest.fn(),
+      error: jest.fn(),
+      setContext: jest.fn(),
+    } as unknown as jest.Mocked<NativeLoggerService>;
+    interceptor = new ResponseInterceptor<any>(reflector, logger);
+
     mockExecutionContext = {
-      getHandler: jest.fn(),
-      getClass: jest.fn(),
+      getHandler: jest.fn().mockReturnValue({}),
+      getClass: jest.fn().mockReturnValue({ name: 'TestController' }),
       switchToHttp: jest.fn().mockReturnValue({
         getRequest: jest.fn().mockReturnValue({}),
-        getResponse: jest.fn().mockReturnValue({}),
+        getResponse: jest.fn().mockReturnValue({ status: jest.fn() }),
       }),
       getArgs: jest.fn(),
       getArgByIndex: jest.fn(),
       switchToRpc: jest.fn(),
       switchToWs: jest.fn(),
       getType: jest.fn(),
-    };
+    } as any;
 
     mockCallHandler = {
       handle: jest.fn(),
-    };
+    } as any;
   });
 
   it('should be defined', () => {
@@ -36,15 +47,17 @@ describe('ResponseInterceptor', () => {
 
   it('should wrap successful response in success format', async () => {
     const testData = { message: 'test data' };
+    reflector.get.mockReturnValue({ type: ResCodes.OPERATION_SUCCESS, message: 'ok' });
     mockCallHandler.handle.mockReturnValue(of(testData));
 
-    const result = await interceptor
-      .intercept(mockExecutionContext, mockCallHandler)
-      .pipe(take(1))
-      .toPromise();
+    const result = await firstValueFrom(
+      interceptor.intercept(mockExecutionContext, mockCallHandler),
+    );
 
     expect(result).toEqual({
       success: true,
+      type: ResCodes.OPERATION_SUCCESS,
+      message: 'ok',
       data: testData,
       timestamp: expect.any(Number),
     });
@@ -52,15 +65,17 @@ describe('ResponseInterceptor', () => {
   });
 
   it('should handle null data', async () => {
+    reflector.get.mockReturnValue(undefined);
     mockCallHandler.handle.mockReturnValue(of(null));
 
-    const result = await interceptor
-      .intercept(mockExecutionContext, mockCallHandler)
-      .pipe(take(1))
-      .toPromise();
+    const result = await firstValueFrom(
+      interceptor.intercept(mockExecutionContext, mockCallHandler),
+    );
 
     expect(result).toEqual({
       success: true,
+      type: ResCodes.OPERATION_SUCCESS,
+      message: undefined,
       data: null,
       timestamp: expect.any(Number),
     });
@@ -69,13 +84,14 @@ describe('ResponseInterceptor', () => {
   it('should handle undefined data', async () => {
     mockCallHandler.handle.mockReturnValue(of(undefined));
 
-    const result = await interceptor
-      .intercept(mockExecutionContext, mockCallHandler)
-      .pipe(take(1))
-      .toPromise();
+    const result = await firstValueFrom(
+      interceptor.intercept(mockExecutionContext, mockCallHandler),
+    );
 
     expect(result).toEqual({
       success: true,
+      type: ResCodes.OPERATION_SUCCESS,
+      message: undefined,
       data: undefined,
       timestamp: expect.any(Number),
     });
@@ -85,13 +101,14 @@ describe('ResponseInterceptor', () => {
     const emptyArray: any[] = [];
     mockCallHandler.handle.mockReturnValue(of(emptyArray));
 
-    const result = await interceptor
-      .intercept(mockExecutionContext, mockCallHandler)
-      .pipe(take(1))
-      .toPromise();
+    const result = await firstValueFrom(
+      interceptor.intercept(mockExecutionContext, mockCallHandler),
+    );
 
     expect(result).toEqual({
       success: true,
+      type: ResCodes.OPERATION_SUCCESS,
+      message: undefined,
       data: [],
       timestamp: expect.any(Number),
     });
@@ -109,13 +126,14 @@ describe('ResponseInterceptor', () => {
     };
     mockCallHandler.handle.mockReturnValue(of(complexData));
 
-    const result = await interceptor
-      .intercept(mockExecutionContext, mockCallHandler)
-      .pipe(take(1))
-      .toPromise();
+    const result = await firstValueFrom(
+      interceptor.intercept(mockExecutionContext, mockCallHandler),
+    );
 
     expect(result).toEqual({
       success: true,
+      type: ResCodes.OPERATION_SUCCESS,
+      message: undefined,
       data: complexData,
       timestamp: expect.any(Number),
     });

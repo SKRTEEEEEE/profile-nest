@@ -43,7 +43,7 @@ describe('RoleAuthTokenGuard', () => {
     });
 
     it('should deny access when user does not have required role', () => {
-      const context = createMockExecutionContext(RoleType.USER);
+      const context = createMockExecutionContext(RoleType.STUDENT);
       
       jest
         .spyOn(reflector, 'getAllAndOverride')
@@ -83,7 +83,7 @@ describe('RoleAuthTokenGuard', () => {
       
       jest
         .spyOn(reflector, 'getAllAndOverride')
-        .mockReturnValueOnce([RoleType.USER]) // requiredRoles
+        .mockReturnValueOnce([RoleType.STUDENT]) // requiredRoles
         .mockReturnValueOnce(false); // isPublic
 
       jest.spyOn(roleAuthUseCase, 'validateRoleAccess').mockReturnValue(false);
@@ -98,7 +98,7 @@ describe('RoleAuthTokenGuard', () => {
       
       jest
         .spyOn(reflector, 'getAllAndOverride')
-        .mockReturnValueOnce([RoleType.ADMIN, RoleType.USER]) // requiredRoles
+        .mockReturnValueOnce([RoleType.ADMIN, RoleType.STUDENT]) // requiredRoles
         .mockReturnValueOnce(false); // isPublic
 
       jest.spyOn(roleAuthUseCase, 'validateRoleAccess').mockReturnValue(true);
@@ -108,18 +108,18 @@ describe('RoleAuthTokenGuard', () => {
       expect(result).toBe(true);
       expect(roleAuthUseCase.validateRoleAccess).toHaveBeenCalledWith({
         userRole: RoleType.ADMIN,
-        requiredRoles: [RoleType.ADMIN, RoleType.USER],
+        requiredRoles: [RoleType.ADMIN, RoleType.STUDENT],
         isPublic: false,
         contextName: 'TestController.testMethod',
       });
     });
 
     it('should handle undefined isPublic as false', () => {
-      const context = createMockExecutionContext(RoleType.USER);
+      const context = createMockExecutionContext(RoleType.STUDENT);
       
       jest
         .spyOn(reflector, 'getAllAndOverride')
-        .mockReturnValueOnce([RoleType.USER]) // requiredRoles
+        .mockReturnValueOnce([RoleType.STUDENT]) // requiredRoles
         .mockReturnValueOnce(undefined); // isPublic
 
       jest.spyOn(roleAuthUseCase, 'validateRoleAccess').mockReturnValue(true);
@@ -134,11 +134,11 @@ describe('RoleAuthTokenGuard', () => {
     });
 
     it('should pass correct context name', () => {
-      const context = createMockExecutionContext(RoleType.USER);
+      const context = createMockExecutionContext(RoleType.STUDENT);
       
       jest
         .spyOn(reflector, 'getAllAndOverride')
-        .mockReturnValueOnce([RoleType.USER])
+        .mockReturnValueOnce([RoleType.STUDENT])
         .mockReturnValueOnce(false);
 
       jest.spyOn(roleAuthUseCase, 'validateRoleAccess').mockReturnValue(true);

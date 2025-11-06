@@ -3,7 +3,7 @@ import {
   FullTechData,
   LengBase,
 } from 'src/domain/entities/tech';
-import { ReadAllFlattenTechsRes, TechRepository } from './tech.interface';
+import { ReadAllFlattenTechsRes, TechInterface } from './tech.interface';
 import { TECH_REPOSITORY } from 'src/modules/tokens';
 import { DBBase } from 'src/dynamic.types';
 
@@ -16,7 +16,7 @@ type BadgeAndValue = {
 export class TechReadUseCase {
   constructor(
     @Inject(TECH_REPOSITORY)
-    private readonly techRepository: TechRepository,
+    private readonly techRepository: TechInterface,
   ) {}
 
   async readAllC(): Promise<ReadAllFlattenTechsRes> {

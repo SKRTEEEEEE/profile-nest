@@ -16,80 +16,76 @@ describe('TopicCalculatorUseCase', () => {
     expect(useCase).toBeDefined();
   });
 
-  describe('calculateTopic', () => {
-    it('should calculate topic score correctly', () => {
-      const mockData = {
-        preferencia: 80,
-        afinidad: 75,
-        experiencia: 70,
-        usoGithub: 3.5,
-      };
+  describe('calculateAllTopicSizePercentages', () => {
+    it('should aggregate repo size per topic and normalize percentages', () => {
+      const repos = [
+        { topics: ['node', 'ts'], size: 100 } as any,
+        { topics: ['node'], size: 50 } as any,
+        { topics: [], size: 999 } as any, // ignored
+      ];
 
-      const result = useCase.calculateTopic(mockData);
+      const result = useCase.calculateAllTopicSizePercentages(repos);
 
-      expect(result).toBeGreaterThan(0);
-      expect(typeof result).toBe('number');
-    });
-
-    it('should handle zero values', () => {
-      const mockData = {
-        preferencia: 0,
-        afinidad: 0,
-        experiencia: 0,
-        usoGithub: 0,
-      };
-
-      const result = useCase.calculateTopic(mockData);
-
-      expect(result).toBe(0);
-    });
-
-    it('should handle maximum values', () => {
-      const mockData = {
-        preferencia: 100,
-        afinidad: 100,
-        experiencia: 100,
-        usoGithub: 5.0,
-      };
-
-      const result = useCase.calculateTopic(mockData);
-
-      expect(result).toBeGreaterThan(0);
-      expect(typeof result).toBe('number');
+      expect(result).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({ name: 'node' }),
+          expect.objectContaining({ name: 'ts' }),
+        ]),
+      );
+      const total = result.reduce((acc, item) => acc + item.percentage, 0);
+      expect(total).toBeCloseTo(100);
     });
   });
 
-  describe('calculateTopics', () => {
-    it('should calculate multiple topics', () => {
-      const mockTechs = [
-        {
-          preferencia: 80,
-          afinidad: 75,
-          experiencia: 70,
-          usoGithub: 3.5,
-        },
-        {
-          preferencia: 90,
-          afinidad: 85,
-          experiencia: 80,
-          usoGithub: 4.0,
-        },
+  describe('calculateAllTopicsRepoPercentages', () => {
+    it('should calculate repo coverage for each topic', () => {
+      const repos = [
+        { topics: ['node', 'ts'] } as any,
+        { topics: ['node'] } as any,
+        { topics: [] } as any,
       ];
 
-      const result = useCase.calculateTopics(mockTechs);
+      const result = useCase.calculateAllTopicsRepoPercentages(repos as any);
 
-      expect(Array.isArray(result)).toBe(true);
-      expect(result.length).toBe(2);
-      result.forEach(score => {
-        expect(typeof score).toBe('number');
-        expect(score).toBeGreaterThan(0);
+      expect(result).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({ name: 'node', topicRepoFrac: '2/2' }),
+          expect.objectContaining({ name: 'ts', topicRepoFrac: '1/2' }),
+        ]),
+      );
+    });
+  });
+
+  describe('calculateTopicGithubData', () => {
+    it('should merge percentages and compute importance score', () => {
+      const size = [
+        { name: 'nodejs', percentage: 40 },
+        { name: 'typescript', percentage: 60 },
+      ];
+      const repo = [
+        { name: 'nodejs', topicRepoPer: 50, topicRepoFrac: '1/2' },
+        { name: 'typescript', topicRepoPer: 75, topicRepoFrac: '2/2' },
+      ];
+
+      const data = useCase.calculateTopicGithubData('typescript', size, repo);
+
+      expect(data).toEqual({
+        topicSizePer: 60,
+        topicRepoPer: 75,
+        topicRepoFrac: '2/2',
+        topicImportanceScore: expect.any(Number),
       });
+      expect(data.topicImportanceScore).toBeCloseTo((60 * 75) / 100);
     });
 
-    it('should return empty array for empty input', () => {
-      const result = useCase.calculateTopics([]);
-
-      expect(result).toEqual([]);
+    it('should fallback to zeros when topic not found', () => {
+      const data = useCase.calculateTopicGithubData('unknown', [], []);
+      expect(data).toEqual({
+        topicSizePer: 0,
+        topicRepoPer: 0,
+        topicRepoFrac: '0/0',
+        topicImportanceScore: 0,
+      });
     });
   });
 });

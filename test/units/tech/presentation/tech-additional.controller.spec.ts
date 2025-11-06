@@ -5,7 +5,7 @@ import { TechOctokitCreateRepo } from '../../../../src/modules/tech/infrastructu
 import { TechOctokitActualizarGithubRepo, ActualizarGithubType } from '../../../../src/modules/tech/infrastructure/tech-octokit/actualizar.repo';
 import { TechOctokitUpdateRepo } from '../../../../src/modules/tech/infrastructure/tech-octokit/update.repo';
 import { TechFindDeleteRepo } from '../../../../src/modules/tech/infrastructure/delete.repo';
-import { ReadAllParams, ActualizarGithubParams } from '../../../../src/domain/entities/tech.type';
+import { ReadAllParams, ActualizarGithubParams, TechFormCategory } from '../../../../src/domain/entities/tech.type';
 import { InputParseError } from '../../../../src/domain/flows/domain.error';
 
 describe('TechController', () => {
@@ -16,11 +16,37 @@ describe('TechController', () => {
   let mockTechOctokitUpdateRepo: jest.Mocked<TechOctokitUpdateRepo>;
   let mockTechFindAndDeleteRepo: jest.Mocked<TechFindDeleteRepo>;
 
+  const intlDesc = { es: 'desc', en: 'desc', ca: 'desc', de: 'desc' };
   const mockTechData = {
     id: 'tech-123',
     nameId: 'javascript',
-    name: 'JavaScript',
-    category: 'programming',
+    nameBadge: 'JavaScript',
+    color: '#f7df1e',
+    web: 'https://developer.mozilla.org',
+    preferencia: 50,
+    experiencia: 60,
+    afinidad: 70,
+    img: null,
+    desc: intlDesc,
+    usoGithub: 5,
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+  } as any;
+
+  const mockFullTechData = {
+    nameId: 'javascript',
+    nameBadge: 'JavaScript',
+    color: '#f7df1e',
+    web: 'https://developer.mozilla.org',
+    preferencia: 50,
+    experiencia: 60,
+    afinidad: 70,
+    img: null,
+    desc: intlDesc,
+    usoGithub: 5,
+    valueAfin: 'high',
+    valueExp: 'high',
+    valueUso: 'high',
   };
 
   beforeEach(async () => {
@@ -29,23 +55,27 @@ describe('TechController', () => {
       readAllCat: jest.fn(),
       readAllC: jest.fn(),
       readAllFlatten: jest.fn(),
-    } as jest.Mocked<TechReadUseCase>;
+      flattenTechs: jest.fn(),
+      getColorByRange: jest.fn(),
+      getGithubUsoByRange: jest.fn(),
+      techRepository: {} as any,
+    } as unknown as jest.Mocked<TechReadUseCase>;
 
     mockTechOctokitCreateRepo = {
       create: jest.fn(),
-    } as jest.Mocked<TechOctokitCreateRepo>;
+    } as unknown as jest.Mocked<TechOctokitCreateRepo>;
 
     mockTechOctokitActualizarGithubRepo = {
       actualizar: jest.fn(),
-    } as jest.Mocked<TechOctokitActualizarGithubRepo>;
+    } as unknown as jest.Mocked<TechOctokitActualizarGithubRepo>;
 
     mockTechOctokitUpdateRepo = {
       update: jest.fn(),
-    } as jest.Mocked<TechOctokitUpdateRepo>;
+    } as unknown as jest.Mocked<TechOctokitUpdateRepo>;
 
     mockTechFindAndDeleteRepo = {
       findAndDelete: jest.fn(),
-    } as jest.Mocked<TechFindDeleteRepo>;
+    } as unknown as jest.Mocked<TechFindDeleteRepo>;
 
     const module: TestingModule = await Test.createTestingModule({
       controllers: [TechController],
@@ -95,7 +125,7 @@ describe('TechController', () => {
     });
 
     it('should read all techs in category format', async () => {
-      const mockData = { programming: [mockTechData] };
+      const mockData = { dispoFw: [{ name: 'react' }], dispoLeng: [{ name: 'javascript' }] };
       mockTechReadService.readAllCat.mockResolvedValue(mockData);
 
       const result = await controller.readAll(ReadAllParams.Category);
@@ -105,7 +135,12 @@ describe('TechController', () => {
     });
 
     it('should read all techs in full format', async () => {
-      const mockData = { db: [mockTechData], flatten: [], category: {} };
+      const mockData = {
+        techs: [mockTechData],
+        flattenTechs: [mockFullTechData],
+        dispoFw: [{ name: 'react' }],
+        dispoLeng: [{ name: 'javascript' }],
+      };
       mockTechReadService.readAllC.mockResolvedValue(mockData);
 
       const result = await controller.readAll(ReadAllParams.Full);
@@ -115,7 +150,7 @@ describe('TechController', () => {
     });
 
     it('should read all techs in flatten format', async () => {
-      const mockData = [mockTechData];
+      const mockData = [mockFullTechData];
       mockTechReadService.readAllFlatten.mockResolvedValue(mockData);
 
       const result = await controller.readAll(ReadAllParams.Flatten);
@@ -133,7 +168,7 @@ describe('TechController', () => {
 
       expect(result).toBeUndefined();
       expect(mockTechOctokitActualizarGithubRepo.actualizar).toHaveBeenCalledWith({
-        type: ActualizarGithubType.All,
+        type: ActualizarGithubType.all,
       });
     });
 
@@ -144,7 +179,7 @@ describe('TechController', () => {
 
       expect(result).toBeUndefined();
       expect(mockTechOctokitActualizarGithubRepo.actualizar).toHaveBeenCalledWith({
-        type: ActualizarGithubType.Json,
+        type: ActualizarGithubType.json,
       });
     });
 
@@ -155,7 +190,7 @@ describe('TechController', () => {
 
       expect(result).toBeUndefined();
       expect(mockTechOctokitActualizarGithubRepo.actualizar).toHaveBeenCalledWith({
-        type: ActualizarGithubType.Md,
+        type: ActualizarGithubType.md,
       });
     });
 
@@ -169,8 +204,8 @@ describe('TechController', () => {
     it('should update tech successfully', async () => {
       const techFormDto = {
         nameId: 'javascript',
-        name: 'JavaScript Updated',
-        category: 'programming',
+        nameBadge: 'JavaScript Updated',
+        color: '#000000',
       };
 
       mockTechOctokitUpdateRepo.update.mockResolvedValue(mockTechData);
@@ -184,7 +219,6 @@ describe('TechController', () => {
     it('should handle update errors', async () => {
       const techFormDto = {
         nameId: 'nonexistent',
-        name: 'Updated',
       };
       const error = new Error('Update failed');
       mockTechOctokitUpdateRepo.update.mockRejectedValue(error);
@@ -197,9 +231,16 @@ describe('TechController', () => {
     it('should create tech successfully', async () => {
       const techFormDto = {
         nameId: 'typescript',
-        name: 'TypeScript',
-        category: 'programming',
-        description: 'JavaScript with types',
+        nameBadge: 'TypeScript',
+        color: '#3178c6',
+        web: 'https://typescriptlang.org',
+        preferencia: 60,
+        experiencia: 70,
+        afinidad: 80,
+        img: null,
+        desc: intlDesc,
+        usoGithub: 4,
+        category: TechFormCategory.LENG,
       };
 
       mockTechOctokitCreateRepo.create.mockResolvedValue(mockTechData);
@@ -213,8 +254,16 @@ describe('TechController', () => {
     it('should handle create errors', async () => {
       const techFormDto = {
         nameId: 'invalid',
-        name: 'Invalid Tech',
-        category: 'unknown',
+        nameBadge: 'Invalid Tech',
+        color: '#000000',
+        web: 'https://invalid.dev',
+        preferencia: 10,
+        experiencia: 10,
+        afinidad: 10,
+        img: null,
+        desc: intlDesc,
+        usoGithub: 0,
+        category: TechFormCategory.FW,
       };
       const error = new Error('Create failed');
       mockTechOctokitCreateRepo.create.mockRejectedValue(error);

@@ -1,10 +1,10 @@
 import { TechReadUseCase } from '../../../../src/modules/tech/application/tech-read.usecase';
-import { TechRepository, Leng, Fw } from '../../../../src/modules/tech/application/tech.interface';
+import { TechInterface, Leng, Fw } from '../../../../src/modules/tech/application/tech.interface';
 import { DBBase } from '../../../../src/dynamic.types';
 
 describe('TechReadUseCase', () => {
   let useCase: TechReadUseCase;
-  let mockTechRepository: jest.Mocked<TechRepository>;
+  let mockTechRepository: jest.Mocked<TechInterface>;
 
   const mockTechWithFrameworks: Leng = {
     nameId: 'typescript',
