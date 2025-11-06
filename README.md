@@ -155,12 +155,17 @@ La estructura sigue los principios de **Clean Architecture**, organizada por cap
 
   - _Funcionalidades de la entidad_
   - `<entidad>`
-    - `presentation`(./docs/presentation.md) → Controladores, DTOs, validaciones
-    - `application`(./docs/application.md) → Casos de uso, lógica de aplicación
-    - `infrastructure`(./docs/infrastructure.md) → Repositorios, servicios externos, persistencia
+    - [`presentation`](./docs/presentation.md) → Controladores, DTOs, validaciones
+    - [`application`](./docs/application.md) → Casos de uso, lógica de aplicación
+    - [`infrastructure`](./docs/infrastructure.md) → Repositorios, servicios externos, persistencia
 
 - [src/`domain`](https://github.com/SKRTEEEEEE/profile-domain)
   - _Entidades de dominio puras_
+
+### 📊 Documentación Adicional
+
+- [📋 Reporte de Análisis de Estructura](./docs/task/staged/reporte-analisis-estructura.md) - Análisis detallado del código, mejoras y refactorizaciones recomendadas
+- [📝 Políticas y Convenciones](./docs/policies.md) - Guías de estilo y mejores prácticas
 
 ## [Recursos](https://github.com/SKRTEEEEEE/markdowns)
 

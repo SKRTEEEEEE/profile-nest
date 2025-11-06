@@ -22,3 +22,6 @@ Estudiar la estructura de el proyecto y mejorar la documentación
 - Hemos de poner los test coverage despues del badge de License que habra en el header del README.md ppal
 - El test coverage ha de tener el estilo que te he pasado todo en una linea
 - Los colores de las partes(stmts, branches, etc..) han de depender del % de coverage, siendo verde superior a 80, naranja entre 40 y 80, y naranja oscuro entre 10 i 40 y rojo para menos de 10.
+
+## Aclaraciones
+- Tienes el backend desplegado en :3001 y un servidor de agora-next en :3002
