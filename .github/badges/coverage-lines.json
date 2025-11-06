@@ -1,6 +1,7 @@
 {
   "schemaVersion": 1,
-  "label": "lines",
+  "label": "Lines",
   "message": "32.83%",
-  "color": "yellow"
+  "color": "darkorange",
+  "style": "flat-square"
 }
