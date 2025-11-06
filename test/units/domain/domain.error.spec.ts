@@ -48,14 +48,19 @@ describe('Domain Errors', () => {
             ErrorCodes.DATABASE_ACTION,
             mockLocation,
             mockFunction,
-            { es: 'Descripción', en: 'Description' },
+            { es: 'Descripción', en: 'Description', ca: 'Descripció', de: 'Beschreibung' },
             { shortDesc: 'Short description' }
           );
         }
       }
 
       const error = new TestDomainErrorWithOptions();
-      expect(error.friendlyDesc).toEqual({ es: 'Descripción', en: 'Description' });
+      expect(error.friendlyDesc).toEqual({
+        es: 'Descripción',
+        en: 'Description',
+        ca: 'Descripció',
+        de: 'Beschreibung',
+      });
       expect(error.meta).toEqual({ shortDesc: 'Short description' });
     });
   });

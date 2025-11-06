@@ -21,7 +21,7 @@ export type ReadAllFlattenTechsRes = {
   dispoLeng: { name: string }[];
 };
 
-export interface TechRepository extends CRUI<LengBase> {
+export interface TechInterface extends CRUI<LengBase> {
   read(filter?: Partial<LengBase & DBBase>): Promise<Array<Leng>>;
   updateByForm(
     updateData: Partial<TechForm>,

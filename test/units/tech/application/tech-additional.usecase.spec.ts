@@ -6,12 +6,12 @@ import {
   TechUpdateByIdUseCase,
   TechDeleteUseCase,
 } from '../../../../src/modules/tech/application/tech.usecase';
-import { TechRepository } from '../../../../src/modules/tech/application/tech.interface';
+import { TechInterface } from '../../../../src/modules/tech/application/tech.interface';
 import { TechBase, LengBase, TechForm } from '../../../../src/domain/entities/tech';
 import { DBBase } from '../../../../src/dynamic.types';
 
 describe('Tech Use Cases', () => {
-  let mockTechRepository: jest.Mocked<TechRepository>;
+  let mockTechRepository: jest.Mocked<TechInterface>;
 
   const mockTechBase: TechBase = {
     nameId: 'javascript',
@@ -43,7 +43,7 @@ describe('Tech Use Cases', () => {
       updateById: jest.fn(),
       delete: jest.fn(),
       read: jest.fn(),
-    } as jest.Mocked<TechRepository>;
+    } as jest.Mocked<TechInterface>;
   });
 
   describe('TechCreateUseCase', () => {

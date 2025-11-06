@@ -176,7 +176,7 @@ describe('TopicChartUseCase - Additional Tests', () => {
         labels: ['nodejs', 'typescript'],
         topicsSizePer: [60, 40],
         bubbleData: [{ x: 0, y: 50, r: 10 }],
-        topicImportanceScore: [30],
+        topicImportanceScore: [30, 25],
       };
 
       const mockBuffer = Buffer.from('chart-image');
@@ -195,7 +195,7 @@ describe('TopicChartUseCase - Additional Tests', () => {
       const mockProps = {
         owner: 'testOwner',
         labels: ['nodejs'],
-        data: [100],
+        topicsSizePer: [100],
       };
 
       const mockBuffer = Buffer.from('chart-image');

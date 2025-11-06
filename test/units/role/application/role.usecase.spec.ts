@@ -9,18 +9,21 @@ import {
 import { RoleInterface } from '../../../../src/modules/role/application/role.interface';
 import { RoleBase } from '../../../../src/domain/entities/role';
 import { DBBase } from '../../../../src/dynamic.types';
+import { RoleType } from '../../../../src/domain/entities/role.type';
 
 describe('Role Use Cases', () => {
   let mockRoleRepository: jest.Mocked<RoleInterface>;
 
   const mockRole: RoleBase & DBBase = {
     id: 'role-123',
-    name: 'admin',
-    description: 'Administrator role',
-    permissions: ['read', 'write', 'delete'],
     address: '0x123...abc',
-    _id: 'role-123',
-  };
+    permissions: RoleType.ADMIN,
+    stripeCustomerId: 'cus_123',
+    subscriptionId: 'sub_123',
+    subscriptionStatus: 'active',
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+  } as RoleBase & DBBase;
 
   beforeEach(() => {
     mockRoleRepository = {
@@ -47,10 +50,8 @@ describe('Role Use Cases', () => {
 
     it('should create a role successfully', async () => {
       const roleData: Omit<RoleBase, 'id'> = {
-        name: 'admin',
-        description: 'Administrator role',
-        permissions: ['read', 'write'],
         address: '0x123...abc',
+        permissions: RoleType.ADMIN,
       };
 
       mockRoleRepository.create.mockResolvedValue(mockRole);
@@ -63,10 +64,8 @@ describe('Role Use Cases', () => {
 
     it('should handle repository errors', async () => {
       const roleData: Omit<RoleBase, 'id'> = {
-        name: 'admin',
-        description: 'Administrator role',
-        permissions: ['read'],
         address: '0x123...abc',
+        permissions: RoleType.ADMIN,
       };
 
       const error = new Error('Create failed');
@@ -116,7 +115,7 @@ describe('Role Use Cases', () => {
     });
 
     it('should read roles with filter', async () => {
-      const filter = { name: 'admin' };
+      const filter = { permissions: RoleType.ADMIN };
       mockRoleRepository.read.mockResolvedValue([mockRole]);
 
       const result = await useCase.read(filter);
@@ -167,9 +166,9 @@ describe('Role Use Cases', () => {
     it('should update a role by id successfully', async () => {
       const updateProps = {
         id: 'role-123',
-        data: { description: 'Updated admin role' },
+        updateData: { permissions: RoleType.STUDENT },
       };
-      const updatedRole = { ...mockRole, description: 'Updated admin role' };
+      const updatedRole = { ...mockRole, permissions: RoleType.STUDENT };
 
       mockRoleRepository.updateById.mockResolvedValue(updatedRole);
 
@@ -182,7 +181,7 @@ describe('Role Use Cases', () => {
     it('should handle repository errors', async () => {
       const updateProps = {
         id: 'nonexistent',
-        data: { description: 'Updated' },
+        updateData: { permissions: RoleType.STUDENT },
       };
       const error = new Error('Update failed');
       mockRoleRepository.updateById.mockRejectedValue(error);
@@ -232,7 +231,7 @@ describe('Role Use Cases', () => {
 
     it('should delete roles with filter successfully', async () => {
       const deleteProps = {
-        filter: { name: 'obsolete' },
+        filter: { address: '0x123...abc' },
       };
 
       mockRoleRepository.delete.mockResolvedValue([mockRole]);
@@ -245,7 +244,7 @@ describe('Role Use Cases', () => {
 
     it('should handle repository errors', async () => {
       const deleteProps = {
-        filter: { name: 'nonexistent' },
+        filter: { address: '0x999' },
       };
       const error = new Error('Bulk delete failed');
       mockRoleRepository.delete.mockRejectedValue(error);

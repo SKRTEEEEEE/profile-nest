@@ -2,6 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { getModelToken } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { MongooseUserRepo } from '../../../../src/modules/user/infrastructure/user.repo';
+import { RoleType } from '../../../../src/domain/entities/role.type';
 
 describe('MongooseUserRepo', () => {
   let repo: MongooseUserRepo;
@@ -11,9 +12,12 @@ describe('MongooseUserRepo', () => {
     _id: 'user-123',
     address: '0x123abc',
     email: 'test@example.com',
-    name: 'Test User',
-    role: null,
+    nick: 'tester',
+    img: null,
+    role: RoleType.STUDENT,
     roleId: null,
+    solicitud: null,
+    isVerified: true,
     createdAt: new Date(),
     updatedAt: new Date(),
     toObject: jest.fn().mockReturnThis(),
@@ -53,7 +57,12 @@ describe('MongooseUserRepo', () => {
       const userData = {
         address: '0x123abc',
         email: 'test@example.com',
-        name: 'Test User',
+        nick: 'tester',
+        img: null,
+        role: RoleType.STUDENT,
+        roleId: null,
+        solicitud: null,
+        isVerified: false,
       };
 
       model.create.mockResolvedValue(mockUser as any);
@@ -162,7 +171,7 @@ describe('MongooseUserRepo', () => {
     });
 
     it('should find users with filter', async () => {
-      const filter = { role: 'ADMIN' };
+      const filter = { role: RoleType.ADMIN };
       const users = [mockUser];
       model.find.mockReturnValue({
         populate: jest.fn().mockReturnThis(),

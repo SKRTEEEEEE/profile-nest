@@ -45,7 +45,7 @@ describe('JwtAuthThirdwebGuard', () => {
       jest
         .spyOn(reflector, 'getAllAndOverride')
         .mockReturnValueOnce(true) // isPublic
-        .mockReturnValueOnce([RoleType.USER]); // requiredRoles
+        .mockReturnValueOnce([RoleType.STUDENT]); // requiredRoles
 
       const superCanActivate = jest.spyOn(
         Object.getPrototypeOf(JwtAuthThirdwebGuard.prototype),

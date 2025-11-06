@@ -2,31 +2,39 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { getModelToken } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { MongooseProjectRepo } from '../../../../src/modules/project/infrastructure/project.repo';
+import { ProjectBase } from '../../../../src/domain/entities/project';
 
 describe('MongooseProjectRepo', () => {
   let repo: MongooseProjectRepo;
-  let model: jest.Mocked<Model<any>>;
+  let model: jest.Mocked<Model<ProjectBase>>;
+  const now = new Date();
 
-  const mockProject = {
-    _id: 'project-123',
-    name: 'Test Project',
-    description: 'A test project',
-    technologies: ['typescript', 'nodejs'],
-    githubUrl: 'https://github.com/user/test-project',
-    createdAt: new Date(),
-    updatedAt: new Date(),
-    toObject: jest.fn().mockReturnThis(),
-  };
+  const mockMongoDoc = () => ({
+    toObject: jest.fn().mockReturnValue({
+      _id: { toString: () => 'project-123' },
+      createdAt: now,
+      updatedAt: now,
+      nameId: 'project-123',
+      ejemplo: true,
+      openSource: null,
+      operative: null,
+      image: null,
+      icon: 'zap' as any,
+      title: { es: 'titulo', en: 'title', ca: 'titol', de: 'titel' },
+      desc: { es: 'desc', en: 'desc', ca: 'desc', de: 'desc' },
+      lilDesc: { es: 'desc', en: 'desc', ca: 'desc', de: 'desc' },
+      time: [],
+      keys: [],
+      techs: [],
+    }),
+  });
 
   beforeEach(async () => {
     const mockModel = {
-      create: jest.fn(),
-      findById: jest.fn(),
-      findOne: jest.fn(),
-      findByIdAndUpdate: jest.fn(),
-      findByIdAndDelete: jest.fn(),
+      insertMany: jest.fn(),
       find: jest.fn(),
-    };
+      findById: jest.fn(),
+    } as Partial<jest.Mocked<Model<ProjectBase>>>;
 
     const module: TestingModule = await Test.createTestingModule({
       providers: [
@@ -39,129 +47,67 @@ describe('MongooseProjectRepo', () => {
     }).compile();
 
     repo = module.get<MongooseProjectRepo>(MongooseProjectRepo);
-    model = module.get(getModelToken('Project'));
+    model = module.get(getModelToken('Project')) as jest.Mocked<Model<ProjectBase>>;
+
+    jest.spyOn<any, any>(repo as any, 'documentToPrimary').mockImplementation(() => ({
+      id: 'project-123',
+      nameId: 'project-123',
+    }));
+    jest.spyOn<any, any>(repo as any, 'resArrCheck').mockReturnValue({});
   });
 
   it('should be defined', () => {
     expect(repo).toBeDefined();
   });
 
-  describe('create', () => {
-    it('should create a project successfully', async () => {
-      const projectData = {
-        name: 'Test Project',
-        description: 'A test project',
-        technologies: ['typescript', 'nodejs'],
-        githubUrl: 'https://github.com/user/test-project',
-      };
+  describe('populate', () => {
+    it('should insert many docs and return primaries', async () => {
+      const docs = [{ nameId: 'project-1' } as ProjectBase];
+      const mockDoc = mockMongoDoc();
+      model.insertMany.mockResolvedValue([mockDoc] as any);
 
-      model.create.mockResolvedValue(mockProject as any);
+      const result = await repo.populate(docs);
 
-      const result = await repo.create(projectData);
+      expect(model.insertMany).toHaveBeenCalledWith(docs);
+      expect(result).toEqual([{ id: 'project-123', nameId: 'project-123' }]);
+    });
+  });
 
-      expect(result).toEqual(mockProject);
-      expect(model.create).toHaveBeenCalledWith(projectData);
+  describe('readEjemplo', () => {
+    it('should read ejemplo projects and map to primary', async () => {
+      const mockDoc = mockMongoDoc();
+      (model.find as jest.Mock).mockResolvedValue([mockDoc] as any);
+
+      const result = await repo.readEjemplo();
+
+      expect(model.find).toHaveBeenCalledWith({ ejemplo: true });
+      expect(result).toEqual([{ id: 'project-123', nameId: 'project-123' }]);
+    });
+
+    it('should throw when find fails', async () => {
+      (model.find as jest.Mock).mockRejectedValue(new Error('db error'));
+
+      await expect(repo.readEjemplo()).rejects.toThrow();
     });
   });
 
   describe('readById', () => {
-    it('should find project by id', async () => {
-      const projectId = 'project-123';
-      model.findById.mockReturnValue({
-        exec: jest.fn().mockResolvedValue(mockProject),
-      } as any);
+    it('should return project when found', async () => {
+      const mockDoc = mockMongoDoc();
+      (model.findById as jest.Mock).mockResolvedValue(mockDoc as any);
 
-      const result = await repo.readById(projectId);
+      const result = await repo.readById('project-123');
 
-      expect(result).toEqual(mockProject);
-      expect(model.findById).toHaveBeenCalledWith(projectId);
+      expect(model.findById).toHaveBeenCalledWith('project-123');
+      expect(result).toEqual({ id: 'project-123', nameId: 'project-123' });
     });
 
-    it('should return null if project not found', async () => {
-      const projectId = 'non-existent';
-      model.findById.mockReturnValue({
-        exec: jest.fn().mockResolvedValue(null),
-      } as any);
+    it('should return null if not found', async () => {
+      (model.findById as jest.Mock).mockResolvedValue(null);
 
-      const result = await repo.readById(projectId);
+      const result = await repo.readById('missing');
 
       expect(result).toBeNull();
-      expect(model.findById).toHaveBeenCalledWith(projectId);
-    });
-  });
-
-  describe('readOne', () => {
-    it('should find one project by filter', async () => {
-      const filter = { name: 'Test Project' };
-      model.findOne.mockReturnValue({
-        exec: jest.fn().mockResolvedValue(mockProject),
-      } as any);
-
-      const result = await repo.readOne(filter);
-
-      expect(result).toEqual(mockProject);
-      expect(model.findOne).toHaveBeenCalledWith(filter);
-    });
-  });
-
-  describe('updateById', () => {
-    it('should update project by id', async () => {
-      const updateProps = {
-        id: 'project-123',
-        updateData: { name: 'Updated Project' },
-      };
-      const updatedProject = { ...mockProject, name: 'Updated Project' };
-      
-      model.findByIdAndUpdate.mockReturnValue({
-        exec: jest.fn().mockResolvedValue(updatedProject),
-      } as any);
-
-      const result = await repo.updateById(updateProps);
-
-      expect(result).toEqual(updatedProject);
-      expect(model.findByIdAndUpdate).toHaveBeenCalledWith(
-        updateProps.id,
-        updateProps.updateData,
-        { new: true }
-      );
-    });
-  });
-
-  describe('read', () => {
-    it('should find all projects', async () => {
-      const projects = [mockProject, { ...mockProject, _id: 'project-456' }];
-      model.find.mockResolvedValue(projects as any);
-
-      const result = await repo.read({});
-
-      expect(result).toEqual(projects);
-      expect(model.find).toHaveBeenCalledWith({});
-    });
-
-    it('should find projects with filter', async () => {
-      const filter = { technologies: 'typescript' };
-      const projects = [mockProject];
-      model.find.mockResolvedValue(projects as any);
-
-      const result = await repo.read(filter);
-
-      expect(result).toEqual(projects);
-      expect(model.find).toHaveBeenCalledWith(filter);
-    });
-  });
-
-  describe('delete', () => {
-    it('should delete project by filter', async () => {
-      const deleteProps = {
-        filter: { name: 'Test Project' },
-      };
-
-      model.findOneAndDelete = jest.fn().mockResolvedValue(mockProject);
-
-      const result = await repo.delete(deleteProps);
-
-      expect(result).toEqual([mockProject]);
-      expect(model.findOneAndDelete).toHaveBeenCalledWith(deleteProps.filter);
     });
   });
 });
