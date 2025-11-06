@@ -1,6 +1,7 @@
 {
   "schemaVersion": 1,
-  "label": "branches",
+  "label": "Branches",
   "message": "40.04%",
-  "color": "green"
+  "color": "orange",
+  "style": "flat-square"
 }

@@ -1,6 +1,7 @@
 {
   "schemaVersion": 1,
-  "label": "functions",
+  "label": "Functions",
   "message": "37.18%",
-  "color": "purple"
+  "color": "darkorange",
+  "style": "flat-square"
 }
