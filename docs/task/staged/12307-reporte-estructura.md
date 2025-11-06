@@ -1,0 +1,1 @@
+- [ ] Crear reporte sobre codigo y estructura actual: partes a refactorizar, codigo/clases inecesario, malas practicas en clean architecture, inyecciones/flujo clean arch incorrecto, etc..
