@@ -63,55 +63,68 @@ jobs:
         run: |
           mkdir -p .github/badges
           
-          # Create JSON files for shields.io endpoint badges with custom colors
-          # Total badge - Orange color
-          cat > .github/badges/coverage-total.json << EOF
-          {
-            "schemaVersion": 1,
-            "label": "total",
-            "message": "${{ steps.coverage.outputs.total }}%",
-            "color": "orange",
-            "style": "for-the-badge"
+          # Function to determine color based on percentage
+          get_color() {
+            local value=$(echo "$1" | awk '{printf "%.0f", $1}')
+            if [ "$value" -ge 80 ]; then
+              echo "brightgreen"
+            elif [ "$value" -ge 40 ]; then
+              echo "orange"
+            elif [ "$value" -ge 10 ]; then
+              echo "darkorange"
+            else
+              echo "red"
+            fi
           }
-          EOF
           
-          # Statements badge - Blue color
+          # Get colors for each metric
+          STATEMENTS_COLOR=$(get_color "${{ steps.coverage.outputs.statements }}")
+          BRANCHES_COLOR=$(get_color "${{ steps.coverage.outputs.branches }}")
+          FUNCTIONS_COLOR=$(get_color "${{ steps.coverage.outputs.functions }}")
+          LINES_COLOR=$(get_color "${{ steps.coverage.outputs.lines }}")
+          
+          # Create JSON files for shields.io endpoint badges with dynamic colors
+          # Statements badge
           cat > .github/badges/coverage-statements.json << EOF
           {
             "schemaVersion": 1,
-            "label": "statements",
+            "label": "Statements",
             "message": "${{ steps.coverage.outputs.statements }}%",
-            "color": "blue"
+            "color": "${STATEMENTS_COLOR}",
+            "style": "flat-square"
           }
           EOF
           
-          # Branches badge - Green color
+          # Branches badge
           cat > .github/badges/coverage-branches.json << EOF
           {
             "schemaVersion": 1,
-            "label": "branches",
+            "label": "Branches",
             "message": "${{ steps.coverage.outputs.branches }}%",
-            "color": "green"
+            "color": "${BRANCHES_COLOR}",
+            "style": "flat-square"
           }
           EOF
           
-          # Functions badge - Purple color
+          # Functions badge
           cat > .github/badges/coverage-functions.json << EOF
           {
             "schemaVersion": 1,
-            "label": "functions",
+            "label": "Functions",
             "message": "${{ steps.coverage.outputs.functions }}%",
-            "color": "purple"
+            "color": "${FUNCTIONS_COLOR}",
+            "style": "flat-square"
           }
           EOF
           
-          # Lines badge - Yellow color
+          # Lines badge
           cat > .github/badges/coverage-lines.json << EOF
           {
             "schemaVersion": 1,
-            "label": "lines",
+            "label": "Lines",
             "message": "${{ steps.coverage.outputs.lines }}%",
-            "color": "yellow"
+            "color": "${LINES_COLOR}",
+            "style": "flat-square"
           }
           EOF
       - name: Commit badge files 💾
