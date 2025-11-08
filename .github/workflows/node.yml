@@ -61,46 +61,73 @@ jobs:
       - name: Create coverage badges 🏅
         if: github.ref == 'refs/heads/main'
         run: |
+          mkdir -p .github/badges
+          
           # Function to determine color based on percentage
           get_color() {
-            local pct=$(echo "$1" | cut -d'.' -f1)
-            if [ "$pct" -ge 80 ]; then
+            local value=$(echo "$1" | awk '{printf "%.0f", $1}')
+            if [ "$value" -ge 80 ]; then
               echo "brightgreen"
-            elif [ "$pct" -ge 40 ]; then
+            elif [ "$value" -ge 40 ]; then
               echo "orange"
-            elif [ "$pct" -ge 10 ]; then
+            elif [ "$value" -ge 10 ]; then
               echo "darkorange"
             else
               echo "red"
             fi
           }
           
-          # Calculate colors for each metric
-          STMTS_COLOR=$(get_color ${{ steps.coverage.outputs.statements }})
-          BRANCH_COLOR=$(get_color ${{ steps.coverage.outputs.branches }})
-          FUNC_COLOR=$(get_color ${{ steps.coverage.outputs.functions }})
-          LINES_COLOR=$(get_color ${{ steps.coverage.outputs.lines }})
-          TOTAL_COLOR=$(get_color ${{ steps.coverage.outputs.total }})
+          # Get colors for each metric
+          STATEMENTS_COLOR=$(get_color "${{ steps.coverage.outputs.statements }}")
+          BRANCHES_COLOR=$(get_color "${{ steps.coverage.outputs.branches }}")
+          FUNCTIONS_COLOR=$(get_color "${{ steps.coverage.outputs.functions }}")
+          LINES_COLOR=$(get_color "${{ steps.coverage.outputs.lines }}")
           
-          echo "Coverage colors - Statements: $STMTS_COLOR, Branches: $BRANCH_COLOR, Functions: $FUNC_COLOR, Lines: $LINES_COLOR, Total: $TOTAL_COLOR"
+          # Create JSON files for shields.io endpoint badges with dynamic colors
+          # Statements badge
+          cat > .github/badges/coverage-statements.json << EOF
+          {
+            "schemaVersion": 1,
+            "label": "Statements",
+            "message": "${{ steps.coverage.outputs.statements }}%",
+            "color": "${STATEMENTS_COLOR}",
+            "style": "flat-square"
+          }
+          EOF
           
-          # Create/update JSON badge files
-          mkdir -p .github/badges
+          # Branches badge
+          cat > .github/badges/coverage-branches.json << EOF
+          {
+            "schemaVersion": 1,
+            "label": "Branches",
+            "message": "${{ steps.coverage.outputs.branches }}%",
+            "color": "${BRANCHES_COLOR}",
+            "style": "flat-square"
+          }
+          EOF
           
-          echo "{\"schemaVersion\": 1, \"label\": \"statements\", \"message\": \"${{ steps.coverage.outputs.statements }}%\", \"color\": \"${STMTS_COLOR}\", \"style\": \"for-the-badge\"}" > .github/badges/coverage-statements.json
-          echo "{\"schemaVersion\": 1, \"label\": \"branches\", \"message\": \"${{ steps.coverage.outputs.branches }}%\", \"color\": \"${BRANCH_COLOR}\", \"style\": \"for-the-badge\"}" > .github/badges/coverage-branches.json
-          echo "{\"schemaVersion\": 1, \"label\": \"functions\", \"message\": \"${{ steps.coverage.outputs.functions }}%\", \"color\": \"${FUNC_COLOR}\", \"style\": \"for-the-badge\"}" > .github/badges/coverage-functions.json
-          echo "{\"schemaVersion\": 1, \"label\": \"lines\", \"message\": \"${{ steps.coverage.outputs.lines }}%\", \"color\": \"${LINES_COLOR}\", \"style\": \"for-the-badge\"}" > .github/badges/coverage-lines.json
-          echo "{\"schemaVersion\": 1, \"label\": \"total\", \"message\": \"${{ steps.coverage.outputs.total }}%\", \"color\": \"${TOTAL_COLOR}\", \"style\": \"for-the-badge\"}" > .github/badges/coverage-total.json
+          # Functions badge
+          cat > .github/badges/coverage-functions.json << EOF
+          {
+            "schemaVersion": 1,
+            "label": "Functions",
+            "message": "${{ steps.coverage.outputs.functions }}%",
+            "color": "${FUNCTIONS_COLOR}",
+            "style": "flat-square"
+          }
+          EOF
           
-          # Update README.md with dynamic badges
-          sed -i "s|Statements-[0-9.]*%25-[a-z]*|Statements-${{ steps.coverage.outputs.statements }}%25-${STMTS_COLOR}|g" README.md
-          sed -i "s|Branches-[0-9.]*%25-[a-z]*|Branches-${{ steps.coverage.outputs.branches }}%25-${BRANCH_COLOR}|g" README.md
-          sed -i "s|Functions-[0-9.]*%25-[a-z]*|Functions-${{ steps.coverage.outputs.functions }}%25-${FUNC_COLOR}|g" README.md
-          sed -i "s|Lines-[0-9.]*%25-[a-z]*|Lines-${{ steps.coverage.outputs.lines }}%25-${LINES_COLOR}|g" README.md
-          
-          echo "README.md and JSON badges updated with coverage information"
-      - name: Commit badge updates 💾
+          # Lines badge
+          cat > .github/badges/coverage-lines.json << EOF
+          {
+            "schemaVersion": 1,
+            "label": "Lines",
+            "message": "${{ steps.coverage.outputs.lines }}%",
+            "color": "${LINES_COLOR}",
+            "style": "flat-square"
+          }
+          EOF
+      - name: Commit badge files 💾
         if: github.ref == 'refs/heads/main'
         run: |
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
