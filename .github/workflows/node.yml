@@ -13,7 +13,7 @@ jobs:
       - name: Hello World 👋
         run: echo "Hello world"
       - name: Checkout🛬
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           submodules: true  # Descarga todos los submódulos
           # submodules: recursive  # Descarga submódulos de forma recursiva
