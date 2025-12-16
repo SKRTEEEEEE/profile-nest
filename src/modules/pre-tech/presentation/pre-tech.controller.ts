@@ -1,5 +1,6 @@
 import { Controller, Get, Post, Query, UseGuards } from '@nestjs/common';
 import { RoleType } from 'src/domain/entities/role.type';
+import { PreTechBase } from 'src/domain/entities/pre-tech';
 
 import { PreTechEndpointUseCase } from '../application/pre-tech.usecase';
 import { RoleAuthTokenGuard } from 'src/shareds/role-auth/presentation/role-auth-token.guard';

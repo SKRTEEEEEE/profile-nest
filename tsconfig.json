@@ -19,7 +19,24 @@
     "noFallthroughCasesInSwitch": false,
     // Con use this for more similarity with frontend
     "paths": {
-      "src/*": ["src/*"]
+      "src/*": ["src/*"],
+      // Hybrid approach: Submodule in dev, Package in prod
+      // Priority: 1. Try submodule first, 2. Fallback to package
+      // Pattern: src/domain/entities/... or src/domain/flows/...
+      "src/domain/entities/*": [
+        "src/domain/src/entities/*",                          // Submodule (dev)
+        "node_modules/@skrteeeeee/profile-domain/src/entities/*"  // Package (CI/CD)
+      ],
+      "src/domain/flows/*": [
+        "src/domain/src/flows/*",                             // Submodule (dev)
+        "node_modules/@skrteeeeee/profile-domain/src/flows/*"    // Package (CI/CD)
+      ],
+      // Barrel exports
+      "src/domain": [
+        "src/domain/src/index",                               // Submodule barrel
+        "node_modules/@skrteeeeee/profile-domain/src/index",  // Package barrel
+        "node_modules/@skrteeeeee/profile-domain"             // Package root
+      ]
     }
   }
 }

@@ -3,6 +3,7 @@ import { DBBase } from 'src/dynamic.types';;
 import { ApiProperty } from '@nestjs/swagger';
 import { DatabaseDto } from 'src/shareds/presentation/db.dto';
 import { ApiDtoMetadata } from 'src/shareds/swagger/dto-metadata.decorator';
+import { PreTechBase } from 'src/domain/entities/pre-tech';
 
 export class PreTechBaseDto implements PreTechBase {
   @ApiProperty({

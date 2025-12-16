@@ -8,27 +8,30 @@ RUN apt-get update \
   && apt-get install -y --no-install-recommends git build-essential python3 ca-certificates \
   && rm -rf /var/lib/apt/lists/*
 
-# 2) Copia solo package.json + lockfile para aprovechar cache de Docker
+# 2) Copia package files para aprovechar cache de Docker
 COPY package*.json ./
 
-# 3) Instala TODAS las dependencias (incluyendo devDependencies necesarias para el build)
-RUN npm ci --prefer-offline --no-audit --progress=false
+# 3) Configura NPM para GitHub Packages y instala dependencias
+# IMPORTANTE: Usa BuildKit secret si está disponible, sino usa ARG como fallback para Railway
+# Railway: Pasa NPM_TOKEN como variable de entorno que se convierte en ARG
+ARG GITHUB_TOKEN
+RUN --mount=type=secret,id=npm_token \
+  TOKEN=$(cat /run/secrets/npm_token 2>/dev/null || echo "$GITHUB_TOKEN") && \
+  echo "@skrteeeeee:registry=https://npm.pkg.github.com" > ~/.npmrc && \
+  echo "//npm.pkg.github.com/:_authToken=${TOKEN}" >> ~/.npmrc && \
+  npm ci --prefer-offline --no-audit --progress=false && \
+  rm -f ~/.npmrc
 
-# 4) Copia el resto del proyecto (incluye .git si no está en .dockerignore)
+# 4) Copia .npmrc del proyecto (sin el token) para runtime si es necesario
+COPY .npmrc ./
+
+# 6) Copia el resto del proyecto
 COPY . .
 
-# 5) Inicializa submódulos SOLO si hay .git (evita fallos si .git no fue incluido)
-RUN if [ -d .git ]; then git submodule update --init --recursive; fi
+# 7) ELIMINA submodule domain si existe (forzamos uso del package)
+RUN rm -rf src/domain && echo "✅ Submodule removed - using package instead"
 
-# 6) Fallback: si .git no está pero hay .gitmodules, clona cada submódulo público según el .gitmodules
-RUN if [ ! -d .git ] && [ -f .gitmodules ]; then \
-      awk '/path =/ {p=$3} /url =/ {print $3 " " p}' .gitmodules | \
-      while read url path; do \
-        echo "Cloning $url into $path" && git clone "$url" "$path"; \
-      done; \
-    fi
-
-# 7) Build (TypeScript / Nest build)
+# 8) Build (TypeScript / Nest build) - usará el package @skrteeeeee/profile-domain
 RUN npm run build
 
 # 8) Elimina devDependencies para dejar solo lo necesario en producción

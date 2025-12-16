@@ -34,6 +34,7 @@
     "@nestjs/swagger": "^11.2.0",
     "@nestjs/throttler": "^6.4.0",
     "@octokit/rest": "^18.12.0",
+    "@skrteeeeee/profile-domain": "^0.0.2",
     "@thirdweb-dev/auth": "^4.1.97",
     "cache-manager": "^7.2.0",
     "class-transformer": "^0.5.1",
