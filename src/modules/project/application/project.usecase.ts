@@ -1,4 +1,4 @@
-import { ProjectBase } from "src/domain/entities/project"
+import { ProjectBase } from '@skrteeeeee/profile-domain/dist/entities/project'
 import { ProjectInterface } from "./project.interface"
 import { DBBase } from "src/dynamic.types"
 import { Inject, Injectable } from "@nestjs/common"

@@ -7,7 +7,7 @@ import { PreTechInterface } from '../application/pre-tech.interface';
 import { DBBase } from 'src/dynamic.types';;
 import { MongoosePopulateImpl } from 'src/shareds/pattern/infrastructure/implementations/populate.impl';
 import { QueryDto } from 'src/shareds/presentation/pipes/query.dto';
-import { PreTechBase } from 'src/domain/entities/pre-tech';
+import { PreTechBase } from '@skrteeeeee/profile-domain/dist/entities/pre-tech';
 
 @Injectable()
 // extends MongooseRpPattern<PreTechBase>

@@ -1,6 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
-import { FwBase, LengBase, LibBase } from 'src/domain/entities/tech';
+import { FwBase, LengBase, LibBase } from '@skrteeeeee/profile-domain/dist/entities/tech';
 import { IntlSchema } from 'src/shareds/pattern/infrastructure/schemas/intl.schema';
 
 @Schema({ timestamps: true, collection: 'Lenguajes' })

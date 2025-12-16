@@ -1,9 +1,9 @@
-// import { TechBase } from "src/domain/entities/tech";
+// import { TechBase } from '@skrteeeeee/profile-domain/dist/entities/tech';
 
 import { DBBase } from 'src/dynamic.types';
 import { CRUI } from 'src/shareds/pattern/application/interfaces/cru';
 import { DeleteProps } from 'src/shareds/pattern/application/interfaces/delete';
-import { FullTechData, LengBase, LibBase, TechBase, TechForm } from 'src/domain/entities/tech';
+import { FullTechData, LengBase, LibBase, TechBase, TechForm } from '@skrteeeeee/profile-domain/dist/entities/tech';
 
 export type { LengBase, LibBase, TechBase, FullTechData, TechForm };
 

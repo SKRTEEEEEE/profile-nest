@@ -1,6 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { RoleBase } from 'src/domain/entities/role';
-import { RoleType } from 'src/domain/entities/role.type';
+import { RoleBase } from '@skrteeeeee/profile-domain/dist/entities/role';
+import { RoleType } from '@skrteeeeee/profile-domain/dist/entities/role.type';
 import { RoleInterface } from './role.interface';
 import { DBBase } from 'src/dynamic.types';;
 import { ROLE_REPOSITORY } from 'src/modules/tokens';

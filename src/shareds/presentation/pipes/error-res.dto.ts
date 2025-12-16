@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsEnum } from 'class-validator';
-import { BaseFlow } from 'src/domain/flows/main.flow';
-import { apiErrorCodes, ErrorCodes } from 'src/domain/flows/error.type';
+import { BaseFlow } from '@skrteeeeee/profile-domain/dist/flows/main.flow';
+import { apiErrorCodes, ErrorCodes } from '@skrteeeeee/profile-domain/dist/flows/error.type';
 import { ApiDtoMetadata } from 'src/shareds/swagger/dto-metadata.decorator';
 
 @ApiDtoMetadata({

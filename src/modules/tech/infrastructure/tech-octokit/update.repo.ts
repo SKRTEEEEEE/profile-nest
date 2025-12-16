@@ -5,9 +5,9 @@ import {
   ActualizarGithubType,
   TechOctokitActualizarGithubRepo,
 } from './actualizar.repo';
-import { TechForm } from 'src/domain/entities/tech';
-import { createDomainError } from 'src/domain/flows/error.registry';
-import { ErrorCodes } from 'src/domain/flows/error.type';
+import { TechForm } from '@skrteeeeee/profile-domain/dist/entities/tech';
+import { createDomainError } from '@skrteeeeee/profile-domain/dist/flows/error.registry';
+import { ErrorCodes } from '@skrteeeeee/profile-domain/dist/flows/error.type';
 
 @Injectable()
 export class TechOctokitUpdateRepo {

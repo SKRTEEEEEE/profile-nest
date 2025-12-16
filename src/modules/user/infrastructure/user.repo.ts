@@ -7,11 +7,11 @@ import {
 } from 'src/dynamic.types';
 import { NativeLoggerService } from 'src/shareds/presentation/native-logger.service';
 import { UserInterface } from '../application/user.interface';
-import { createDomainError } from 'src/domain/flows/error.registry';
-import { ErrorCodes } from 'src/domain/flows/error.type';
-import { RoleType } from 'src/domain/entities/role.type';
+import { createDomainError } from '@skrteeeeee/profile-domain/dist/flows/error.registry';
+import { ErrorCodes } from '@skrteeeeee/profile-domain/dist/flows/error.type';
+import { RoleType } from '@skrteeeeee/profile-domain/dist/entities/role.type';
 import { MongooseDocument } from 'src/shareds/pattern/infrastructure/types/mongoose';
-import { UserBase, UserFormS } from 'src/domain/entities/user';
+import { UserBase, UserFormS } from '@skrteeeeee/profile-domain/dist/entities/user';
 
 @Injectable()
 export class MongooseUserRepo

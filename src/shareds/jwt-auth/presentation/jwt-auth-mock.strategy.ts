@@ -5,9 +5,9 @@ import { PassportStrategy } from '@nestjs/passport';
 import { Request } from 'express';
 import { Strategy } from 'passport-custom';
 import { JwtAuthPayload } from 'src/shareds/jwt-auth/application/jwt-auth.interface';
-import { RoleType } from 'src/domain/entities/role.type';
-import { createDomainError } from 'src/domain/flows/error.registry';
-import { ErrorCodes } from 'src/domain/flows/error.type';
+import { RoleType } from '@skrteeeeee/profile-domain/dist/entities/role.type';
+import { createDomainError } from '@skrteeeeee/profile-domain/dist/flows/error.registry';
+import { ErrorCodes } from '@skrteeeeee/profile-domain/dist/flows/error.type';
 
 @Injectable()
 export class JwtAuthMockStrategy extends PassportStrategy(Strategy, 'mock') {

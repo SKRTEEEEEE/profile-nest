@@ -1,7 +1,7 @@
 // role-authorization.service.ts
 import { Injectable, ForbiddenException } from '@nestjs/common';
 import { RoleAuthInterface } from 'src/shareds/role-auth/application/role-auth.interface';
-import { RoleHierarchy, RoleType } from 'src/domain/entities/role.type';
+import { RoleHierarchy, RoleType } from '@skrteeeeee/profile-domain/dist/entities/role.type';
 
 @Injectable()
 export class RoleAuthUseCase implements RoleAuthInterface {

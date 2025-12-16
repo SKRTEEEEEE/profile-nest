@@ -16,8 +16,8 @@ import { LoginPayload } from 'thirdweb/auth';
 import {
   DatabaseFindError,
   UnauthorizedError,
-} from 'src/domain/flows/domain.error';
-import { RoleType } from 'src/domain/entities/role.type';
+} from '@skrteeeeee/profile-domain/dist/flows/domain.error';
+import { RoleType } from '@skrteeeeee/profile-domain/dist/entities/role.type';
 import { PersistedEntity } from 'src/shareds/pattern/application/interfaces/adapter.type';
 
 export type UserRoleThirdWebDeleteProps = {

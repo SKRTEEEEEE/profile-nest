@@ -2,12 +2,12 @@ import { Body, Controller, Get, Param, Post } from "@nestjs/common";
 import { ApiBearerAuth, ApiOperation, ApiTags } from "@nestjs/swagger";
 import { ProjectPopulateUseCase, ProjectReadByIdUseCase, ProjectReadEjemploUseCase } from "../application/project.usecase";
 import { ProjectInterface } from "../application/project.interface";
-import { ProjectBase } from "src/domain/entities/project";
+import { ProjectBase } from '@skrteeeeee/profile-domain/dist/entities/project';
 import { PublicRoute } from "src/shareds/jwt-auth/presentation/public-route.decorator";
 import { ApiErrorResponse } from "src/shareds/presentation/api-error.decorator";
 import { ApiSuccessResponse } from "src/shareds/presentation/api-success.decorator";
 import { ProjectDto, ProjectFormDto } from "./project.dto";
-import { ResCodes } from "src/domain/flows/res.type";
+import { ResCodes } from '@skrteeeeee/profile-domain/dist/flows/res.type';
 
 
 @ApiTags('Project')

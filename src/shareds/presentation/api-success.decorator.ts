@@ -5,7 +5,7 @@ import {
   ApiOkResponse,
   getSchemaPath,
 } from '@nestjs/swagger';
-import { ResCodes } from 'src/domain/flows/res.type';
+import { ResCodes } from '@skrteeeeee/profile-domain/dist/flows/res.type';
 import { SuccessResponseDto } from './pipes/success-res.dto';
 
 export const API_RESPONSE_META = 'API_RESPONSE_META';

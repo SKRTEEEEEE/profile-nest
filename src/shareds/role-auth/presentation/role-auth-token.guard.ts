@@ -1,7 +1,7 @@
 // src/infrastructure/guards/role-from-token.guard.ts
 import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
-import { RoleType } from 'src/domain/entities/role.type';
+import { RoleType } from '@skrteeeeee/profile-domain/dist/entities/role.type';
 import { ROLES_KEY } from './role.decorator';
 import { PUBLIC_ROUTE_KEY } from '../../jwt-auth/presentation/public-route.decorator';
 import { RoleAuthUseCase } from '../application/role-auth.usecase';

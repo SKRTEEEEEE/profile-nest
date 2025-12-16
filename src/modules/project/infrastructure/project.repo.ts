@@ -3,7 +3,7 @@ import { Injectable } from "@nestjs/common";
 import { ProjectInterface } from "../application/project.interface";
 import { Model } from "mongoose";
 import { InjectModel } from "@nestjs/mongoose";
-import { ProjectBase } from "src/domain/entities/project";
+import { ProjectBase } from '@skrteeeeee/profile-domain/dist/entities/project';
 
 //🧠🔎parseOpt -- ejemplo
 const extractId = (item: any, index: number) => {

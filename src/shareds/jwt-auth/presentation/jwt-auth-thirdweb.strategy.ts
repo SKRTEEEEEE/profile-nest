@@ -4,8 +4,8 @@ import { Strategy } from 'passport-custom';
 import { Request } from 'express';
 import { JwtAuthPayload } from 'src/shareds/jwt-auth/application/jwt-auth.interface';
 import { JwtAuthUseCase } from 'src/shareds/jwt-auth/application/jwt-auth.usecase';
-import { createDomainError } from 'src/domain/flows/error.registry';
-import { ErrorCodes } from 'src/domain/flows/error.type';
+import { createDomainError } from '@skrteeeeee/profile-domain/dist/flows/error.registry';
+import { ErrorCodes } from '@skrteeeeee/profile-domain/dist/flows/error.type';
 
 @Injectable()
 export class JwtAuthThirdwebStrategy extends PassportStrategy(

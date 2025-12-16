@@ -2,7 +2,7 @@ import { Inject, Injectable } from '@nestjs/common';
 import {
   FullTechData,
   LengBase,
-} from 'src/domain/entities/tech';
+} from '@skrteeeeee/profile-domain/dist/entities/tech';
 import { ReadAllFlattenTechsRes, TechInterface } from './tech.interface';
 import { TECH_REPOSITORY } from 'src/modules/tokens';
 import { DBBase } from 'src/dynamic.types';

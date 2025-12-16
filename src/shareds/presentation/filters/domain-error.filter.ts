@@ -7,12 +7,12 @@ import {
 } from '@nestjs/common';
 import { Request, Response } from 'express';
 import { NativeLoggerService } from '../native-logger.service';
-import { DomainError } from 'src/domain/flows/domain.error';
+import { DomainError } from '@skrteeeeee/profile-domain/dist/flows/domain.error';
 import {
   ERROR_CODES_METADATA,
   ErrorCodes,
   ErrorCodesMetadata,
-} from 'src/domain/flows/error.type';
+} from '@skrteeeeee/profile-domain/dist/flows/error.type';
 import { CORRELATION_ID_HEADER } from '../correlation-id.middleware';
 
 // Mapeo de ErrorCodes a HttpStatus

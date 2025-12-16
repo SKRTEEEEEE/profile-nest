@@ -7,8 +7,8 @@ import { Reflector } from '@nestjs/core';
 import { AuthGuard } from '@nestjs/passport';
 import { Observable } from 'rxjs';
 import { PUBLIC_ROUTE_KEY } from './public-route.decorator';
-import { createDomainError } from 'src/domain/flows/error.registry';
-import { ErrorCodes } from 'src/domain/flows/error.type';
+import { createDomainError } from '@skrteeeeee/profile-domain/dist/flows/error.registry';
+import { ErrorCodes } from '@skrteeeeee/profile-domain/dist/flows/error.type';
 
 @Injectable()
 export class JwtAuthMockGuard extends AuthGuard('mock') {

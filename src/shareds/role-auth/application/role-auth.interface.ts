@@ -1,4 +1,4 @@
-import { RoleType } from 'src/domain/entities/role.type';
+import { RoleType } from '@skrteeeeee/profile-domain/dist/entities/role.type';
 
 export abstract class RoleAuthInterface {
   abstract validateRoleAccess(options: {

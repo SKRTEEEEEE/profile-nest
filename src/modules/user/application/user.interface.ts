@@ -1,6 +1,6 @@
 import { DBBase } from "src/dynamic.types";
 import { CRUI } from "src/shareds/pattern/application/interfaces/cru";
-import { UserBase } from "src/domain/entities/user";
+import { UserBase } from '@skrteeeeee/profile-domain/dist/entities/user';
 
 export interface UserInterface extends CRUI<UserBase> {
   read(filter?: Partial<UserBase & DBBase>): Promise<(UserBase & DBBase)[]>;

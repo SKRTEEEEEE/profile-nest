@@ -3,7 +3,7 @@ import { VerifyLoginPayloadParams } from 'thirdweb/auth';
 import { AuthThirdWebRepo } from 'src/shareds/thirdweb/auth-thirdweb.repo';
 import { Injectable } from '@nestjs/common';
 import { UserCreateUseCase, UserReadOneUseCase } from './user.usecase';
-import { UnauthorizedError } from 'src/domain/flows/domain.error';
+import { UnauthorizedError } from '@skrteeeeee/profile-domain/dist/flows/domain.error';
 
 // Es mejor si no se crea capa app para el shared importado, mejor no crear usecase, por lo tanto, crear la función en el controller
 @Injectable()

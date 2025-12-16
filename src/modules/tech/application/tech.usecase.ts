@@ -1,6 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
 // import { ReadOneRepository } from "src/shareds/pattern/application/usecases/read-one.interface";
-import {  LengBase, TechBase, TechForm } from 'src/domain/entities/tech';
+import {  LengBase, TechBase, TechForm } from '@skrteeeeee/profile-domain/dist/entities/tech';
 import { Leng, TechInterface } from './tech.interface';
 import { TECH_REPOSITORY } from 'src/modules/tokens';
 import { DeleteI, DeleteProps } from 'src/shareds/pattern/application/interfaces/delete';

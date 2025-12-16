@@ -8,7 +8,7 @@ import {
 } from '@nestjs/common';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { ResCodes, ResFlow } from 'src/domain/flows/res.type';
+import { ResCodes, ResFlow } from '@skrteeeeee/profile-domain/dist/flows/res.type';
 import { Reflector } from '@nestjs/core';
 import { API_RESPONSE_META } from './api-success.decorator';
 import { NativeLoggerService } from './native-logger.service';

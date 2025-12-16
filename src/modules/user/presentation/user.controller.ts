@@ -22,9 +22,9 @@ import {
 } from '../application/user.usecase';
 import { DBBase } from 'src/dynamic.types';;
 import { PublicRoute } from 'src/shareds/jwt-auth/presentation/public-route.decorator';
-import { RoleType } from 'src/domain/entities/role.type';
-import { createDomainError } from 'src/domain/flows/error.registry';
-import { ErrorCodes } from 'src/domain/flows/error.type';
+import { RoleType } from '@skrteeeeee/profile-domain/dist/entities/role.type';
+import { createDomainError } from '@skrteeeeee/profile-domain/dist/flows/error.registry';
+import { ErrorCodes } from '@skrteeeeee/profile-domain/dist/flows/error.type';
 import {
   RoleCreateUseCase,
   RoleDeleteByIdUseCase,
@@ -48,7 +48,7 @@ import { JwtAuthPayload } from 'src/shareds/jwt-auth/application/jwt-auth.interf
 import { ApiMockLoginBody } from './user.decorator';
 import { ApiErrorResponse } from 'src/shareds/presentation/api-error.decorator';
 import { ApiSuccessResponse } from 'src/shareds/presentation/api-success.decorator';
-import { ResCodes } from 'src/domain/flows/res.type';
+import { ResCodes } from '@skrteeeeee/profile-domain/dist/flows/res.type';
 
 enum ManageRoleParam {
   Give = 'give',

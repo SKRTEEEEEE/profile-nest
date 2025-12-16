@@ -4,10 +4,10 @@ import {
   TechReadOneUseCase,
 } from '../application/tech.usecase';
 import { DBBase } from 'src/dynamic.types';;
-import { FwBase } from 'src/domain/entities/tech';
+import { FwBase } from '@skrteeeeee/profile-domain/dist/entities/tech';
 import { Document } from 'mongoose';
-import { createDomainError } from 'src/domain/flows/error.registry';
-import { ErrorCodes } from 'src/domain/flows/error.type';
+import { createDomainError } from '@skrteeeeee/profile-domain/dist/flows/error.registry';
+import { ErrorCodes } from '@skrteeeeee/profile-domain/dist/flows/error.type';
 import { FwDocument, LibDocument } from './tech.schema';
 
 

@@ -4,37 +4,26 @@ FROM node:22-bullseye-slim AS build
 WORKDIR /app
 
 # 1) Instala git + herramientas para compilar módulos nativos (si fueran necesarias)
-RUN apt-get update \
-  && apt-get install -y --no-install-recommends git build-essential python3 ca-certificates \
-  && rm -rf /var/lib/apt/lists/*
 
-# 2) Copia package files para aprovechar cache de Docker
+# 2) Copia solo package.json + lockfile para aprovechar cache de Docker
 COPY package*.json ./
 
-# 3) Configura NPM para GitHub Packages y instala dependencias
-# IMPORTANTE: Usa BuildKit secret si está disponible, sino usa ARG como fallback para Railway
-# Railway: Pasa NPM_TOKEN como variable de entorno que se convierte en ARG
-ARG GITHUB_TOKEN
-RUN --mount=type=secret,id=npm_token \
-  TOKEN=$(cat /run/secrets/npm_token 2>/dev/null || echo "$GITHUB_TOKEN") && \
-  echo "@skrteeeeee:registry=https://npm.pkg.github.com" > ~/.npmrc && \
-  echo "//npm.pkg.github.com/:_authToken=${TOKEN}" >> ~/.npmrc && \
-  npm ci --prefer-offline --no-audit --progress=false && \
-  rm -f ~/.npmrc
+# 3) Railway config: Copia .npmrc con ${NPM_TOKEN} placeholder  
+COPY .npmrc package*.json ./
 
-# 4) Copia .npmrc del proyecto (sin el token) para runtime si es necesario
-COPY .npmrc ./
+# 4) Railway sustituye automáticamente ${NPM_TOKEN} cuando npm lee el .npmrc
+# Necesitamos setear NPM_TOKEN como variable para que npm lo vea
+ARG NPM_TOKEN
+RUN test -n "$NPM_TOKEN" || (echo "ERROR: NPM_TOKEN not set" && exit 1)
+RUN NPM_TOKEN=$NPM_TOKEN npm ci --prefer-offline --no-audit --progress=false
 
-# 6) Copia el resto del proyecto
+# 4) Copia el resto del proyecto (incluye .git si no está en .dockerignore)
 COPY . .
 
-# 7) ELIMINA submodule domain si existe (forzamos uso del package)
-RUN rm -rf src/domain && echo "✅ Submodule removed - using package instead"
-
-# 8) Build (TypeScript / Nest build) - usará el package @skrteeeeee/profile-domain
+# 5) Build (TypeScript imports directly from @skrteeeeee/profile-domain package)
 RUN npm run build
 
-# 8) Elimina devDependencies para dejar solo lo necesario en producción
+# 7) Elimina devDependencies para dejar solo lo necesario en producción
 RUN npm prune --production
 
 # ===== Producción (imagen final pequeña) =====

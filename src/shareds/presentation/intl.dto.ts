@@ -1,4 +1,4 @@
-import { IntlBase } from 'src/domain/entities/intl.type';
+import { IntlBase } from '@skrteeeeee/profile-domain/dist/entities/intl.type';
 import { IsString } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 import { ApiDtoMetadata } from '../swagger/dto-metadata.decorator';

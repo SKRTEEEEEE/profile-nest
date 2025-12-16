@@ -1,6 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, Schema as MongooseSchema } from 'mongoose';
-import { RoleType } from 'src/domain/entities/role.type';
+import { RoleType } from '@skrteeeeee/profile-domain/dist/entities/role.type';
 import { RoleSchemaDocument } from 'src/modules/role/infrastructure/role.schema';
 
 @Schema({ timestamps: true, collection: 'users' })

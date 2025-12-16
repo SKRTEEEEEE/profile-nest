@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { FwBase, LengBase, TechBase, TechForm } from 'src/domain/entities/tech';
+import { FwBase, LengBase, TechBase, TechForm } from '@skrteeeeee/profile-domain/dist/entities/tech';
 import { TechReadUseCase } from 'src/modules/tech/application/tech-read.usecase';
 import {
   TechCreateUseCase,
@@ -12,8 +12,8 @@ import {
   ActualizarGithubType,
   TechOctokitActualizarGithubRepo,
 } from './actualizar.repo';
-import { createDomainError } from 'src/domain/flows/error.registry';
-import { ErrorCodes } from 'src/domain/flows/error.type';
+import { createDomainError } from '@skrteeeeee/profile-domain/dist/flows/error.registry';
+import { ErrorCodes } from '@skrteeeeee/profile-domain/dist/flows/error.type';
 
 @Injectable()
 export class TechOctokitCreateRepo {

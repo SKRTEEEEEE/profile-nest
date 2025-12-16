@@ -2,12 +2,12 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 
-import { RoleBase } from 'src/domain/entities/role';
+import { RoleBase } from '@skrteeeeee/profile-domain/dist/entities/role';
 import { MongooseCRUImpl } from 'src/shareds/pattern/infrastructure/implementations/cru.impl';
 import { RoleInterface } from '../application/role.interface';
 import { DBBase } from 'src/dynamic.types';;
-import { ErrorCodes } from 'src/domain/flows/error.type';
-import { createDomainError } from 'src/domain/flows/error.registry';
+import { ErrorCodes } from '@skrteeeeee/profile-domain/dist/flows/error.type';
+import { createDomainError } from '@skrteeeeee/profile-domain/dist/flows/error.registry';
 import { DeleteProps } from 'src/shareds/pattern/application/interfaces/delete';
 
 @Injectable()

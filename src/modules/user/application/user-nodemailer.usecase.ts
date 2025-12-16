@@ -6,10 +6,10 @@ import {
   UserUpdateUseCase,
 } from './user.usecase';
 import { VerifyLoginPayloadParams } from '@thirdweb-dev/auth';
-import { DatabaseFindError, SetEnvError } from 'src/domain/flows/domain.error';
-import { createDomainError } from 'src/domain/flows/error.registry';
-import { ErrorCodes } from 'src/domain/flows/error.type';
-import { UserFormS } from 'src/domain/entities/user';
+import { DatabaseFindError, SetEnvError } from '@skrteeeeee/profile-domain/dist/flows/domain.error';
+import { createDomainError } from '@skrteeeeee/profile-domain/dist/flows/error.registry';
+import { ErrorCodes } from '@skrteeeeee/profile-domain/dist/flows/error.type';
+import { UserFormS } from '@skrteeeeee/profile-domain/dist/entities/user';
 
 export type UserNodemailerUpdateProps =
   // payload: VerifyLoginPayloadParams,

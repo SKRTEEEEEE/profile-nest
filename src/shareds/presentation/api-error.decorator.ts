@@ -2,7 +2,7 @@ import { ApiExtraModels, ApiResponse } from '@nestjs/swagger';
 import { errorCodeStatus } from './filters/domain-error.filter';
 import { ErrorResponseDto } from './pipes/error-res.dto';
 import { applyDecorators } from '@nestjs/common';
-import { ErrorCodes, ERROR_CODES_METADATA } from 'src/domain/flows/error.type';
+import { ErrorCodes, ERROR_CODES_METADATA } from '@skrteeeeee/profile-domain/dist/flows/error.type';
 
 // Función para detectar si un método recibe parámetros
 function hasInputParameters(target: any, propertyKey: string): boolean {

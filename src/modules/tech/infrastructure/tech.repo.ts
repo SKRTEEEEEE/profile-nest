@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import {  FwBase,  LengBase, TechBase, TechForm } from 'src/domain/entities/tech';
+import {  FwBase,  LengBase, TechBase, TechForm } from '@skrteeeeee/profile-domain/dist/entities/tech';
 import {  Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 import { MongooseCRUImpl } from 'src/shareds/pattern/infrastructure/implementations/cru.impl';
@@ -8,8 +8,8 @@ import {
   DBBase,
 } from 'src/dynamic.types';;
 import { Fw,  Leng,  TechInterface } from '../application/tech.interface';
-import { createDomainError } from 'src/domain/flows/error.registry';
-import { ErrorCodes } from 'src/domain/flows/error.type';
+import { createDomainError } from '@skrteeeeee/profile-domain/dist/flows/error.registry';
+import { ErrorCodes } from '@skrteeeeee/profile-domain/dist/flows/error.type';
 import { MongooseDocument } from 'src/shareds/pattern/infrastructure/types/mongoose';
 import { DeleteProps } from 'src/shareds/pattern/application/interfaces/delete';
 

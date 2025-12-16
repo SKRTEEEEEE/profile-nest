@@ -17,7 +17,7 @@ import {
   ActualizarGithubType,
   TechOctokitActualizarGithubRepo,
 } from '../infrastructure/tech-octokit/actualizar.repo';
-import { createDomainError } from 'src/domain/flows/error.registry';
+import { createDomainError } from '@skrteeeeee/profile-domain/dist/flows/error.registry';
 import { TechOctokitUpdateRepo } from '../infrastructure/tech-octokit/update.repo';
 import { TechFindDeleteRepo } from '../infrastructure/delete.repo';
 import {
@@ -34,13 +34,13 @@ import {
   TechFormDtoOptional,
 } from './tech.dto';
 import { ApiErrorResponse } from 'src/shareds/presentation/api-error.decorator';
-import { ErrorCodes } from 'src/domain/flows/error.type';
+import { ErrorCodes } from '@skrteeeeee/profile-domain/dist/flows/error.type';
 import { ApiSuccessResponse } from 'src/shareds/presentation/api-success.decorator';
-import { ResCodes } from 'src/domain/flows/res.type';
+import { ResCodes } from '@skrteeeeee/profile-domain/dist/flows/res.type';
 import {
   ActualizarGithubParams,
   ReadAllParams,
-} from 'src/domain/entities/tech.type';
+} from '@skrteeeeee/profile-domain/dist/entities/tech.type';
 import { VoidDto } from 'src/shareds/presentation/pipes/void.dto';
 import { Throttle, ThrottlerGuard } from '@nestjs/throttler';
 

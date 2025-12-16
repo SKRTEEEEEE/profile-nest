@@ -1,6 +1,6 @@
 import { Controller, Get, Post, Query, UseGuards } from '@nestjs/common';
-import { RoleType } from 'src/domain/entities/role.type';
-import { PreTechBase } from 'src/domain/entities/pre-tech';
+import { RoleType } from '@skrteeeeee/profile-domain/dist/entities/role.type';
+import { PreTechBase } from '@skrteeeeee/profile-domain/dist/entities/pre-tech';
 
 import { PreTechEndpointUseCase } from '../application/pre-tech.usecase';
 import { RoleAuthTokenGuard } from 'src/shareds/role-auth/presentation/role-auth-token.guard';
@@ -8,7 +8,7 @@ import { PublicRoute } from 'src/shareds/jwt-auth/presentation/public-route.deco
 import { Roles } from 'src/shareds/role-auth/presentation/role.decorator';
 import { QueryDto } from 'src/shareds/presentation/pipes/query.dto';
 import { DBBase } from 'src/dynamic.types';;
-import { ResCodes } from 'src/domain/flows/res.type';
+import { ResCodes } from '@skrteeeeee/profile-domain/dist/flows/res.type';
 import { PreTechInterface } from '../application/pre-tech.interface';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { ApiSuccessResponse } from 'src/shareds/presentation/api-success.decorator';

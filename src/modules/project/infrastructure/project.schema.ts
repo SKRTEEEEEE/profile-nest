@@ -1,7 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
-import { IntlBase } from 'src/domain/entities/intl.type';
-import { TypeProject } from 'src/domain/entities/project.type';
+import { IntlBase } from '@skrteeeeee/profile-domain/dist/entities/intl.type';
+import { TypeProject } from '@skrteeeeee/profile-domain/dist/entities/project.type';
 
 // Sub-esquema para TechProject
 @Schema({ _id: true })

@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { VerifyJWTRes } from '../jwt-auth/application/jwt-auth.interface';
-import { createDomainError } from 'src/domain/flows/error.registry';
-import { ErrorCodes } from 'src/domain/flows/error.type';
+import { createDomainError } from '@skrteeeeee/profile-domain/dist/flows/error.registry';
+import { ErrorCodes } from '@skrteeeeee/profile-domain/dist/flows/error.type';
 import { createThirdwebClient, ThirdwebClient } from 'thirdweb';
 import { createAuth, VerifyLoginPayloadParams } from 'thirdweb/auth';
 import { Account, privateKeyToAccount } from 'thirdweb/wallets';

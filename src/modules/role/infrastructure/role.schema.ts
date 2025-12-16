@@ -1,7 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
-import { RoleBase } from 'src/domain/entities/role';
-import { RoleType } from 'src/domain/entities/role.type';
+import { RoleBase } from '@skrteeeeee/profile-domain/dist/entities/role';
+import { RoleType } from '@skrteeeeee/profile-domain/dist/entities/role.type';
 
 @Schema({ timestamps: true, collection: 'Role' })
 export class RoleSchemaDocument extends Document implements RoleBase {

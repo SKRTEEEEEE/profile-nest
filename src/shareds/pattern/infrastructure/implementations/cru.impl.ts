@@ -1,8 +1,8 @@
 import { QueryOptions, UpdateQuery } from 'mongoose';
 import { MongooseDocument } from '../types/mongoose';
 import { MongooseBaseImpl } from './base';
-import { createDomainError } from 'src/domain/flows/error.registry';
-import { ErrorCodes } from 'src/domain/flows/error.type';
+import { createDomainError } from '@skrteeeeee/profile-domain/dist/flows/error.registry';
+import { ErrorCodes } from '@skrteeeeee/profile-domain/dist/flows/error.type';
 import { DBBase } from 'src/dynamic.types';
 
 export type MongooseUpdateByIdProps<TBase> = {

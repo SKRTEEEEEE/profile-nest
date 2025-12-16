@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { EmailInterface, SendMailParams } from './email.interface';
 import SMTPTransport from 'nodemailer/lib/smtp-transport';
-import { createDomainError } from 'src/domain/flows/error.registry';
-import { ErrorCodes } from 'src/domain/flows/error.type';
+import { createDomainError } from '@skrteeeeee/profile-domain/dist/flows/error.registry';
+import { ErrorCodes } from '@skrteeeeee/profile-domain/dist/flows/error.type';
 import { verificationEmailTemplate } from './verification-email-template';
 import * as crypto from 'crypto';
 import * as nodemailer from 'nodemailer';

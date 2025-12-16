@@ -11,9 +11,9 @@ import {
 import { DBBase } from 'src/dynamic.types';
 import { IntlDto } from 'src/shareds/presentation/intl.dto';
 import { ApiDtoMetadata } from 'src/shareds/swagger/dto-metadata.decorator';
-import { IntlBase } from 'src/domain/entities/intl.type';
-import { TypeProject } from "src/domain/entities/project.type";
-import { ProjectBase } from 'src/domain/entities/project';
+import { IntlBase } from '@skrteeeeee/profile-domain/dist/entities/intl.type';
+import { TypeProject } from '@skrteeeeee/profile-domain/dist/entities/project.type';
+import { ProjectBase } from '@skrteeeeee/profile-domain/dist/entities/project';
 
 
 // DTO para TechProject

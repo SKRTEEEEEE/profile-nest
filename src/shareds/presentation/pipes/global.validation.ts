@@ -2,8 +2,8 @@ import { ValidatorOptions } from 'class-validator';
 import { PipeTransform, Injectable, ArgumentMetadata } from '@nestjs/common';
 import { validate } from 'class-validator';
 import { plainToInstance } from 'class-transformer';
-import { createDomainError } from 'src/domain/flows/error.registry';
-import { ErrorCodes } from 'src/domain/flows/error.type';
+import { createDomainError } from '@skrteeeeee/profile-domain/dist/flows/error.registry';
+import { ErrorCodes } from '@skrteeeeee/profile-domain/dist/flows/error.type';
 
 export const validationOptions: ValidationPipeOptions = {
   whitelist: true, // Eliminar propiedades no definidas en DTOs -> prefiero warning y eliminar + dev msg

@@ -1,7 +1,7 @@
 // import { CanActivate, ExecutionContext, ForbiddenException, Injectable } from '@nestjs/common';
 // import { Reflector } from '@nestjs/core';
 // import { ROLES_KEY } from '../decorators/role.decorator';
-// import { RoleType } from 'src/domain/entities/role.type';
+// import { RoleType } from '@skrteeeeee/profile-domain/dist/entities/role.type';
 // import { RoleAuthUseCase } from '../../application/usecases/shareds/role-auth.service';
 // import { DBBase } from 'src/infrastructure/mongoose/types';
 

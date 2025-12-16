@@ -1,5 +1,5 @@
-import { IntlBase } from "src/domain/entities/intl.type";
-import { KeyProject, ProjectBase, TechProject, TimeProject } from "src/domain/entities/project";
+import { IntlBase } from '@skrteeeeee/profile-domain/dist/entities/intl.type';
+import { KeyProject, ProjectBase, TechProject, TimeProject } from '@skrteeeeee/profile-domain/dist/entities/project';
 import { DBBase, LucideIconNames } from "src/dynamic.types";
 
 export type Project = {

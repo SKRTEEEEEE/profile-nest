@@ -1,12 +1,12 @@
 import { Injectable, Inject } from '@nestjs/common';
-import { createDomainError } from 'src/domain/flows/error.registry';
-import { ErrorCodes } from 'src/domain/flows/error.type';
+import { createDomainError } from '@skrteeeeee/profile-domain/dist/flows/error.registry';
+import { ErrorCodes } from '@skrteeeeee/profile-domain/dist/flows/error.type';
 import { UserInterface } from './user.interface';
 import { USER_REPOSITORY } from 'src/modules/tokens';
 import { DBBase } from 'src/dynamic.types';
 import { CreateProps, UpdateByIdProps } from 'src/shareds/pattern/application/interfaces/cru';
 import { UserVerification } from '../domain/user-verification';
-import { UserBase } from 'src/domain/entities/user';
+import { UserBase } from '@skrteeeeee/profile-domain/dist/entities/user';
 
 @Injectable()
 export class UserCreateUseCase {

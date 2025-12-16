@@ -7,10 +7,10 @@ import { Reflector } from '@nestjs/core';
 import { AuthGuard } from '@nestjs/passport';
 import { PUBLIC_ROUTE_KEY } from './public-route.decorator';
 import { Observable } from 'rxjs';
-import { RoleType } from 'src/domain/entities/role.type';
+import { RoleType } from '@skrteeeeee/profile-domain/dist/entities/role.type';
 import { ROLES_KEY } from '../../role-auth/presentation/role.decorator';
-import { createDomainError } from 'src/domain/flows/error.registry';
-import { ErrorCodes } from 'src/domain/flows/error.type';
+import { createDomainError } from '@skrteeeeee/profile-domain/dist/flows/error.registry';
+import { ErrorCodes } from '@skrteeeeee/profile-domain/dist/flows/error.type';
 
 // TODO - hacer que cuando se le pase isPublic y tambien requiredRoles, se anule el public!
 

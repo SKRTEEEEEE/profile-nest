@@ -1,9 +1,9 @@
-// import { RoleBase } from "src/domain/entities/role";
+// import { RoleBase } from '@skrteeeeee/profile-domain/dist/entities/role';
 // import { CRRUDDRepository } from "../patterns/crrudd.interface";
 
 import { CRUI } from 'src/shareds/pattern/application/interfaces/cru';
 import { DeleteProps } from 'src/shareds/pattern/application/interfaces/delete';
-import { RoleBase } from 'src/domain/entities/role';
+import { RoleBase } from '@skrteeeeee/profile-domain/dist/entities/role';
 import { DBBase } from 'src/dynamic.types';;
 
 export interface RoleInterface extends CRUI<RoleBase> {

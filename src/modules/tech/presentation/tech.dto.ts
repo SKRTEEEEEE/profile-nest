@@ -13,11 +13,11 @@ import {
   LengBase,
   TechBase,
   TechForm,
-} from 'src/domain/entities/tech';
+} from '@skrteeeeee/profile-domain/dist/entities/tech';
 import {
   apiTechFormCategory,
   TechFormCategory,
-} from 'src/domain/entities/tech.type';
+} from '@skrteeeeee/profile-domain/dist/entities/tech.type';
 import { PreTechBaseDto } from 'src/modules/pre-tech/presentation/pre-tech.dto';
 import { DBBase } from 'src/dynamic.types';;
 import { IntlDto } from 'src/shareds/presentation/intl.dto';
