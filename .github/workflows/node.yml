@@ -14,16 +14,10 @@ jobs:
         run: echo "Hello world"
       - name: Checkout🛬
         uses: actions/checkout@v4
-        # NO usar submodules en CI/CD - usaremos el package
-
-      - name: Remove submodule (force package usage) 🗑️
-        run: |
-          if [ -d "src/domain" ]; then
-            rm -rf src/domain
-            echo "✅ Submodule removed - TypeScript will use package"
-          else
-            echo "✅ No submodule found - will use package"
-          fi
+        with:
+          submodules: true  # Descarga todos los submódulos
+          # submodules: recursive  # Descarga submódulos de forma recursiva
+          # token: ${{ secrets.GITHUB_TOKEN }}  # O un token personalizado si es necesario
 
       - name: Cache dependencies 🧠
         id: cache-node_modules
@@ -39,8 +33,6 @@ jobs:
       - name: Install dependencies 📩
         if: steps.cache-node_modules.outputs.cache-hit != true
         run: npm ci
-        env:
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
       - name: Build TypeScript 📦
         run: npm run build && find dist/src/main.js
       - name: Lint code 💅
