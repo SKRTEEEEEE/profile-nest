@@ -1,5 +1,6 @@
 import { createDomainError } from "src/domain/flows/error.registry";
 import { ErrorCodes } from "src/domain/flows/error.type";
+import { UserBase } from "src/domain/entities/user";
 
 
 /**

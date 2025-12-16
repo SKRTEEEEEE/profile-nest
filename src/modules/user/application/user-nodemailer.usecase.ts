@@ -9,6 +9,7 @@ import { VerifyLoginPayloadParams } from '@thirdweb-dev/auth';
 import { DatabaseFindError, SetEnvError } from 'src/domain/flows/domain.error';
 import { createDomainError } from 'src/domain/flows/error.registry';
 import { ErrorCodes } from 'src/domain/flows/error.type';
+import { UserFormS } from 'src/domain/entities/user';
 
 export type UserNodemailerUpdateProps =
   // payload: VerifyLoginPayloadParams,

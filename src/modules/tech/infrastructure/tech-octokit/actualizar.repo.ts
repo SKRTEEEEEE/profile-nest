@@ -3,6 +3,7 @@ import { FullTechData, LengBase, TechBase } from 'src/domain/entities/tech';
 import { TechReadUseCase } from 'src/modules/tech/application/tech-read.usecase';
 import { DBBase } from 'src/dynamic.types';;
 import { OctokitRepo } from 'src/shareds/octokit/infrastructure/octokit.service';
+import { PreTechBase } from 'src/domain/entities/pre-tech';
 
 // ⚠️ Hay que arreglar esto ⬇️⬇️
 const baseOptions = {
