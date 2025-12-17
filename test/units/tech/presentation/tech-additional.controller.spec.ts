@@ -7,6 +7,7 @@ import { TechOctokitUpdateRepo } from '../../../../src/modules/tech/infrastructu
 import { TechFindDeleteRepo } from '../../../../src/modules/tech/infrastructure/delete.repo';
 import { ReadAllParams, ActualizarGithubParams, TechFormCategory } from 'src/domain/entities/tech.type';
 import { InputParseError } from 'src/domain/flows/domain.error';
+import { ThrottlerGuard } from '@nestjs/throttler';
 
 describe('TechController', () => {
   let controller: TechController;
@@ -87,7 +88,7 @@ describe('TechController', () => {
         { provide: TechFindDeleteRepo, useValue: mockTechFindAndDeleteRepo },
       ],
     })
-      .overrideGuard(APP_GUARD)
+      .overrideGuard(ThrottlerGuard)
       .useValue({ canActivate: () => true })
       .compile();
 

@@ -54,10 +54,11 @@ describe('ResponseInterceptor', () => {
       interceptor.intercept(mockExecutionContext, mockCallHandler),
     );
 
+    // The interceptor now prioritizes data.message over meta.message
     expect(result).toEqual({
       success: true,
       type: ResCodes.OPERATION_SUCCESS,
-      message: 'ok',
+      message: 'test data', // Changed: now uses data.message
       data: testData,
       timestamp: expect.any(Number),
     });

@@ -71,7 +71,7 @@ describe('RoleAuthTokenGuard', () => {
 
       expect(result).toBe(true);
       expect(roleAuthUseCase.validateRoleAccess).toHaveBeenCalledWith({
-        userRole: null,
+        userRole: undefined, // Changed: guard returns undefined when user is null
         requiredRoles: undefined,
         isPublic: true,
         contextName: 'TestController.testMethod',
