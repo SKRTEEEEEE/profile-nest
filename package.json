@@ -23,7 +23,8 @@
     "test:e2e": "jest --config ./test/jest-e2e.json",
     "switch:latest": "node scripts/switch-version.js latest",
     "switch:main": "node scripts/switch-version.js main",
-    "check:branch": "node scripts/check-branch.js"
+    "check:branch": "node scripts/check-branch.js",
+    "latest-to-main": "node scripts/latest-to-main.js"
   },
   "dependencies": {
     "@nestjs/cache-manager": "^3.0.1",

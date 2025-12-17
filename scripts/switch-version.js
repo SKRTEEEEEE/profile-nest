@@ -103,30 +103,31 @@ function updateTsconfig() {
   console.log('✅ tsconfig.json updated');
 }
 
-// Verify domain tag (only for main)
-function verifyDomainTag() {
-  if (TARGET !== 'main') return;
-  
-  console.log('\n🏷️  Verifying domain tag...');
+// Get current branch
+function getCurrentBranch() {
   try {
-    const tag = execSync('git -C src/domain describe --tags --abbrev=0', { encoding: 'utf8' }).trim();
-    console.log(`✅ Domain tag found: ${tag}`);
+    return execSync('git rev-parse --abbrev-ref HEAD', { 
+      encoding: 'utf8',
+      cwd: ROOT
+    }).trim();
   } catch (error) {
-    console.error('❌ No domain tag found. Please create a tag in the domain submodule before switching to main.');
+    console.error('❌ Failed to get current branch');
     process.exit(1);
   }
 }
 
-// Checkout branch
-function checkoutBranch() {
-  console.log(`\n📌 Checking out ${TARGET} branch...`);
-  try {
-    execSync(`git checkout ${TARGET}`, { stdio: 'inherit', cwd: ROOT });
-    console.log(`✅ Switched to ${TARGET} branch`);
-  } catch (error) {
-    console.error(`❌ Failed to checkout ${TARGET} branch`);
+// Verify we're on the correct branch
+function verifyBranch() {
+  const currentBranch = getCurrentBranch();
+  console.log(`\n📍 Current branch: ${currentBranch}`);
+  
+  if (currentBranch !== TARGET) {
+    console.error(`❌ You are on '${currentBranch}' branch but trying to configure for '${TARGET}'.`);
+    console.error(`   Please checkout ${TARGET} first: git checkout ${TARGET}`);
     process.exit(1);
   }
+  
+  console.log(`✅ On correct branch: ${TARGET}`);
 }
 
 // Validate tsconfig paths and types
@@ -164,21 +165,21 @@ function runTypeCheck() {
 }
 
 // Main execution
-console.log(`\n🚀 Switching to ${TARGET.toUpperCase()} version...\n`);
+console.log(`\n🚀 Configuring for ${TARGET.toUpperCase()} version...\n`);
 
-checkoutBranch();
-verifyDomainTag();
+verifyBranch();
 replaceImports();
 updateTsconfig();
 validateTsconfig();
 runTypeCheck();
 
-console.log(`\n✨ Successfully switched to ${TARGET} version!`);
+console.log(`\n✨ Successfully configured for ${TARGET} version!`);
 console.log(`\nNext steps:`);
 if (TARGET === 'main') {
-  console.log(`  1. Install package: npm install @skrteeeeee/profile-domain@latest`);
-  console.log(`  2. Commit changes: git add . && git commit -m "chore: switch to main (package)"`);
+  console.log(`  1. Remove submodule: git rm -r src/domain && rm -rf src/domain`);
+  console.log(`  2. Install package: npm install @skrteeeeee/profile-domain@latest`);
+  console.log(`  3. Commit changes: git add . && git commit -m "chore: migrate to package domain"`);
 } else {
   console.log(`  1. Init submodule: git submodule update --init --recursive`);
-  console.log(`  2. Commit changes: git add . && git commit -m "chore: switch to latest (submodule)"`);
+  console.log(`  2. Commit changes: git add . && git commit -m "chore: migrate to submodule domain"`);
 }
