@@ -8,8 +8,8 @@ import {
   NotImplementedError,
   SharedActionError,
   ThrottleError,
-} from '../../../src/domain/flows/domain.error';
-import { ErrorCodes } from '../../../src/domain/flows/error.type';
+} from 'src/domain/flows/domain.error';
+import { ErrorCodes } from 'src/domain/flows/error.type';
 
 describe('Domain Errors', () => {
   class MockLocation {

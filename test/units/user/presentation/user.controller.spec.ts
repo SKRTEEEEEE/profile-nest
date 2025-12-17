@@ -11,7 +11,7 @@ import {
 } from '../../../../src/modules/user/application/user.usecase';
 import { UserNodemailerUpdateUseCase } from '../../../../src/modules/user/application/user-nodemailer.usecase';
 import { RoleDeleteByIdUseCase, RoleCreateUseCase } from '../../../../src/modules/role/application/role.usecase';
-import { RoleType } from '../../../../src/domain/entities/role.type';
+import { RoleType } from 'src/domain/entities/role.type';
 
 describe('UserController', () => {
   let controller: UserController;

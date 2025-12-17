@@ -2,7 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { getModelToken } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { MongooseUserRepo } from '../../../../src/modules/user/infrastructure/user.repo';
-import { RoleType } from '../../../../src/domain/entities/role.type';
+import { RoleType } from 'src/domain/entities/role.type';
 
 describe('MongooseUserRepo', () => {
   let repo: MongooseUserRepo;

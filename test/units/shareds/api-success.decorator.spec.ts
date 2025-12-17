@@ -1,5 +1,5 @@
 import { ApiSuccessResponse } from '../../../src/shareds/presentation/api-success.decorator';
-import { ResCodes } from '../../../src/domain/flows/res.type';
+import { ResCodes } from 'src/domain/flows/res.type';
 import { applyDecorators } from '@nestjs/common';
 
 // Mock applyDecorators

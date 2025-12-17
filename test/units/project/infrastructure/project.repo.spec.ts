@@ -2,7 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { getModelToken } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { MongooseProjectRepo } from '../../../../src/modules/project/infrastructure/project.repo';
-import { ProjectBase } from '../../../../src/domain/entities/project';
+import { ProjectBase } from 'src/domain/entities/project';
 
 describe('MongooseProjectRepo', () => {
   let repo: MongooseProjectRepo;

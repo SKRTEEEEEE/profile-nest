@@ -3,7 +3,7 @@ import { ExecutionContext, CallHandler } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { NativeLoggerService } from '../../../src/shareds/presentation/native-logger.service';
 import { of, firstValueFrom } from 'rxjs';
-import { ResCodes } from '../../../src/domain/flows/res.type';
+import { ResCodes } from 'src/domain/flows/res.type';
 
 describe('ResponseInterceptor', () => {
   let interceptor: ResponseInterceptor<any>;

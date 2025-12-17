@@ -2,8 +2,8 @@ import { TopicChartUseCase } from '../../../src/shareds/chart/application/topic-
 import { TopicChartInterface, renderTopicAlphaTripleProps, RenderAlphaSimpleProps } from '../../../src/shareds/chart/application/topic-chart.interface';
 import { TopicCalculatorUseCase } from '../../../src/shareds/topic/application/topic-calculator.usecase';
 import { RepoDetailsRes } from '../../../src/shareds/octokit/application/octokit.interface';
-import { ErrorCodes } from '../../../src/domain/flows/error.type';
-import { NotImplementedError, InputParseError } from '../../../src/domain/flows/domain.error';
+import { ErrorCodes } from 'src/domain/flows/error.type';
+import { NotImplementedError, InputParseError } from 'src/domain/flows/domain.error';
 
 describe('TopicChartUseCase', () => {
   let useCase: TopicChartUseCase;

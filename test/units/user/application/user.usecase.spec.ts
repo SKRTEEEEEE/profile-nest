@@ -10,7 +10,8 @@ import {
 } from '../../../../src/modules/user/application/user.usecase';
 import { UserInterface } from '../../../../src/modules/user/application/user.interface';
 import { DBBase } from '../../../../src/dynamic.types';
-import { ErrorCodes } from '../../../../src/domain/flows/error.type';
+import { ErrorCodes } from 'src/domain/flows/error.type';
+import { UserBase } from 'src/domain/entities/user';
 
 describe('User UseCases', () => {
   let mockUserRepository: jest.Mocked<UserInterface>;

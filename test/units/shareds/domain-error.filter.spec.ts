@@ -2,8 +2,8 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { HttpStatus, ArgumentsHost } from '@nestjs/common';
 import { DomainErrorFilter, errorCodeStatus } from '../../../src/shareds/presentation/filters/domain-error.filter';
 import { NativeLoggerService } from '../../../src/shareds/presentation/native-logger.service';
-import { DatabaseActionError, InputParseError, UnauthorizedError } from '../../../src/domain/flows/domain.error';
-import { ErrorCodes } from '../../../src/domain/flows/error.type';
+import { DatabaseActionError, InputParseError, UnauthorizedError } from 'src/domain/flows/domain.error';
+import { ErrorCodes } from 'src/domain/flows/error.type';
 
 describe('DomainErrorFilter', () => {
   let filter: DomainErrorFilter;

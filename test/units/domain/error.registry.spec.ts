@@ -1,5 +1,5 @@
-import { createDomainError, ERROR_CLASS_REGISTRY } from '../../../src/domain/flows/error.registry';
-import { ErrorCodes } from '../../../src/domain/flows/error.type';
+import { createDomainError, ERROR_CLASS_REGISTRY } from 'src/domain/flows/error.registry';
+import { ErrorCodes } from 'src/domain/flows/error.type';
 import {
   DatabaseActionError,
   DatabaseFindError,
@@ -9,7 +9,7 @@ import {
   NotImplementedError,
   SharedActionError,
   ThrottleError,
-} from '../../../src/domain/flows/domain.error';
+} from 'src/domain/flows/domain.error';
 
 describe('Error Registry', () => {
   class MockLocation {

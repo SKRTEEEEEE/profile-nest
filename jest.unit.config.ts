@@ -5,25 +5,12 @@ const config = {
   testRegex: 'test/units/.*\\.spec\\.ts$',
   testPathIgnorePatterns: [
     // Temporarily exclude tests with complex type/mock issues
-    'test/units/role/',
-    'test/units/user/application/user-additional.usecase.spec.ts',
-    'test/units/user/presentation/user.controller.spec.ts',
-    'test/units/user/infrastructure/user.repo.spec.ts',
-    'test/units/tech/presentation/tech-additional.controller.spec.ts',
-    'test/units/tech/infrastructure/tech.repo.spec.ts',
-    'test/units/project/infrastructure/project.repo.spec.ts',
     'test/units/shareds/api-error.decorator.spec.ts',
     'test/units/shareds/api-success.decorator.spec.ts',
     'test/units/shareds/jwt-auth-mock.strategy.spec.ts',
     'test/units/shareds/jwt-auth-thirdweb.guard.spec.ts',
     'test/units/shareds/topic-calculator.usecase.spec.ts',
-    'test/units/shareds/topic-chart.usecase.spec.ts',
     'test/units/shareds/topic-chart-additional.usecase.spec.ts',
-    'test/units/shareds/response.interceptor.spec.ts',
-    'test/units/shareds/role-auth.usecase.spec.ts',
-    'test/units/shareds/role-auth-token.guard.spec.ts',
-    'test/units/shareds/domain-error.filter.spec.ts',
-    'test/units/domain/domain.error.spec.ts',
     'test/units/app.module.spec.ts',
     'test/units/shareds/octokit.service.spec.ts',
   ],
@@ -31,6 +18,13 @@ const config = {
     '^.+\\.(t|j)s$': 'ts-jest',
   },
   moduleNameMapper: {
+    // Map domain imports to the actual submodule location
+    '^src/domain/entities/(.*)$': '<rootDir>/src/domain/src/entities/$1',
+    '^src/domain/flows/(.*)$': '<rootDir>/src/domain/src/flows/$1',
+    '^src/domain/entities$': '<rootDir>/src/domain/src/entities',
+    '^src/domain/flows$': '<rootDir>/src/domain/src/flows',
+    '^src/domain$': '<rootDir>/src/domain/src/index',
+    // General src mapping (must be last)
     '^src/(.*)$': '<rootDir>/src/$1',
   },
   collectCoverageFrom: [

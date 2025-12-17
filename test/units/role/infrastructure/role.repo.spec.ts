@@ -1,9 +1,9 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { getModelToken } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { MongooseRoleRepo } from '../../../../src/modules/role/infrastructure/role.repo';
-import { RoleBase } from '../../../../src/domain/entities/role';
-import { RoleType } from '../../../../src/domain/entities/role.type';
+import { MongooseRoleRepo } from 'src/modules/role/infrastructure/role.repo';
+import { RoleBase } from 'src/domain/entities/role';
+import { RoleType } from 'src/domain/entities/role.type';
 
 describe('MongooseRoleRepo', () => {
   let repo: MongooseRoleRepo;

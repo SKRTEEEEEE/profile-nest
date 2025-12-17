@@ -1,4 +1,4 @@
-import { ErrorCodes } from '../../../src/domain/flows/error.type';
+import { ErrorCodes } from 'src/domain/flows/error.type';
 
 // Mock dependencies before importing the decorator
 jest.mock('@nestjs/common', () => ({

@@ -7,7 +7,7 @@ import {
   TechDeleteUseCase,
 } from '../../../../src/modules/tech/application/tech.usecase';
 import { TechInterface } from '../../../../src/modules/tech/application/tech.interface';
-import { TechBase, LengBase, TechForm } from '../../../../src/domain/entities/tech';
+import { TechBase, LengBase, TechForm } from 'src/domain/entities/tech';
 import { DBBase } from '../../../../src/dynamic.types';
 
 describe('Tech Use Cases', () => {
