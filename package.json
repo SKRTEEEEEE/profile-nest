@@ -20,7 +20,10 @@
     "test:watch": "jest --watch --config jest.unit.config.ts",
     "test:cov": "jest --coverage --config jest.unit.config.ts",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand --config jest.unit.config.ts",
-    "test:e2e": "jest --config ./test/jest-e2e.json"
+    "test:e2e": "jest --config ./test/jest-e2e.json",
+    "switch:latest": "node scripts/switch-version.js latest",
+    "switch:main": "node scripts/switch-version.js main",
+    "check:branch": "node scripts/check-branch.js"
   },
   "dependencies": {
     "@nestjs/cache-manager": "^3.0.1",
