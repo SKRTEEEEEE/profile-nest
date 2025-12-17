@@ -3,6 +3,7 @@ import { getModelToken } from '@nestjs/mongoose';
 import { MongooseTechRepo } from 'src/modules/tech/infrastructure/tech.repo';
 import { Model } from 'mongoose';
 import { LengBase } from 'src/domain/entities/tech';
+import { NativeLoggerService } from 'src/shareds/presentation/native-logger.service';
 
 describe('MongooseTechRepo', () => {
   let repo: MongooseTechRepo;
@@ -23,6 +24,15 @@ describe('MongooseTechRepo', () => {
         {
           provide: getModelToken('Lenguaje'),
           useValue: mockModel,
+        },
+        {
+          provide: NativeLoggerService,
+          useValue: {
+            log: jest.fn(),
+            error: jest.fn(),
+            warn: jest.fn(),
+            debug: jest.fn(),
+          },
         },
       ],
     }).compile();

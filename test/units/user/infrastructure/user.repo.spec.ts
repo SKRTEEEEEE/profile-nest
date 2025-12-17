@@ -3,6 +3,7 @@ import { getModelToken } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { MongooseUserRepo } from '../../../../src/modules/user/infrastructure/user.repo';
 import { RoleType } from 'src/domain/entities/role.type';
+import { NativeLoggerService } from '../../../../src/shareds/presentation/native-logger.service';
 
 describe('MongooseUserRepo', () => {
   let repo: MongooseUserRepo;
@@ -40,6 +41,15 @@ describe('MongooseUserRepo', () => {
         {
           provide: getModelToken('User'),
           useValue: mockModel,
+        },
+        {
+          provide: NativeLoggerService,
+          useValue: {
+            log: jest.fn(),
+            error: jest.fn(),
+            warn: jest.fn(),
+            debug: jest.fn(),
+          },
         },
       ],
     }).compile();

@@ -86,7 +86,10 @@ describe('TechController', () => {
         { provide: TechOctokitUpdateRepo, useValue: mockTechOctokitUpdateRepo },
         { provide: TechFindDeleteRepo, useValue: mockTechFindAndDeleteRepo },
       ],
-    }).compile();
+    })
+      .overrideGuard(APP_GUARD)
+      .useValue({ canActivate: () => true })
+      .compile();
 
     controller = module.get<TechController>(TechController);
   });

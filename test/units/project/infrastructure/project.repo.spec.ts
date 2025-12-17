@@ -3,6 +3,7 @@ import { getModelToken } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { MongooseProjectRepo } from '../../../../src/modules/project/infrastructure/project.repo';
 import { ProjectBase } from 'src/domain/entities/project';
+import { NativeLoggerService } from '../../../../src/shareds/presentation/native-logger.service';
 
 describe('MongooseProjectRepo', () => {
   let repo: MongooseProjectRepo;
@@ -42,6 +43,15 @@ describe('MongooseProjectRepo', () => {
         {
           provide: getModelToken('Project'),
           useValue: mockModel,
+        },
+        {
+          provide: NativeLoggerService,
+          useValue: {
+            log: jest.fn(),
+            error: jest.fn(),
+            warn: jest.fn(),
+            debug: jest.fn(),
+          },
         },
       ],
     }).compile();
