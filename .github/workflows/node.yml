@@ -2,6 +2,8 @@ name: '🐢 Node'
 
 on:
   push:
+    branches-ignore:
+      - main
 
 permissions:
   contents: write

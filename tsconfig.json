@@ -17,31 +17,24 @@
     "noImplicitAny": false,
     "strictBindCallApply": false,
     "noFallthroughCasesInSwitch": false,
-    // Con use this for more similarity with frontend
     "paths": {
-      "src/*": ["src/*"],
-      // Hybrid approach: Use submodule in dev (with fallback to package)
-      // In CI/CD: submodule is deleted, so it uses submodule paths that we'll copy from package
-      
-      // Pattern: src/domain/entities/* and src/domain/flows/*
-      "src/domain/entities/*": [
-        "src/domain/src/entities/*"                            // Submodule (or symlink to package)
+      "src/*": [
+        "src/*"
       ],
-      "src/domain/flows/*": [
-        "src/domain/src/flows/*"                               // Submodule (or symlink to package)
+      "src/domain": [
+        "src/domain/src/index"
       ],
-      
-      // Direct file imports
       "src/domain/entities": [
         "src/domain/src/entities"
+      ],
+      "src/domain/entities/*": [
+        "src/domain/src/entities/*"
       ],
       "src/domain/flows": [
         "src/domain/src/flows"
       ],
-      
-      // Barrel exports
-      "src/domain": [
-        "src/domain/src/index"                                 // Submodule barrel
+      "src/domain/flows/*": [
+        "src/domain/src/flows/*"
       ]
     }
   }
