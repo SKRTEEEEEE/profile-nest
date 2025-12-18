@@ -36,7 +36,8 @@ const CONFIG = {
   },
   main: {
     name: 'main (Package)',
-    fromPattern: /src\/domain(\/[a-zA-Z0-9_\-\/]+)?/g,
+    // Regex to match 'src/domain' followed by anything or nothing, and replace with package
+    fromPattern: /src\/domain(\/[a-zA-Z0-9_\-\/\.]+)?/g,
     toPath: '@skrteeeeee/profile-domain',
     tsconfigPaths: {} // Intentionally empty to remove domain paths
   }
