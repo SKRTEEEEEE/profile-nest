@@ -91,18 +91,18 @@ console.log(`\n🚀 Switching to: ${activeConfig.name}`);
 // 1. Verify Branch (Skip if auto-merge)
 if (!IS_AUTO_MERGE) {
   const branch = getCurrentBranch();
-  console.log(`\n📍 [1/7] Branch Check: ${branch}`);
+  console.log(`\n📍 [1/8] Branch Check: ${branch}`);
   if (branch !== TARGET) {
     console.error(`❌ Mismatch! You are configuring for '${TARGET}' but on branch '${branch}'.`);
     console.error(`   Use 'git checkout ${TARGET}' first.`);
     process.exit(1);
   }
 } else {
-  console.log(`\n📍 [1/7] Branch Check: Skipped (Auto-merge mode)`);
+  console.log(`\n📍 [1/8] Branch Check: Skipped (Auto-merge mode)`);
 }
 
 // 2. Replace Imports
-console.log(`\n🔄 [2/7] Updating imports...`);
+console.log(`\n🔄 [2/8] Updating imports...`);
 // Search in both SRC_DIR and TEST_DIR
 const files = [...findTsFiles(SRC_DIR), ...findTsFiles(TEST_DIR)];
 let changedCount = 0;
@@ -120,7 +120,7 @@ files.forEach(file => {
 console.log(`✅ Updated ${changedCount} files.`);
 
 // 3. Validate package.json
-console.log(`\n📦 [3/7] Validating package.json...`);
+console.log(`\n📦 [3/8] Validating package.json...`);
 try {
   const pkg = readJson(PACKAGE_JSON_PATH);
   if (TARGET === 'main') {
@@ -137,7 +137,7 @@ try {
 }
 
 // 4. Update tsconfig.json
-console.log(`\n🔧 [4/7] Updating tsconfig.json...`);
+console.log(`\n🔧 [4/8] Updating tsconfig.json...`);
 try {
   const tsconfig = readJson(TSCONFIG_PATH);
 
@@ -171,7 +171,7 @@ try {
 }
 
 // 5. Clean (dist + node_modules)
-console.log(`\n🧹 [5/7] Cleaning (dist, node_modules)...`);
+console.log(`\n🧹 [5/8] Cleaning (dist, node_modules)...`);
 try {
   if (fs.existsSync(path.join(ROOT, 'dist'))) {
     fs.rmSync(path.join(ROOT, 'dist'), { recursive: true, force: true });
@@ -185,8 +185,32 @@ try {
   // Don't exit, try to continue
 }
 
-// 6. Install Dependencies
-console.log(`\n📥 [6/7] Installing dependencies...`);
+// 6. Load Environment (NPM_TOKEN)
+console.log(`\n🔑 [6/8] Loading environment variables...`);
+const ENV_PATH = path.join(ROOT, '.env');
+if (fs.existsSync(ENV_PATH)) {
+  const envConfig = fs.readFileSync(ENV_PATH, 'utf8');
+  envConfig.split('\n').forEach(line => {
+    const match = line.match(/^([^=]+)=(.*)$/);
+    if (match) {
+      const key = match[1].trim();
+      const value = match[2].trim().replace(/^['"]|['"]$/g, ''); // Remove quotes
+      if (!process.env[key]) {
+        process.env[key] = value;
+      }
+    }
+  });
+  if (process.env.NPM_TOKEN) {
+    console.log('   ✅ NPM_TOKEN loaded from .env');
+  } else {
+    console.log('   ⚠️ NPM_TOKEN not found in .env (if needed)');
+  }
+} else {
+  console.log('   ℹ️ No .env file found.');
+}
+
+// 7. Install Dependencies
+console.log(`\n📥 [7/8] Installing dependencies...`);
 try {
   // If main, make sure we install the package. If latest, we might just npm install.
   if (TARGET === 'main') {
@@ -205,8 +229,8 @@ try {
   process.exit(1);
 }
 
-// 7. Validate Types
-console.log(`\n🔎 [7/7] Strict type check (tsc --noEmit)...`);
+// 8. Validate Types
+console.log(`\n🔎 [8/8] Strict type check (tsc --noEmit)...`);
 try {
   execSync('npx -p typescript tsc --noEmit', { stdio: 'inherit', cwd: ROOT });
   console.log(`✅ Type check passed.`);
