@@ -150,7 +150,7 @@ try {
 // 4. Validate Types
 console.log(`\n🔎 strict type check (tsc --noEmit)...`);
 try {
-  execSync('npx tsc --noEmit', { stdio: 'inherit', cwd: ROOT });
+  execSync('npx -p typescript tsc --noEmit', { stdio: 'inherit', cwd: ROOT });
   console.log(`✅ Type check passed.`);
 } catch (error) {
   console.error(`❌ Type check failed. Please check errors above.`);
@@ -158,4 +158,3 @@ try {
 }
 
 console.log(`\n✨ Successfully switched to ${TARGET} version!\n`);
-
