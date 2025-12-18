@@ -5,8 +5,9 @@ import { TechOctokitCreateRepo } from '../../../../src/modules/tech/infrastructu
 import { TechOctokitActualizarGithubRepo, ActualizarGithubType } from '../../../../src/modules/tech/infrastructure/tech-octokit/actualizar.repo';
 import { TechOctokitUpdateRepo } from '../../../../src/modules/tech/infrastructure/tech-octokit/update.repo';
 import { TechFindDeleteRepo } from '../../../../src/modules/tech/infrastructure/delete.repo';
-import { ReadAllParams, ActualizarGithubParams, TechFormCategory } from '../../../../src/domain/entities/tech.type';
-import { InputParseError } from '../../../../src/domain/flows/domain.error';
+import { ReadAllParams, ActualizarGithubParams, TechFormCategory } from '@skrteeeeee/profile-domain';
+import { InputParseError } from '@skrteeeeee/profile-domain';
+import { ThrottlerGuard } from '@nestjs/throttler';
 
 describe('TechController', () => {
   let controller: TechController;
@@ -86,7 +87,10 @@ describe('TechController', () => {
         { provide: TechOctokitUpdateRepo, useValue: mockTechOctokitUpdateRepo },
         { provide: TechFindDeleteRepo, useValue: mockTechFindAndDeleteRepo },
       ],
-    }).compile();
+    })
+      .overrideGuard(ThrottlerGuard)
+      .useValue({ canActivate: () => true })
+      .compile();
 
     controller = module.get<TechController>(TechController);
   });

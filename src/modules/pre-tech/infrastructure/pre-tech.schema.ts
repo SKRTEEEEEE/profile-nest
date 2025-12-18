@@ -1,6 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
-import { PreTechBase } from '@skrteeeeee/profile-domain/dist/entities/pre-tech';
+import { PreTechBase } from '@skrteeeeee/profile-domain';
 
 @Schema({ timestamps: true, collection: 'ptechs' }) // 👈 aquí forzas el nombre
 export class PreTechSchemaDocument extends Document implements PreTechBase {

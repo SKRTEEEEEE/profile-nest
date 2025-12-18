@@ -3,7 +3,7 @@ import { Reflector } from '@nestjs/core';
 import { JwtAuthThirdwebGuard } from 'src/shareds/jwt-auth/presentation/jwt-auth-thirdweb.guard';
 import { PUBLIC_ROUTE_KEY } from 'src/shareds/jwt-auth/presentation/public-route.decorator';
 import { ROLES_KEY } from 'src/shareds/role-auth/presentation/role.decorator';
-import { RoleType } from 'src/domain/entities/role.type';
+import { RoleType } from '@skrteeeeee/profile-domain';
 
 describe('JwtAuthThirdwebGuard', () => {
   let guard: JwtAuthThirdwebGuard;

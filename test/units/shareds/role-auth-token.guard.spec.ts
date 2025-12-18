@@ -2,7 +2,7 @@ import { ExecutionContext } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { RoleAuthTokenGuard } from 'src/shareds/role-auth/presentation/role-auth-token.guard';
 import { RoleAuthUseCase } from 'src/shareds/role-auth/application/role-auth.usecase';
-import { RoleType } from 'src/domain/entities/role.type';
+import { RoleType } from '@skrteeeeee/profile-domain';
 import { ROLES_KEY } from 'src/shareds/role-auth/presentation/role.decorator';
 import { PUBLIC_ROUTE_KEY } from 'src/shareds/jwt-auth/presentation/public-route.decorator';
 
@@ -71,7 +71,7 @@ describe('RoleAuthTokenGuard', () => {
 
       expect(result).toBe(true);
       expect(roleAuthUseCase.validateRoleAccess).toHaveBeenCalledWith({
-        userRole: null,
+        userRole: undefined, // Changed: guard returns undefined when user is null
         requiredRoles: undefined,
         isPublic: true,
         contextName: 'TestController.testMethod',

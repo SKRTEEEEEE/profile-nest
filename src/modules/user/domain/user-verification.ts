@@ -1,6 +1,6 @@
-import { createDomainError } from '@skrteeeeee/profile-domain/dist/flows/error.registry';
-import { ErrorCodes } from '@skrteeeeee/profile-domain/dist/flows/error.type';
-import { UserBase } from '@skrteeeeee/profile-domain/dist/entities/user';
+import { createDomainError } from "@skrteeeeee/profile-domain";
+import { ErrorCodes } from "@skrteeeeee/profile-domain";
+import { UserBase } from "@skrteeeeee/profile-domain";
 
 
 /**

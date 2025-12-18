@@ -6,7 +6,7 @@ import {
 } from 'src/modules/project/application/project.usecase';
 import { ProjectInterface } from 'src/modules/project/application/project.interface';
 import { PROJECT_REPOSITORY } from 'src/modules/tokens';
-import { ProjectBase } from 'src/domain/entities/project';
+import { ProjectBase } from '@skrteeeeee/profile-domain';
 import { DBBase } from 'src/dynamic.types';
 import { NativeLoggerService } from 'src/shareds/presentation/native-logger.service';
 

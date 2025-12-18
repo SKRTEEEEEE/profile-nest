@@ -6,7 +6,7 @@ import { USER_REPOSITORY } from 'src/modules/tokens';
 import { DBBase } from 'src/dynamic.types';
 import { CreateProps, UpdateByIdProps } from 'src/shareds/pattern/application/interfaces/cru';
 import { UserVerification } from '../domain/user-verification';
-import { UserBase } from '@skrteeeeee/profile-domain/dist/entities/user';
+import { UserBase } from '@skrteeeeee/profile-domain';
 
 @Injectable()
 export class UserCreateUseCase {

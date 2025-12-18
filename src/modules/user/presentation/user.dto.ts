@@ -8,7 +8,7 @@ import {
 } from 'class-validator';
 import { apiRoleType, RoleType } from '@skrteeeeee/profile-domain/dist/entities/role.type';
 import { DBBase } from 'src/dynamic.types';;
-import { UserBase, UserFormS } from '@skrteeeeee/profile-domain/dist/entities/user';
+import { UserBase, UserFormS } from '@skrteeeeee/profile-domain';
 import { AuthThirdWebVerifyPayloadDto } from 'src/shareds/thirdweb/auth-thirdweb.dto';
 import { LoginPayload } from 'thirdweb/auth';
 import { UserNodemailerUpdateProps } from '../application/user-nodemailer.usecase';

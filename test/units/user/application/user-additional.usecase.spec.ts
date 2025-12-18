@@ -10,7 +10,8 @@ import {
 } from '../../../../src/modules/user/application/user.usecase';
 import { UserInterface } from '../../../../src/modules/user/application/user.interface';
 import { DBBase } from '../../../../src/dynamic.types';
-import { DatabaseFindError, UnauthorizedError, DatabaseActionError } from '../../../../src/domain/flows/domain.error';
+import { DatabaseFindError, UnauthorizedError, DatabaseActionError } from '@skrteeeeee/profile-domain';
+import { UserBase } from '@skrteeeeee/profile-domain';
 
 describe('User Use Cases', () => {
   let mockUserRepository: jest.Mocked<UserInterface>;

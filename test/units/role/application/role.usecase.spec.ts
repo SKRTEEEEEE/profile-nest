@@ -7,9 +7,9 @@ import {
   RoleDeleteUseCase,
 } from '../../../../src/modules/role/application/role.usecase';
 import { RoleInterface } from '../../../../src/modules/role/application/role.interface';
-import { RoleBase } from '../../../../src/domain/entities/role';
-import { DBBase } from '../../../../src/dynamic.types';
-import { RoleType } from '../../../../src/domain/entities/role.type';
+import { RoleBase } from '@skrteeeeee/profile-domain';
+import { DBBase } from 'src/dynamic.types';
+import { RoleType } from '@skrteeeeee/profile-domain';
 
 describe('Role Use Cases', () => {
   let mockRoleRepository: jest.Mocked<RoleInterface>;

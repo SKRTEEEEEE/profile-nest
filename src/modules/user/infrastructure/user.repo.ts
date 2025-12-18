@@ -11,7 +11,7 @@ import { createDomainError } from '@skrteeeeee/profile-domain/dist/flows/error.r
 import { ErrorCodes } from '@skrteeeeee/profile-domain/dist/flows/error.type';
 import { RoleType } from '@skrteeeeee/profile-domain/dist/entities/role.type';
 import { MongooseDocument } from 'src/shareds/pattern/infrastructure/types/mongoose';
-import { UserBase, UserFormS } from '@skrteeeeee/profile-domain/dist/entities/user';
+import { UserBase, UserFormS } from '@skrteeeeee/profile-domain';
 
 @Injectable()
 export class MongooseUserRepo

@@ -1,6 +1,6 @@
 import { ForbiddenException } from '@nestjs/common';
 import { RoleAuthUseCase } from '../../../src/shareds/role-auth/application/role-auth.usecase';
-import { RoleType } from '../../../src/domain/entities/role.type';
+import { RoleType } from '@skrteeeeee/profile-domain';
 
 describe('RoleAuthUseCase', () => {
   let useCase: RoleAuthUseCase;

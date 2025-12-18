@@ -17,11 +17,9 @@
     "noImplicitAny": false,
     "strictBindCallApply": false,
     "noFallthroughCasesInSwitch": false,
-    // Con use this for more similarity with frontend
     "paths": {
-      "src/*": ["src/*"],
-      "@skrteeeeee/profile-domain/*": [
-        "node_modules/@skrteeeeee/profile-domain/*"
+      "src/*": [
+        "src/*"
       ]
     }
   }

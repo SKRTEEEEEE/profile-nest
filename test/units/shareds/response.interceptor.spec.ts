@@ -3,7 +3,7 @@ import { ExecutionContext, CallHandler } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { NativeLoggerService } from '../../../src/shareds/presentation/native-logger.service';
 import { of, firstValueFrom } from 'rxjs';
-import { ResCodes } from '../../../src/domain/flows/res.type';
+import { ResCodes } from '@skrteeeeee/profile-domain';
 
 describe('ResponseInterceptor', () => {
   let interceptor: ResponseInterceptor<any>;
@@ -54,10 +54,11 @@ describe('ResponseInterceptor', () => {
       interceptor.intercept(mockExecutionContext, mockCallHandler),
     );
 
+    // The interceptor now prioritizes data.message over meta.message
     expect(result).toEqual({
       success: true,
       type: ResCodes.OPERATION_SUCCESS,
-      message: 'ok',
+      message: 'test data', // Changed: now uses data.message
       data: testData,
       timestamp: expect.any(Number),
     });

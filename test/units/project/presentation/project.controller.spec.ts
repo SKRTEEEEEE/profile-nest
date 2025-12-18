@@ -3,7 +3,7 @@ import { ProjectController } from 'src/modules/project/presentation/project.cont
 import { ProjectReadByIdUseCase, ProjectReadEjemploUseCase, ProjectPopulateUseCase } from 'src/modules/project/application/project.usecase';
 import { RoleAuthTokenGuard } from 'src/shareds/role-auth/presentation/role-auth-token.guard';
 import { ThrottlerGuard } from '@nestjs/throttler';
-import { ProjectBase } from 'src/domain/entities/project';
+import { ProjectBase } from '@skrteeeeee/profile-domain';
 import { DBBase } from 'src/dynamic.types';
 
 describe('ProjectController', () => {
