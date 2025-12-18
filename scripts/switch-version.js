@@ -24,31 +24,8 @@ const PACKAGE_JSON_PATH = path.join(ROOT, 'package.json');
 const CONFIG = {
   latest: {
     name: 'latest (Submodule)',
-    // Replace package with src/domain path
-    // We want to replace '@skrteeeeee/profile-domain' with 'src/domain'
-    // This allows sub-paths like '@skrteeeeee/profile-domain/entities/user' -> 'src/domain/entities/user'
-    // BUT user said: "el cambio ha de substituir la ruta entera ... -> SI '@skrteeeeee/profile-domain'" when going to main.
-    // So for latest, we reverse it: '@skrteeeeee/profile-domain' -> 'src/domain' (preserving subpaths?)
-    // Actually, if main uses flat package, we need to map flat package to deep src/domain?
-    // Let's assume standard behavior based on user feedback:
-    // main: src/domain/entities/x -> @skrteeeeee/profile-domain
-    // latest: @skrteeeeee/profile-domain -> src/domain/entities/x ?? -> THIS IS HARD if purely regex.
-    // CHECK USER REQUEST AGAIN: "from 'src/domain/entities/pre-tech' -> ... -> SI '@skrteeeeee/profile-domain'"
-    // This implies the package exports everything flat. 
-    // IF we are going back to latest, we need to know WHERE it came from. 
-    // This is tricky without AST. 
-    // However, if we assume the user maintains the code in 'latest' and only pushes to 'main' for release,
-    // then 'switch:latest' is less critical to get perfectly right IF we assume 'latest' is the source of truth forever.
-    // But 'switch:latest' allows moving back.
-    // Let's stick to the user's specific request for MAIN first: replace ANY src/domain/... path with JUST @skrteeeeee/profile-domain
-
     fromPattern: /@skrteeeeee\/profile-domain/g,
     toPath: 'src/domain',
-    // ^ This revert is imperfect if main collapsed paths. But let's keep it simple for now or usage will break.
-    // If main collapses 'src/domain/entities/user' to '@pkg', then '@pkg' -> 'src/domain' is 'src/domain' (missing /entities/user).
-    // The user might rely on auto-import to fix this in IDE, but script might break it.
-    // For now, let's focus on latest->main correctness.
-
     tsconfigPaths: {
       "src/domain/entities/*": ["src/domain/src/entities/*"],
       "src/domain/flows/*": ["src/domain/src/flows/*"],
@@ -59,7 +36,6 @@ const CONFIG = {
   },
   main: {
     name: 'main (Package)',
-    // Regex to match 'src/domain' followed by anything or nothing, and replace with package
     fromPattern: /src\/domain(\/[a-zA-Z0-9_\-\/]+)?/g,
     toPath: '@skrteeeeee/profile-domain',
     tsconfigPaths: {} // Intentionally empty to remove domain paths
@@ -197,18 +173,16 @@ try {
 // 5. Clean (dist + node_modules)
 console.log(`\n🧹 [5/7] Cleaning (dist, node_modules)...`);
 try {
-  execSync('rm -rf dist node_modules', { stdio: 'inherit', cwd: ROOT });
+  if (fs.existsSync(path.join(ROOT, 'dist'))) {
+    fs.rmSync(path.join(ROOT, 'dist'), { recursive: true, force: true });
+  }
+  if (fs.existsSync(path.join(ROOT, 'node_modules'))) {
+    fs.rmSync(path.join(ROOT, 'node_modules'), { recursive: true, force: true });
+  }
   console.log(`✅ Cleaned.`);
 } catch (e) {
-  // Use rm -rf equivalent for Windows if needed, but 'rm -rf' usually works in git bash/powershell if available,
-  // or use fs.rmSync in node > 14
-  try {
-    fs.rmSync(path.join(ROOT, 'dist'), { recursive: true, force: true });
-    fs.rmSync(path.join(ROOT, 'node_modules'), { recursive: true, force: true });
-    console.log(`✅ Cleaned (fs).`);
-  } catch (fsErr) {
-    console.error(`❌ Failed to clean: ${fsErr.message}`);
-  }
+  console.error(`❌ Failed to clean: ${e.message}`);
+  // Don't exit, try to continue
 }
 
 // 6. Install Dependencies
@@ -234,20 +208,10 @@ try {
 // 7. Validate Types
 console.log(`\n🔎 [7/7] Strict type check (tsc --noEmit)...`);
 try {
-  // Use -p tsconfig.build.json to ignore tests during this check if desired
-  // But user complained about tests NOT being updated, implying they SHOULD be checked or at least consistent.
-  // Assuming we fixed the imports in tests, we SHOULD be able to check everything? 
-  // User pointed out: "No se estan aplicando los cambios en los archivos de test".
-  // If we fix that, `tsc` (standard) should pass if types are correct.
-  // HOWEVER, missing types for 'jest', 'expect' etc suggest env issues in 'main'. 
-  // Let's stick to standard `tsc` now that we fixed specific file inclusions. If it fails on 'expect', it's a separate config issue.
-  // But to be safe and ensure CI passes build, let's check build config at least.
-
   execSync('npx -p typescript tsc --noEmit', { stdio: 'inherit', cwd: ROOT });
   console.log(`✅ Type check passed.`);
 } catch (error) {
   console.error(`❌ Type check failed.`);
-  console.log('   (Note: If errors are only in filtered tests, you might want to adjust tsconfig or switch logic)');
   process.exit(1);
 }
 
