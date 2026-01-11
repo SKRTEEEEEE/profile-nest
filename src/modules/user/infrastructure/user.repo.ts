@@ -24,28 +24,30 @@ export class MongooseUserRepo
     private readonly logger: NativeLoggerService,
   ) {
     super(userModel);
+    console.log('[MongooseUserRepo.constructor] User model:', !!this.userModel);
   }
   async readOne(
     filter: Record<string, any>,
-  ): Promise<UserBase & DBBase> {
+  ): Promise<(UserBase & DBBase) | null> {
     try {
+      console.log('[MongooseUserRepo.readOne] Searching with filter:', JSON.stringify(filter));
       const doc = await this.userModel.findOne(filter);
-      if (!doc)
-        throw createDomainError(
-          ErrorCodes.DATABASE_FIND,
-          MongooseUserRepo,
-          'readOne',
-          undefined,
-          { optionalMessage: 'Error en la operación de lectura' },
-        );
+      console.log('[MongooseUserRepo.readOne] Document found:', !!doc);
+      if (!doc) {
+        console.log('[MongooseUserRepo.readOne] No document found, returning null');
+        return null;
+      }
+      console.log('[MongooseUserRepo.readOne] Converting document to primary');
       return this.documentToPrimary(doc);
     } catch (error) {
+      console.log('[MongooseUserRepo.readOne] Error:', error instanceof Error ? error.message : String(error));
+      console.log('[MongooseUserRepo.readOne] Stack:', error instanceof Error ? error.stack : 'No stack');
       throw createDomainError(
         ErrorCodes.DATABASE_FIND,
         MongooseUserRepo,
         'readOne',
         undefined,
-        { optionalMessage: 'Error en la operación de lectura' },
+        { optionalMessage: `Error en la operación de lectura: ${error instanceof Error ? error.message : String(error)}` },
       );
     }
   }
@@ -127,7 +129,7 @@ export class MongooseUserRepo
     } & DBBase
   > {
     try {
-      const res = await this.userModel.findOne({ filter: address });
+      const res = await this.userModel.findOne({ address: address });
       if (!res)
         throw createDomainError(
           ErrorCodes.DATABASE_FIND,

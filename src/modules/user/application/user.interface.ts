@@ -10,5 +10,5 @@ export interface UserInterface extends CRUI<UserBase> {
   ): Promise<UserBase & DBBase>;
   deleteById(id: string): Promise<UserBase & DBBase>;
   readByAddress(address: string): Promise<UserBase & DBBase>;
-  readOne(filter: Record<string, any>): Promise<UserBase & DBBase>;
+  readOne(filter: Record<string, any>): Promise<(UserBase & DBBase) | null>;
 }
